@@ -70,10 +70,10 @@ public class ShareUT {
             String type = object.getClass().getSimpleName();
             SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
-            key = AesUT.getInstance().encrypt(key);
+            key = AesUtils.getInstance().encrypt(key);
             if (key != null && !key.equals("")) {
                 if ("String".equals(type)) {
-                    editor.putString(key, AesUT.getInstance().encrypt((String) object));
+                    editor.putString(key, AesUtils.getInstance().encrypt((String) object));
                 } else if ("Integer".equals(type)) {
                     editor.putInt(key, (Integer) object);
                 } else if ("Boolean".equals(type)) {
@@ -102,10 +102,10 @@ public class ShareUT {
         try {
             String type = defaultObject.getClass().getSimpleName();
             SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-            key = AesUT.getInstance().encrypt(key);
+            key = AesUtils.getInstance().encrypt(key);
             if (key != null && !key.equals("")) {
                 if ("String".equals(type)) {
-                    return AesUT.getInstance().decrypt(sp.getString(key, (String) defaultObject));
+                    return AesUtils.getInstance().decrypt(sp.getString(key, (String) defaultObject));
                 } else if ("Integer".equals(type)) {
                     return sp.getInt(key, (Integer) defaultObject);
                 } else if ("Boolean".equals(type)) {
