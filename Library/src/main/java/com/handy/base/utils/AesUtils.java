@@ -24,26 +24,31 @@ import javax.crypto.spec.SecretKeySpec;
  * <p>
  * Created by LiuJie on 2016/1/19.
  */
-public class AesUT {
-    private static AesUT aesUT = null;
+public class AesUtils {
+    private static AesUtils aesUtils = null;
     private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
     private String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
-    private AesUT() {
+    private AesUtils() {
     }
 
-    public synchronized static AesUT getInstance() {
-        if (aesUT == null) {
-            aesUT = new AesUT();
+    public synchronized static AesUtils getInstance() {
+        if (aesUtils == null) {
+            aesUtils = new AesUtils();
         }
-        return aesUT;
+        return aesUtils;
     }
 
     public String getDEFAULT_KEY() {
         return DEFAULT_KEY;
     }
 
-    public AesUT setDEFAULT_KEY(String DEFAULT_KEY) {
+    /**
+     * 密钥必须是16个字符
+     *
+     * @param DEFAULT_KEY AES密钥
+     */
+    public AesUtils setDEFAULT_KEY(String DEFAULT_KEY) {
         this.DEFAULT_KEY = DEFAULT_KEY;
         return this;
     }
