@@ -2,7 +2,7 @@ package com.handy.base.utils;
 
 import android.annotation.SuppressLint;
 
-import com.blankj.utilcode.constant.MemoryConstants;
+import com.handy.base.constants.MemoryConstants;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
