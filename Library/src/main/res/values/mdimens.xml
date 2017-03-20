@@ -1,0 +1,31 @@
+<resources>
+    <!-- Default FontSize 字体大小 -->
+    <dimen name="handy_font_least">9sp</dimen>
+    <dimen name="handy_font_micro">11sp</dimen>
+    <dimen name="handy_font_small">13sp</dimen>
+    <dimen name="handy_font_medium">15sp</dimen>
+    <dimen name="handy_font_slarge">17sp</dimen>
+    <dimen name="handy_font_large">19sp</dimen>
+    <dimen name="handy_font_xlarge">21sp</dimen>
+    <dimen name="handy_font_xxlarge">23sp</dimen>
+
+    <!-- Default Margin 距离大小 -->
+    <dimen name="handy_margin_least">2dp</dimen>
+    <dimen name="handy_margin_micro">4dp</dimen>
+    <dimen name="handy_margin_small">6dp</dimen>
+    <dimen name="handy_margin_medium">8dp</dimen>
+    <dimen name="handy_margin_slarge">10dp</dimen>
+    <dimen name="handy_margin_large">12dp</dimen>
+    <dimen name="handy_margin_xlarge">16dp</dimen>
+    <dimen name="handy_margin_xxlarge">18dp</dimen>
+
+    <!-- Default Padding 间距大小-->
+    <dimen name="handy_padding_least">2dp</dimen>
+    <dimen name="handy_padding_micro">4dp</dimen>
+    <dimen name="handy_padding_small">6dp</dimen>
+    <dimen name="handy_padding_medium">8dp</dimen>
+    <dimen name="handy_padding_slarge">10dp</dimen>
+    <dimen name="handy_padding_large">12dp</dimen>
+    <dimen name="handy_padding_xlarge">16dp</dimen>
+    <dimen name="handy_padding_xxlarge">18dp</dimen>
+</resources>
