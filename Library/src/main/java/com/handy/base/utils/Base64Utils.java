@@ -7,13 +7,13 @@ package com.handy.base.utils;
  */
 public class Base64Utils {
     private static Base64Utils base64Utils = null;
-    private char[] base64EncodeChars = new char[]{'A', 'B', 'C', 'D',
+    private static char[] base64EncodeChars = new char[]{'A', 'B', 'C', 'D',
             'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
             'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
             'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
             'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
             '4', '5', '6', '7', '8', '9', '+', '/'};
-    private byte[] base64DecodeChars = new byte[]{-1, -1, -1, -1, -1,
+    private static byte[] base64DecodeChars = new byte[]{-1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
             -1, -1, -1, -1, 62, -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59,
@@ -24,13 +24,7 @@ public class Base64Utils {
             -1, -1};
 
     private Base64Utils() {
-    }
-
-    public synchronized static Base64Utils getInstance() {
-        if (base64Utils == null) {
-            base64Utils = new Base64Utils();
-        }
-        return base64Utils;
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -39,7 +33,7 @@ public class Base64Utils {
      * @param data
      * @return
      */
-    public String encode(byte[] data) {
+    public static String encode(byte[] data) {
         StringBuffer sb = new StringBuffer();
         int len = data.length;
         int i = 0;
@@ -76,7 +70,7 @@ public class Base64Utils {
      * @return
      */
 
-    public byte[] decode(String str) {
+    public static byte[] decode(String str) {
         try {
             StringBuffer sb = new StringBuffer();
             byte[] data = null;

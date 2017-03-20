@@ -25,32 +25,12 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by LiuJie on 2016/1/19.
  */
 public class AesUtils {
+    private static final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
     private static AesUtils aesUtils = null;
-    private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
-    private String DEFAULT_KEY = "HANDY_SECRET_KEY";
+    private static String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
     private AesUtils() {
-    }
-
-    public synchronized static AesUtils getInstance() {
-        if (aesUtils == null) {
-            aesUtils = new AesUtils();
-        }
-        return aesUtils;
-    }
-
-    public String getDEFAULT_KEY() {
-        return DEFAULT_KEY;
-    }
-
-    /**
-     * 密钥必须是16个字符
-     *
-     * @param DEFAULT_KEY AES密钥
-     */
-    public AesUtils setDEFAULT_KEY(String DEFAULT_KEY) {
-        this.DEFAULT_KEY = DEFAULT_KEY;
-        return this;
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -59,7 +39,7 @@ public class AesUtils {
      * @param src 明文
      * @return 密文
      */
-    public String encrypt(String src) {
+    public static String encrypt(String src) {
         try {
             return encrypt(DEFAULT_KEY, src);
         } catch (Exception e) {
@@ -68,7 +48,7 @@ public class AesUtils {
         return null;
     }
 
-    private String encrypt(String key, String src) {
+    private static String encrypt(String key, String src) {
         try {
             byte[] keyByte = key.getBytes();
             SecretKeySpec keySpec = new SecretKeySpec(keyByte, "AES");
@@ -81,7 +61,7 @@ public class AesUtils {
             byte[] srcByte = src.getBytes();
             byte[] encrypted = cipher.doFinal(srcByte);
             //Base64转码。
-            String result = Base64Utils.getInstance().encode(encrypted);
+            String result = Base64Utils.encode(encrypted);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +75,7 @@ public class AesUtils {
      * @param src 密文
      * @return 明文
      */
-    public String decrypt(String src) {
+    public static String decrypt(String src) {
         try {
             return decrypt(DEFAULT_KEY, src);
         } catch (Exception e) {
@@ -104,7 +84,7 @@ public class AesUtils {
         return null;
     }
 
-    private String decrypt(String key, String src) {
+    private static String decrypt(String key, String src) {
         try {
             byte[] keyByte = key.getBytes();
             SecretKeySpec keySpec = new SecretKeySpec(keyByte, "AES");
@@ -112,7 +92,7 @@ public class AesUtils {
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
             //Base64转码。
-            byte[] srcByte = Base64Utils.getInstance().decode(src);
+            byte[] srcByte = Base64Utils.decode(src);
             //解密。
             byte[] decrypted = cipher.doFinal(srcByte);
             String result = new String(decrypted);

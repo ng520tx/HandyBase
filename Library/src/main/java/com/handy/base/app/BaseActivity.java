@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
 import com.handy.base.utils.ActivityStackUtils;
+import com.handy.base.utils.PermissionsUT;
 
 /**
  * Activity基本类
@@ -40,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
         this.savedInstanceState = savedInstanceState;
 
         GetScreenSize();
-        ActivityStackUtils.getInstance().addActivity(this);
+        ActivityStackUtils.addActivity(this);
     }
 
     @Override
@@ -75,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     protected void onDestroy() {
         super.onDestroy();
         canShowDialog = false;
-        ActivityStackUtils.getInstance().finishActivity(this);
+        ActivityStackUtils.finishActivity(this);
     }
 
     @Override
@@ -89,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     @Override
     public void checkActivityPermissions() {
-        if (!PermissionsUT.getInstance().checkDeniedPermissions(activity, true)) {
+        if (!PermissionsUT.checkDeniedPermissions(activity, true)) {
             onActivityPermissionSuccess();
         }
     }
@@ -106,10 +107,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     @Override
     public void onActivityPermissionRejection() {
-//            SweetDialogUT.getInstance().showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
+//            SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
 //                @Override
 //                public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                    PrintfUT.getInstance().showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
+//                    PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
 //                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
 //                    intent.setData(Uri.parse("package:" + getPackageName()));
 //                    startActivityForResult(intent, 45);
@@ -119,7 +120,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 //                @Override
 //                public void onClick(SweetAlertDialog sweetAlertDialog) {
 //                    sweetAlertDialog.dismiss();
-//                    ActivityStackUtils.getInstance().AppExit(context);
+//                    ActivityStackUtils.AppExit(context);
 //                }
 //            }).setCancelable(false);
 
@@ -128,7 +129,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 //        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //            super.onActivityResult(requestCode, resultCode, data);
 //            if (requestCode == 45) {
-//                PermissionsUT.getInstance().checkDeniedPermissions(activity, true);
+//                PermissionsUT.checkDeniedPermissions(activity, true);
 //            }
 //        }
     }
@@ -152,7 +153,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (!PermissionsUT.getInstance().checkDeniedPermissions(activity, true)) {
+            if (!PermissionsUT.checkDeniedPermissions(activity, true)) {
                 onActivityPermissionSuccess();
             }
         } else {

@@ -10,32 +10,16 @@ import android.content.SharedPreferences;
  */
 public class ShareUtils {
 
-    private static ShareUtils shareUtils = null;
-    private String SP_NAME = "HANDYBASE.sp";
+    private static String SP_NAME = "HANDYBASE.sp";
 
     private ShareUtils() {
-    }
-
-    public synchronized static ShareUtils getInstance() {
-        if (shareUtils == null) {
-            shareUtils = new ShareUtils();
-        }
-        return shareUtils;
-    }
-
-    public String getSP_NAME() {
-        return SP_NAME;
-    }
-
-    public void setSP_NAME(String SP_NAME) {
-        this.SP_NAME = SP_NAME;
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
      * 保存在手机里面的文件名
      */
-
-    public void setStringParam(Context context, String key, String value) {
+    public static void setStringParam(Context context, String key, String value) {
         SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = sp.edit();
         edit.putString(key, value);
@@ -49,7 +33,7 @@ public class ShareUtils {
      * @param keys
      * @param values
      */
-    public void setStringParams(Context context, String[] keys, String[] values) {
+    public static void setStringParams(Context context, String[] keys, String[] values) {
         SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = sp.edit();
         for (int i = 0; i < keys.length; i++) {
@@ -65,15 +49,15 @@ public class ShareUtils {
      * @param key
      * @param object
      */
-    public void setParam(Context context, String key, Object object) {
+    public static void setParam(Context context, String key, Object object) {
         try {
             String type = object.getClass().getSimpleName();
             SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
-            key = AesUtils.getInstance().encrypt(key);
+            key = AesUtils.encrypt(key);
             if (key != null && !key.equals("")) {
                 if ("String".equals(type)) {
-                    editor.putString(key, AesUtils.getInstance().encrypt((String) object));
+                    editor.putString(key, AesUtils.encrypt((String) object));
                 } else if ("Integer".equals(type)) {
                     editor.putInt(key, (Integer) object);
                 } else if ("Boolean".equals(type)) {
@@ -98,14 +82,14 @@ public class ShareUtils {
      * @param defaultObject
      * @return
      */
-    public Object getParam(Context context, String key, Object defaultObject) {
+    public static Object getParam(Context context, String key, Object defaultObject) {
         try {
             String type = defaultObject.getClass().getSimpleName();
             SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-            key = AesUtils.getInstance().encrypt(key);
+            key = AesUtils.encrypt(key);
             if (key != null && !key.equals("")) {
                 if ("String".equals(type)) {
-                    return AesUtils.getInstance().decrypt(sp.getString(key, (String) defaultObject));
+                    return AesUtils.decrypt(sp.getString(key, (String) defaultObject));
                 } else if ("Integer".equals(type)) {
                     return sp.getInt(key, (Integer) defaultObject);
                 } else if ("Boolean".equals(type)) {

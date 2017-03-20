@@ -15,25 +15,11 @@ import java.util.List;
  * Created by LiuJie on 2016/7/20.
  */
 public class PermissionsUT {
-    private static PermissionsUT permissionsUT = null;
-    private List<String> Permissions = new ArrayList<>();
+
+    private static List<String> Permissions = new ArrayList<>();
 
     private PermissionsUT() {
-    }
-
-    public synchronized static PermissionsUT getInstance() {
-        if (permissionsUT == null) {
-            permissionsUT = new PermissionsUT();
-        }
-        return permissionsUT;
-    }
-
-    public List<String> getPermissions() {
-        return Permissions;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        Permissions = permissions;
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -43,7 +29,7 @@ public class PermissionsUT {
      * @param isRequest 是否发起系统权限请求
      * @return 如果有未启用的权限返回false
      */
-    private boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest) {
+    private static boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest) {
         for (int index = 0; index < Permissions.size(); index++) {
             if (ContextCompat.checkSelfPermission(activity, Permissions.get(index)) == PackageManager.PERMISSION_DENIED) {
                 if (isRequest)
@@ -54,7 +40,7 @@ public class PermissionsUT {
         return false;
     }
 
-    private boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest, List<String> permissions) {
+    private static boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest, List<String> permissions) {
         for (int index = 0; index < permissions.size(); index++) {
             if (ContextCompat.checkSelfPermission(activity, permissions.get(index)) == PackageManager.PERMISSION_DENIED) {
                 if (isRequest)
@@ -73,20 +59,20 @@ public class PermissionsUT {
      * @param isRequest 是否发起系统权限请求
      * @return 如果有未启用的权限返回true
      */
-    public boolean checkDeniedPermissions(Activity activity, boolean isRequest) {
+    public static boolean checkDeniedPermissions(Activity activity, boolean isRequest) {
         if (Permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (checkDeniedPermissionsBase(activity, isRequest)) {
-                    PrintfUT.getInstance().LogW("发现未启用权限");
+                    LogUtils.w("发现未启用权限");
                     return true;
                 } else {
-                    PrintfUT.getInstance().LogD("应用权限已全部开启");
+                    LogUtils.d("应用权限已全部开启");
                 }
             } else {
-                PrintfUT.getInstance().LogD("系统版本小于23，无需扫描权限");
+                LogUtils.d("系统版本小于23，无需扫描权限");
             }
         } else {
-            PrintfUT.getInstance().LogE("未发现需扫描的权限内容");
+            LogUtils.e("未发现需扫描的权限内容");
         }
         return false;
     }
@@ -100,20 +86,20 @@ public class PermissionsUT {
      * @param permissions 权限扫描的参数
      * @return 如果有未启用的权限返回true
      */
-    public boolean checkDeniedPermissions(Activity activity, List<String> permissions, boolean isRequest) {
+    public static boolean checkDeniedPermissions(Activity activity, List<String> permissions, boolean isRequest) {
         if (permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (checkDeniedPermissionsBase(activity, isRequest, permissions)) {
-                    PrintfUT.getInstance().LogW("发现未启用权限");
+                    LogUtils.w("发现未启用权限");
                     return true;
                 } else {
-                    PrintfUT.getInstance().LogD("应用权限已全部开启");
+                    LogUtils.d("应用权限已全部开启");
                 }
             } else {
-                PrintfUT.getInstance().LogD("系统版本小于23，无需扫描权限");
+                LogUtils.d("系统版本小于23，无需扫描权限");
             }
         } else {
-            PrintfUT.getInstance().LogE("未发现需扫描的权限内容");
+            LogUtils.e("未发现需扫描的权限内容");
         }
         return false;
     }
@@ -127,24 +113,24 @@ public class PermissionsUT {
      * @param isFinish    是否关闭当前Activity
      * @return 如果有未启用的权限返回true
      */
-    public boolean checkDeniedPermissions(Activity activity, Class intentClass, boolean isRequest, boolean isFinish) {
+    public static boolean checkDeniedPermissions(Activity activity, Class intentClass, boolean isRequest, boolean isFinish) {
         if (Permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (checkDeniedPermissionsBase(activity, isRequest)) {
-                    PrintfUT.getInstance().LogW("发现未启用权限");
+                    LogUtils.w("发现未启用权限");
                     return true;
                 } else {
                     if (isFinish) activity.finish();
-                    PrintfUT.getInstance().LogD("应用权限已全部开启");
-                    IntentUT.getInstance().openActivity(activity, intentClass, isFinish);
+                    LogUtils.d("应用权限已全部开启");
+                    IntentUtils.openActivity(activity, intentClass, isFinish);
                 }
             } else {
                 if (isFinish) activity.finish();
-                PrintfUT.getInstance().LogD("系统版本小于23，无需扫描权限");
-                IntentUT.getInstance().openActivity(activity, intentClass, isFinish);
+                LogUtils.d("系统版本小于23，无需扫描权限");
+                IntentUtils.openActivity(activity, intentClass, isFinish);
             }
         } else {
-            PrintfUT.getInstance().LogE("未发现需扫描的权限内容");
+            LogUtils.e("未发现需扫描的权限内容");
         }
         return false;
     }
@@ -159,24 +145,24 @@ public class PermissionsUT {
      * @param permissions 权限扫描的参数
      * @return 如果有未启用的权限返回true
      */
-    public boolean checkDeniedPermissions(Activity activity, Class intentClass, List<String> permissions, boolean isRequest, boolean isFinish) {
+    public static boolean checkDeniedPermissions(Activity activity, Class intentClass, List<String> permissions, boolean isRequest, boolean isFinish) {
         if (permissions != null && permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (checkDeniedPermissionsBase(activity, isRequest, permissions)) {
-                    PrintfUT.getInstance().LogW("发现未启用权限");
+                    LogUtils.w("发现未启用权限");
                     return true;
                 } else {
                     if (isFinish) activity.finish();
-                    PrintfUT.getInstance().LogD("应用权限已全部开启");
-                    IntentUT.getInstance().openActivity(activity, intentClass, isFinish);
+                    LogUtils.d("应用权限已全部开启");
+                    IntentUtils.openActivity(activity, intentClass, isFinish);
                 }
             } else {
                 if (isFinish) activity.finish();
-                PrintfUT.getInstance().LogD("系统版本小于23，无需扫描权限");
-                IntentUT.getInstance().openActivity(activity, intentClass, isFinish);
+                LogUtils.d("系统版本小于23，无需扫描权限");
+                IntentUtils.openActivity(activity, intentClass, isFinish);
             }
         } else {
-            PrintfUT.getInstance().LogE("未发现需扫描的权限内容");
+            LogUtils.e("未发现需扫描的权限内容");
         }
         return false;
     }

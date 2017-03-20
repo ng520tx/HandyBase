@@ -13,22 +13,17 @@ import java.util.Stack;
  */
 public class ActivityStackUtils {
     private static ActivityStackUtils activityStackUtils; //单例模式
-    private Stack<Activity> activityStack; //Activity栈
+    private static Stack<Activity> activityStack; //Activity栈
 
     private ActivityStackUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    public static ActivityStackUtils getInstance() {
-        if (activityStackUtils == null) {
-            activityStackUtils = new ActivityStackUtils();
-        }
-        return activityStackUtils;
-    }
 
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(Activity activity) {
+    public static void addActivity(Activity activity) {
         if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
@@ -38,7 +33,7 @@ public class ActivityStackUtils {
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
-    public Activity currentActivity() {
+    public static Activity currentActivity() {
         if (activityStack != null) {
             Activity activity = activityStack.lastElement();
             return activity;
@@ -49,7 +44,7 @@ public class ActivityStackUtils {
     /**
      * 结束当前Activity（堆栈中最后一个压入的）
      */
-    public void finishActivity() {
+    public static void finishActivity() {
         if (activityStack != null) {
             Activity activity = activityStack.lastElement();
             finishActivity(activity);
@@ -59,7 +54,7 @@ public class ActivityStackUtils {
     /**
      * 结束指定的Activity
      */
-    public void finishActivity(Activity activity) {
+    public static void finishActivity(Activity activity) {
         if (activity != null && activityStack != null) {
             activityStack.remove(activity);
             activity.finish();
@@ -69,7 +64,7 @@ public class ActivityStackUtils {
     /**
      * 结束指定类名的Activity
      */
-    public void finishActivity(Class<?> cls) {
+    public static void finishActivity(Class<?> cls) {
         if (activityStack != null) {
             for (Activity activity : activityStack) {
                 if (activity.getClass().equals(cls)) {
@@ -82,7 +77,7 @@ public class ActivityStackUtils {
     /**
      * 结束所有Activity
      */
-    public void finishAllActivity() {
+    public static void finishAllActivity() {
         if (activityStack != null) {
             for (int i = 0; i < activityStack.size(); i++) {
                 if (null != activityStack.get(i)) {
@@ -96,10 +91,10 @@ public class ActivityStackUtils {
     /**
      * 结束第一个Activity之后的所有Activity
      */
-    public void finishToFirstActivity() {
+    public static void finishToFirstActivity() {
         if (activityStack != null) {
             for (Activity activity : activityStack) {
-                PrintfUT.getInstance().LogD(activity.getPackageName() + activity.getLocalClassName());
+                LogUtils.d(activity.getPackageName() + activity.getLocalClassName());
             }
             for (int i = 1; i < activityStack.size(); i++) {
                 if (null != activityStack.get(i)) {
@@ -113,7 +108,7 @@ public class ActivityStackUtils {
     /**
      * 退出应用程序
      */
-    public void AppExit(Context context) {
+    public static void AppExit(Context context) {
         try {
             finishAllActivity();
             ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
