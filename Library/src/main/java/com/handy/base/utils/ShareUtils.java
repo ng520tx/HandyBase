@@ -8,19 +8,19 @@ import android.content.SharedPreferences;
  * <p>
  * Created by LiuJie on 2016/1/19.
  */
-public class ShareUT {
+public class ShareUtils {
 
-    private static ShareUT shareUT = null;
+    private static ShareUtils shareUtils = null;
     private String SP_NAME = "LIUJIE045.sp";
 
-    private ShareUT() {
+    private ShareUtils() {
     }
 
-    public synchronized static ShareUT getInstance() {
-        if (shareUT == null) {
-            shareUT = new ShareUT();
+    public synchronized static ShareUtils getInstance() {
+        if (shareUtils == null) {
+            shareUtils = new ShareUtils();
         }
-        return shareUT;
+        return shareUtils;
     }
 
     public String getSP_NAME() {
