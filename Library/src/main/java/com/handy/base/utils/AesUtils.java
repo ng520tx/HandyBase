@@ -81,7 +81,7 @@ public class AesUtils {
             byte[] srcByte = src.getBytes();
             byte[] encrypted = cipher.doFinal(srcByte);
             //Base64转码。
-            String result = Base64UT.getInstance().encode(encrypted);
+            String result = Base64Utils.getInstance().encode(encrypted);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +112,7 @@ public class AesUtils {
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
             //Base64转码。
-            byte[] srcByte = Base64UT.getInstance().decode(src);
+            byte[] srcByte = Base64Utils.getInstance().decode(src);
             //解密。
             byte[] decrypted = cipher.doFinal(srcByte);
             String result = new String(decrypted);

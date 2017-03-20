@@ -11,18 +11,18 @@ import java.util.Stack;
  * <p>
  * Created by LiuJie on 2016/1/19.
  */
-public class AtyStackUT {
-    private static AtyStackUT atyStackUT; //单例模式
+public class ActivityStackUtils {
+    private static ActivityStackUtils activityStackUtils; //单例模式
     private Stack<Activity> activityStack; //Activity栈
 
-    private AtyStackUT() {
+    private ActivityStackUtils() {
     }
 
-    public static AtyStackUT getInstance() {
-        if (atyStackUT == null) {
-            atyStackUT = new AtyStackUT();
+    public static ActivityStackUtils getInstance() {
+        if (activityStackUtils == null) {
+            activityStackUtils = new ActivityStackUtils();
         }
-        return atyStackUT;
+        return activityStackUtils;
     }
 
     /**

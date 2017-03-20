@@ -5,8 +5,8 @@ package com.handy.base.utils;
  * <p>
  * Created by LiuJie on 2016/1/19.
  */
-public class Base64UT {
-    private static Base64UT base64UT = null;
+public class Base64Utils {
+    private static Base64Utils base64Utils = null;
     private char[] base64EncodeChars = new char[]{'A', 'B', 'C', 'D',
             'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
             'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
@@ -23,14 +23,14 @@ public class Base64UT {
             38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1,
             -1, -1};
 
-    private Base64UT() {
+    private Base64Utils() {
     }
 
-    public synchronized static Base64UT getInstance() {
-        if (base64UT == null) {
-            base64UT = new Base64UT();
+    public synchronized static Base64Utils getInstance() {
+        if (base64Utils == null) {
+            base64Utils = new Base64Utils();
         }
-        return base64UT;
+        return base64Utils;
     }
 
     /**

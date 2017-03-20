@@ -10,8 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
-import com.handy.base.utils.AtyStackUT;
-import com.handy.base.utils.PermissionsUT;
+import com.handy.base.utils.ActivityStackUtils;
 
 /**
  * Activity基本类
@@ -41,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
         this.savedInstanceState = savedInstanceState;
 
         GetScreenSize();
-        AtyStackUT.getInstance().addActivity(this);
+        ActivityStackUtils.getInstance().addActivity(this);
     }
 
     @Override
@@ -76,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     protected void onDestroy() {
         super.onDestroy();
         canShowDialog = false;
-        AtyStackUT.getInstance().finishActivity(this);
+        ActivityStackUtils.getInstance().finishActivity(this);
     }
 
     @Override
@@ -120,7 +119,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 //                @Override
 //                public void onClick(SweetAlertDialog sweetAlertDialog) {
 //                    sweetAlertDialog.dismiss();
-//                    AtyStackUT.getInstance().AppExit(context);
+//                    ActivityStackUtils.getInstance().AppExit(context);
 //                }
 //            }).setCancelable(false);
 
