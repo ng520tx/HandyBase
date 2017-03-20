@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 public class ShareUtils {
 
     private static ShareUtils shareUtils = null;
-    private String SP_NAME = "LIUJIE045.sp";
+    private String SP_NAME = "HANDYBASE.sp";
 
     private ShareUtils() {
     }
