@@ -1,560 +1,560 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="handy_red50">#fde0dc</color>
-    <color name="handy_red100">#f9bdbb</color>
-    <color name="handy_red200">#f69988</color>
-    <color name="handy_red300">#f36c60</color>
-    <color name="handy_red400">#e84e40</color>
-    <color name="handy_red500">#e51c23</color>
-    <color name="handy_red600">#dd191d</color>
-    <color name="handy_red700">#d01716</color>
-    <color name="handy_red800">#c41411</color>
-    <color name="handy_red900">#b0120a</color>
-    <color name="handy_reda100">#ff7997</color>
-    <color name="handy_reda200">#ff5177</color>
-    <color name="handy_reda400">#ff2d6f</color>
-    <color name="handy_reda700">#e00032</color>
+    <color name="handybase_red50">#fde0dc</color>
+    <color name="handybase_red100">#f9bdbb</color>
+    <color name="handybase_red200">#f69988</color>
+    <color name="handybase_red300">#f36c60</color>
+    <color name="handybase_red400">#e84e40</color>
+    <color name="handybase_red500">#e51c23</color>
+    <color name="handybase_red600">#dd191d</color>
+    <color name="handybase_red700">#d01716</color>
+    <color name="handybase_red800">#c41411</color>
+    <color name="handybase_red900">#b0120a</color>
+    <color name="handybase_reda100">#ff7997</color>
+    <color name="handybase_reda200">#ff5177</color>
+    <color name="handybase_reda400">#ff2d6f</color>
+    <color name="handybase_reda700">#e00032</color>
 
-    <color name="handy_pink50">#fce4ec</color>
-    <color name="handy_pink100">#f8bbd0</color>
-    <color name="handy_pink200">#f48fb1</color>
-    <color name="handy_pink300">#f06292</color>
-    <color name="handy_pink400">#ec407a</color>
-    <color name="handy_pink500">#e91e63</color>
-    <color name="handy_pink600">#d81b60</color>
-    <color name="handy_pink700">#c2185b</color>
-    <color name="handy_pink800">#ad1457</color>
-    <color name="handy_pink900">#880e4f</color>
-    <color name="handy_pinka100">#ff80ab</color>
-    <color name="handy_pinka200">#ff4081</color>
-    <color name="handy_pinka400">#f50057</color>
-    <color name="handy_pinka700">#c51162</color>
+    <color name="handybase_pink50">#fce4ec</color>
+    <color name="handybase_pink100">#f8bbd0</color>
+    <color name="handybase_pink200">#f48fb1</color>
+    <color name="handybase_pink300">#f06292</color>
+    <color name="handybase_pink400">#ec407a</color>
+    <color name="handybase_pink500">#e91e63</color>
+    <color name="handybase_pink600">#d81b60</color>
+    <color name="handybase_pink700">#c2185b</color>
+    <color name="handybase_pink800">#ad1457</color>
+    <color name="handybase_pink900">#880e4f</color>
+    <color name="handybase_pinka100">#ff80ab</color>
+    <color name="handybase_pinka200">#ff4081</color>
+    <color name="handybase_pinka400">#f50057</color>
+    <color name="handybase_pinka700">#c51162</color>
 
-    <color name="handy_purple50">#f3e5f5</color>
-    <color name="handy_purple100">#e1bee7</color>
-    <color name="handy_purple200">#ce93d8</color>
-    <color name="handy_purple300">#ba68c8</color>
-    <color name="handy_purple400">#ab47bc</color>
-    <color name="handy_purple500">#9c27b0</color>
-    <color name="handy_purple600">#8e24aa</color>
-    <color name="handy_purple700">#7b1fa2</color>
-    <color name="handy_purple800">#6a1b9a</color>
-    <color name="handy_purple900">#4a148c</color>
-    <color name="handy_purplea100">#ea80fc</color>
-    <color name="handy_purplea200">#e040fb</color>
-    <color name="handy_purplea400">#d500f9</color>
-    <color name="handy_purplea700">#aa00ff</color>
+    <color name="handybase_purple50">#f3e5f5</color>
+    <color name="handybase_purple100">#e1bee7</color>
+    <color name="handybase_purple200">#ce93d8</color>
+    <color name="handybase_purple300">#ba68c8</color>
+    <color name="handybase_purple400">#ab47bc</color>
+    <color name="handybase_purple500">#9c27b0</color>
+    <color name="handybase_purple600">#8e24aa</color>
+    <color name="handybase_purple700">#7b1fa2</color>
+    <color name="handybase_purple800">#6a1b9a</color>
+    <color name="handybase_purple900">#4a148c</color>
+    <color name="handybase_purplea100">#ea80fc</color>
+    <color name="handybase_purplea200">#e040fb</color>
+    <color name="handybase_purplea400">#d500f9</color>
+    <color name="handybase_purplea700">#aa00ff</color>
 
-    <color name="handy_deeppurple50">#ede7f6</color>
-    <color name="handy_deeppurple100">#d1c4e9</color>
-    <color name="handy_deeppurple200">#b39ddb</color>
-    <color name="handy_deeppurple300">#9575cd</color>
-    <color name="handy_deeppurple400">#7e57c2</color>
-    <color name="handy_deeppurple500">#673ab7</color>
-    <color name="handy_deeppurple600">#5e35b1</color>
-    <color name="handy_deeppurple700">#512da8</color>
-    <color name="handy_deeppurple800">#4527a0</color>
-    <color name="handy_deeppurple900">#311b92</color>
-    <color name="handy_deeppurplea100">#b388ff</color>
-    <color name="handy_deeppurplea200">#7c4dff</color>
-    <color name="handy_deeppurplea400">#651fff</color>
-    <color name="handy_deeppurplea700">#6200ea</color>
+    <color name="handybase_deeppurple50">#ede7f6</color>
+    <color name="handybase_deeppurple100">#d1c4e9</color>
+    <color name="handybase_deeppurple200">#b39ddb</color>
+    <color name="handybase_deeppurple300">#9575cd</color>
+    <color name="handybase_deeppurple400">#7e57c2</color>
+    <color name="handybase_deeppurple500">#673ab7</color>
+    <color name="handybase_deeppurple600">#5e35b1</color>
+    <color name="handybase_deeppurple700">#512da8</color>
+    <color name="handybase_deeppurple800">#4527a0</color>
+    <color name="handybase_deeppurple900">#311b92</color>
+    <color name="handybase_deeppurplea100">#b388ff</color>
+    <color name="handybase_deeppurplea200">#7c4dff</color>
+    <color name="handybase_deeppurplea400">#651fff</color>
+    <color name="handybase_deeppurplea700">#6200ea</color>
 
-    <color name="handy_indigo50">#e8eaf6</color>
-    <color name="handy_indigo100">#c5cae9</color>
-    <color name="handy_indigo200">#9fa8da</color>
-    <color name="handy_indigo300">#7986cb</color>
-    <color name="handy_indigo400">#5c6bc0</color>
-    <color name="handy_indigo500">#3f51b5</color>
-    <color name="handy_indigo600">#3949ab</color>
-    <color name="handy_indigo700">#303f9f</color>
-    <color name="handy_indigo800">#283593</color>
-    <color name="handy_indigo900">#1a237e</color>
-    <color name="handy_indigoa100">#8c9eff</color>
-    <color name="handy_indigoa200">#536dfe</color>
-    <color name="handy_indigoa400">#3d5afe</color>
-    <color name="handy_indigoa700">#304ffe</color>
+    <color name="handybase_indigo50">#e8eaf6</color>
+    <color name="handybase_indigo100">#c5cae9</color>
+    <color name="handybase_indigo200">#9fa8da</color>
+    <color name="handybase_indigo300">#7986cb</color>
+    <color name="handybase_indigo400">#5c6bc0</color>
+    <color name="handybase_indigo500">#3f51b5</color>
+    <color name="handybase_indigo600">#3949ab</color>
+    <color name="handybase_indigo700">#303f9f</color>
+    <color name="handybase_indigo800">#283593</color>
+    <color name="handybase_indigo900">#1a237e</color>
+    <color name="handybase_indigoa100">#8c9eff</color>
+    <color name="handybase_indigoa200">#536dfe</color>
+    <color name="handybase_indigoa400">#3d5afe</color>
+    <color name="handybase_indigoa700">#304ffe</color>
 
-    <color name="handy_blue50">#e7e9fd</color>
-    <color name="handy_blue100">#d0d9ff</color>
-    <color name="handy_blue200">#afbfff</color>
-    <color name="handy_blue300">#91a7ff</color>
-    <color name="handy_blue400">#738ffe</color>
-    <color name="handy_blue500">#5677fc</color>
-    <color name="handy_blue600">#4e6cef</color>
-    <color name="handy_blue700">#455ede</color>
-    <color name="handy_blue800">#3b50ce</color>
-    <color name="handy_blue900">#2a36b1</color>
-    <color name="handy_bluea100">#a6baff</color>
-    <color name="handy_bluea200">#6889ff</color>
-    <color name="handy_bluea400">#4d73ff</color>
-    <color name="handy_bluea700">#4d69ff</color>
+    <color name="handybase_blue50">#e7e9fd</color>
+    <color name="handybase_blue100">#d0d9ff</color>
+    <color name="handybase_blue200">#afbfff</color>
+    <color name="handybase_blue300">#91a7ff</color>
+    <color name="handybase_blue400">#738ffe</color>
+    <color name="handybase_blue500">#5677fc</color>
+    <color name="handybase_blue600">#4e6cef</color>
+    <color name="handybase_blue700">#455ede</color>
+    <color name="handybase_blue800">#3b50ce</color>
+    <color name="handybase_blue900">#2a36b1</color>
+    <color name="handybase_bluea100">#a6baff</color>
+    <color name="handybase_bluea200">#6889ff</color>
+    <color name="handybase_bluea400">#4d73ff</color>
+    <color name="handybase_bluea700">#4d69ff</color>
 
-    <color name="handy_lightblue50">#e1f5fe</color>
-    <color name="handy_lightblue100">#b3e5fc</color>
-    <color name="handy_lightblue200">#81d4fa</color>
-    <color name="handy_lightblue300">#4fc3f7</color>
-    <color name="handy_lightblue400">#29b6f6</color>
-    <color name="handy_lightblue500">#03a9f4</color>
-    <color name="handy_lightblue600">#039be5</color>
-    <color name="handy_lightblue700">#0288d1</color>
-    <color name="handy_lightblue800">#0277bd</color>
-    <color name="handy_lightblue900">#01579b</color>
-    <color name="handy_lightbluea100">#80d8ff</color>
-    <color name="handy_lightbluea200">#40c4ff</color>
-    <color name="handy_lightbluea400">#00b0ff</color>
-    <color name="handy_lightbluea700">#0091ea</color>
+    <color name="handybase_lightblue50">#e1f5fe</color>
+    <color name="handybase_lightblue100">#b3e5fc</color>
+    <color name="handybase_lightblue200">#81d4fa</color>
+    <color name="handybase_lightblue300">#4fc3f7</color>
+    <color name="handybase_lightblue400">#29b6f6</color>
+    <color name="handybase_lightblue500">#03a9f4</color>
+    <color name="handybase_lightblue600">#039be5</color>
+    <color name="handybase_lightblue700">#0288d1</color>
+    <color name="handybase_lightblue800">#0277bd</color>
+    <color name="handybase_lightblue900">#01579b</color>
+    <color name="handybase_lightbluea100">#80d8ff</color>
+    <color name="handybase_lightbluea200">#40c4ff</color>
+    <color name="handybase_lightbluea400">#00b0ff</color>
+    <color name="handybase_lightbluea700">#0091ea</color>
 
-    <color name="handy_cyan50">#e0f7fa</color>
-    <color name="handy_cyan100">#b2ebf2</color>
-    <color name="handy_cyan200">#80deea</color>
-    <color name="handy_cyan300">#4dd0e1</color>
-    <color name="handy_cyan400">#26c6da</color>
-    <color name="handy_cyan500">#00bcd4</color>
-    <color name="handy_cyan600">#00acc1</color>
-    <color name="handy_cyan700">#0097a7</color>
-    <color name="handy_cyan800">#00838f</color>
-    <color name="handy_cyan900">#006064</color>
-    <color name="handy_cyana100">#84ffff</color>
-    <color name="handy_cyana200">#18ffff</color>
-    <color name="handy_cyana400">#00e5ff</color>
-    <color name="handy_cyana700">#00b8d4</color>
+    <color name="handybase_cyan50">#e0f7fa</color>
+    <color name="handybase_cyan100">#b2ebf2</color>
+    <color name="handybase_cyan200">#80deea</color>
+    <color name="handybase_cyan300">#4dd0e1</color>
+    <color name="handybase_cyan400">#26c6da</color>
+    <color name="handybase_cyan500">#00bcd4</color>
+    <color name="handybase_cyan600">#00acc1</color>
+    <color name="handybase_cyan700">#0097a7</color>
+    <color name="handybase_cyan800">#00838f</color>
+    <color name="handybase_cyan900">#006064</color>
+    <color name="handybase_cyana100">#84ffff</color>
+    <color name="handybase_cyana200">#18ffff</color>
+    <color name="handybase_cyana400">#00e5ff</color>
+    <color name="handybase_cyana700">#00b8d4</color>
 
-    <color name="handy_teal50">#e0f2f1</color>
-    <color name="handy_teal100">#b2dfdb</color>
-    <color name="handy_teal200">#80cbc4</color>
-    <color name="handy_teal300">#4db6ac</color>
-    <color name="handy_teal400">#26a69a</color>
-    <color name="handy_teal500">#009688</color>
-    <color name="handy_teal600">#00897b</color>
-    <color name="handy_teal700">#00796b</color>
-    <color name="handy_teal800">#00695c</color>
-    <color name="handy_teal900">#004d40</color>
-    <color name="handy_teala100">#a7ffeb</color>
-    <color name="handy_teala200">#64ffda</color>
-    <color name="handy_teala400">#1de9b6</color>
-    <color name="handy_teala700">#00bfa5</color>
+    <color name="handybase_teal50">#e0f2f1</color>
+    <color name="handybase_teal100">#b2dfdb</color>
+    <color name="handybase_teal200">#80cbc4</color>
+    <color name="handybase_teal300">#4db6ac</color>
+    <color name="handybase_teal400">#26a69a</color>
+    <color name="handybase_teal500">#009688</color>
+    <color name="handybase_teal600">#00897b</color>
+    <color name="handybase_teal700">#00796b</color>
+    <color name="handybase_teal800">#00695c</color>
+    <color name="handybase_teal900">#004d40</color>
+    <color name="handybase_teala100">#a7ffeb</color>
+    <color name="handybase_teala200">#64ffda</color>
+    <color name="handybase_teala400">#1de9b6</color>
+    <color name="handybase_teala700">#00bfa5</color>
 
-    <color name="handy_green50">#d0f8ce</color>
-    <color name="handy_green100">#a3e9a4</color>
-    <color name="handy_green200">#72d572</color>
-    <color name="handy_green300">#42bd41</color>
-    <color name="handy_green400">#2baf2b</color>
-    <color name="handy_green500">#259b24</color>
-    <color name="handy_green600">#0a8f08</color>
-    <color name="handy_green700">#0a7e07</color>
-    <color name="handy_green800">#056f00</color>
-    <color name="handy_green900">#0d5302</color>
-    <color name="handy_greena100">#a2f78d</color>
-    <color name="handy_greena200">#5af158</color>
-    <color name="handy_greena400">#14e715</color>
-    <color name="handy_greena700">#12c700</color>
+    <color name="handybase_green50">#d0f8ce</color>
+    <color name="handybase_green100">#a3e9a4</color>
+    <color name="handybase_green200">#72d572</color>
+    <color name="handybase_green300">#42bd41</color>
+    <color name="handybase_green400">#2baf2b</color>
+    <color name="handybase_green500">#259b24</color>
+    <color name="handybase_green600">#0a8f08</color>
+    <color name="handybase_green700">#0a7e07</color>
+    <color name="handybase_green800">#056f00</color>
+    <color name="handybase_green900">#0d5302</color>
+    <color name="handybase_greena100">#a2f78d</color>
+    <color name="handybase_greena200">#5af158</color>
+    <color name="handybase_greena400">#14e715</color>
+    <color name="handybase_greena700">#12c700</color>
 
-    <color name="handy_lightgreen50">#f1f8e9</color>
-    <color name="handy_lightgreen100">#dcedc8</color>
-    <color name="handy_lightgreen200">#c5e1a5</color>
-    <color name="handy_lightgreen300">#aed581</color>
-    <color name="handy_lightgreen400">#9ccc65</color>
-    <color name="handy_lightgreen500">#8bc34a</color>
-    <color name="handy_lightgreen600">#7cb342</color>
-    <color name="handy_lightgreen700">#689f38</color>
-    <color name="handy_lightgreen800">#558b2f</color>
-    <color name="handy_lightgreen900">#33691e</color>
-    <color name="handy_lightgreena100">#ccff90</color>
-    <color name="handy_lightgreena200">#b2ff59</color>
-    <color name="handy_lightgreena400">#76ff03</color>
-    <color name="handy_lightgreena700">#64dd17</color>
+    <color name="handybase_lightgreen50">#f1f8e9</color>
+    <color name="handybase_lightgreen100">#dcedc8</color>
+    <color name="handybase_lightgreen200">#c5e1a5</color>
+    <color name="handybase_lightgreen300">#aed581</color>
+    <color name="handybase_lightgreen400">#9ccc65</color>
+    <color name="handybase_lightgreen500">#8bc34a</color>
+    <color name="handybase_lightgreen600">#7cb342</color>
+    <color name="handybase_lightgreen700">#689f38</color>
+    <color name="handybase_lightgreen800">#558b2f</color>
+    <color name="handybase_lightgreen900">#33691e</color>
+    <color name="handybase_lightgreena100">#ccff90</color>
+    <color name="handybase_lightgreena200">#b2ff59</color>
+    <color name="handybase_lightgreena400">#76ff03</color>
+    <color name="handybase_lightgreena700">#64dd17</color>
 
-    <color name="handy_lime50">#f9fbe7</color>
-    <color name="handy_lime100">#f0f4c3</color>
-    <color name="handy_lime200">#e6ee9c</color>
-    <color name="handy_lime300">#dce775</color>
-    <color name="handy_lime400">#d4e157</color>
-    <color name="handy_lime500">#cddc39</color>
-    <color name="handy_lime600">#c0ca33</color>
-    <color name="handy_lime700">#afb42b</color>
-    <color name="handy_lime800">#9e9d24</color>
-    <color name="handy_lime900">#827717</color>
-    <color name="handy_limea100">#f4ff81</color>
-    <color name="handy_limea200">#eeff41</color>
-    <color name="handy_limea400">#c6ff00</color>
-    <color name="handy_limea700">#aeea00</color>
+    <color name="handybase_lime50">#f9fbe7</color>
+    <color name="handybase_lime100">#f0f4c3</color>
+    <color name="handybase_lime200">#e6ee9c</color>
+    <color name="handybase_lime300">#dce775</color>
+    <color name="handybase_lime400">#d4e157</color>
+    <color name="handybase_lime500">#cddc39</color>
+    <color name="handybase_lime600">#c0ca33</color>
+    <color name="handybase_lime700">#afb42b</color>
+    <color name="handybase_lime800">#9e9d24</color>
+    <color name="handybase_lime900">#827717</color>
+    <color name="handybase_limea100">#f4ff81</color>
+    <color name="handybase_limea200">#eeff41</color>
+    <color name="handybase_limea400">#c6ff00</color>
+    <color name="handybase_limea700">#aeea00</color>
 
-    <color name="handy_yellow50">#fffde7</color>
-    <color name="handy_yellow100">#fff9c4</color>
-    <color name="handy_yellow200">#fff59d</color>
-    <color name="handy_yellow300">#fff176</color>
-    <color name="handy_yellow400">#ffee58</color>
-    <color name="handy_yellow500">#ffeb3b</color>
-    <color name="handy_yellow600">#fdd835</color>
-    <color name="handy_yellow700">#fbc02d</color>
-    <color name="handy_yellow800">#f9a825</color>
-    <color name="handy_yellow900">#f57f17</color>
-    <color name="handy_yellowa100">#ffff8d</color>
-    <color name="handy_yellowa200">#ffff00</color>
-    <color name="handy_yellowa400">#ffea00</color>
-    <color name="handy_yellowa700">#ffd600</color>
+    <color name="handybase_yellow50">#fffde7</color>
+    <color name="handybase_yellow100">#fff9c4</color>
+    <color name="handybase_yellow200">#fff59d</color>
+    <color name="handybase_yellow300">#fff176</color>
+    <color name="handybase_yellow400">#ffee58</color>
+    <color name="handybase_yellow500">#ffeb3b</color>
+    <color name="handybase_yellow600">#fdd835</color>
+    <color name="handybase_yellow700">#fbc02d</color>
+    <color name="handybase_yellow800">#f9a825</color>
+    <color name="handybase_yellow900">#f57f17</color>
+    <color name="handybase_yellowa100">#ffff8d</color>
+    <color name="handybase_yellowa200">#ffff00</color>
+    <color name="handybase_yellowa400">#ffea00</color>
+    <color name="handybase_yellowa700">#ffd600</color>
 
-    <color name="handy_amber50">#fff8e1</color>
-    <color name="handy_amber100">#ffecb3</color>
-    <color name="handy_amber200">#ffe082</color>
-    <color name="handy_amber300">#ffd54f</color>
-    <color name="handy_amber400">#ffca28</color>
-    <color name="handy_amber500">#ffc107</color>
-    <color name="handy_amber600">#ffb300</color>
-    <color name="handy_amber700">#ffa000</color>
-    <color name="handy_amber800">#ff8f00</color>
-    <color name="handy_amber900">#ff6f00</color>
-    <color name="handy_ambera100">#ffe57f</color>
-    <color name="handy_ambera200">#ffd740</color>
-    <color name="handy_ambera400">#ffc400</color>
-    <color name="handy_ambera700">#ffab00</color>
+    <color name="handybase_amber50">#fff8e1</color>
+    <color name="handybase_amber100">#ffecb3</color>
+    <color name="handybase_amber200">#ffe082</color>
+    <color name="handybase_amber300">#ffd54f</color>
+    <color name="handybase_amber400">#ffca28</color>
+    <color name="handybase_amber500">#ffc107</color>
+    <color name="handybase_amber600">#ffb300</color>
+    <color name="handybase_amber700">#ffa000</color>
+    <color name="handybase_amber800">#ff8f00</color>
+    <color name="handybase_amber900">#ff6f00</color>
+    <color name="handybase_ambera100">#ffe57f</color>
+    <color name="handybase_ambera200">#ffd740</color>
+    <color name="handybase_ambera400">#ffc400</color>
+    <color name="handybase_ambera700">#ffab00</color>
 
-    <color name="handy_orange50">#fff3e0</color>
-    <color name="handy_orange100">#ffe0b2</color>
-    <color name="handy_orange200">#ffcc80</color>
-    <color name="handy_orange300">#ffb74d</color>
-    <color name="handy_orange400">#ffa726</color>
-    <color name="handy_orange500">#ff9800</color>
-    <color name="handy_orange600">#fb8c00</color>
-    <color name="handy_orange700">#f57c00</color>
-    <color name="handy_orange800">#ef6c00</color>
-    <color name="handy_orange900">#e65100</color>
-    <color name="handy_orangea100">#ffd180</color>
-    <color name="handy_orangea200">#ffab40</color>
-    <color name="handy_orangea400">#ff9100</color>
-    <color name="handy_orangea700">#ff6d00</color>
+    <color name="handybase_orange50">#fff3e0</color>
+    <color name="handybase_orange100">#ffe0b2</color>
+    <color name="handybase_orange200">#ffcc80</color>
+    <color name="handybase_orange300">#ffb74d</color>
+    <color name="handybase_orange400">#ffa726</color>
+    <color name="handybase_orange500">#ff9800</color>
+    <color name="handybase_orange600">#fb8c00</color>
+    <color name="handybase_orange700">#f57c00</color>
+    <color name="handybase_orange800">#ef6c00</color>
+    <color name="handybase_orange900">#e65100</color>
+    <color name="handybase_orangea100">#ffd180</color>
+    <color name="handybase_orangea200">#ffab40</color>
+    <color name="handybase_orangea400">#ff9100</color>
+    <color name="handybase_orangea700">#ff6d00</color>
 
-    <color name="handy_deeporange50">#fbe9e7</color>
-    <color name="handy_deeporange100">#ffccbc</color>
-    <color name="handy_deeporange200">#ffab91</color>
-    <color name="handy_deeporange300">#ff8a65</color>
-    <color name="handy_deeporange400">#ff7043</color>
-    <color name="handy_deeporange500">#ff5722</color>
-    <color name="handy_deeporange600">#f4511e</color>
-    <color name="handy_deeporange700">#e64a19</color>
-    <color name="handy_deeporange800">#d84315</color>
-    <color name="handy_deeporange900">#bf360c</color>
-    <color name="handy_deeporangea100">#ff9e80</color>
-    <color name="handy_deeporangea200">#ff6e40</color>
-    <color name="handy_deeporangea400">#ff3d00</color>
-    <color name="handy_deeporangea700">#dd2c00</color>
+    <color name="handybase_deeporange50">#fbe9e7</color>
+    <color name="handybase_deeporange100">#ffccbc</color>
+    <color name="handybase_deeporange200">#ffab91</color>
+    <color name="handybase_deeporange300">#ff8a65</color>
+    <color name="handybase_deeporange400">#ff7043</color>
+    <color name="handybase_deeporange500">#ff5722</color>
+    <color name="handybase_deeporange600">#f4511e</color>
+    <color name="handybase_deeporange700">#e64a19</color>
+    <color name="handybase_deeporange800">#d84315</color>
+    <color name="handybase_deeporange900">#bf360c</color>
+    <color name="handybase_deeporangea100">#ff9e80</color>
+    <color name="handybase_deeporangea200">#ff6e40</color>
+    <color name="handybase_deeporangea400">#ff3d00</color>
+    <color name="handybase_deeporangea700">#dd2c00</color>
 
-    <color name="handy_brown50">#efebe9</color>
-    <color name="handy_brown100">#d7ccc8</color>
-    <color name="handy_brown200">#bcaaa4</color>
-    <color name="handy_brown300">#a1887f</color>
-    <color name="handy_brown400">#8d6e63</color>
-    <color name="handy_brown500">#795548</color>
-    <color name="handy_brown600">#6d4c41</color>
-    <color name="handy_brown700">#5d4037</color>
-    <color name="handy_brown800">#4e342e</color>
-    <color name="handy_brown900">#3e2723</color>
+    <color name="handybase_brown50">#efebe9</color>
+    <color name="handybase_brown100">#d7ccc8</color>
+    <color name="handybase_brown200">#bcaaa4</color>
+    <color name="handybase_brown300">#a1887f</color>
+    <color name="handybase_brown400">#8d6e63</color>
+    <color name="handybase_brown500">#795548</color>
+    <color name="handybase_brown600">#6d4c41</color>
+    <color name="handybase_brown700">#5d4037</color>
+    <color name="handybase_brown800">#4e342e</color>
+    <color name="handybase_brown900">#3e2723</color>
 
-    <color name="handy_grey50">#fafafa</color>
-    <color name="handy_grey100">#f5f5f5</color>
-    <color name="handy_grey200">#eeeeee</color>
-    <color name="handy_grey300">#e0e0e0</color>
-    <color name="handy_grey400">#bdbdbd</color>
-    <color name="handy_grey500">#9e9e9e</color>
-    <color name="handy_grey600">#757575</color>
-    <color name="handy_grey700">#616161</color>
-    <color name="handy_grey800">#424242</color>
-    <color name="handy_grey900">#212121</color>
-    <color name="handy_grey1000">#000000</color>
+    <color name="handybase_grey50">#fafafa</color>
+    <color name="handybase_grey100">#f5f5f5</color>
+    <color name="handybase_grey200">#eeeeee</color>
+    <color name="handybase_grey300">#e0e0e0</color>
+    <color name="handybase_grey400">#bdbdbd</color>
+    <color name="handybase_grey500">#9e9e9e</color>
+    <color name="handybase_grey600">#757575</color>
+    <color name="handybase_grey700">#616161</color>
+    <color name="handybase_grey800">#424242</color>
+    <color name="handybase_grey900">#212121</color>
+    <color name="handybase_grey1000">#000000</color>
 
-    <color name="handy_bluegrey50">#eceff1</color>
-    <color name="handy_bluegrey100">#cfd8dc</color>
-    <color name="handy_bluegrey200">#b0bec5</color>
-    <color name="handy_bluegrey300">#90a4ae</color>
-    <color name="handy_bluegrey400">#78909c</color>
-    <color name="handy_bluegrey500">#607d8b</color>
-    <color name="handy_bluegrey600">#546e7a</color>
-    <color name="handy_bluegrey700">#455a64</color>
-    <color name="handy_bluegrey800">#37474f</color>
-    <color name="handy_bluegrey900">#263238</color>
+    <color name="handybase_bluegrey50">#eceff1</color>
+    <color name="handybase_bluegrey100">#cfd8dc</color>
+    <color name="handybase_bluegrey200">#b0bec5</color>
+    <color name="handybase_bluegrey300">#90a4ae</color>
+    <color name="handybase_bluegrey400">#78909c</color>
+    <color name="handybase_bluegrey500">#607d8b</color>
+    <color name="handybase_bluegrey600">#546e7a</color>
+    <color name="handybase_bluegrey700">#455a64</color>
+    <color name="handybase_bluegrey800">#37474f</color>
+    <color name="handybase_bluegrey900">#263238</color>
 
 
     <!--白色-->
-    <color name="handy_white">#FFFFFF</color>
+    <color name="handybase_white">#FFFFFF</color>
     <!--象牙色-->
-    <color name="handy_ivory">#FFFFF0</color>
+    <color name="handybase_ivory">#FFFFF0</color>
     <!--亮黄色-->
-    <color name="handy_lightyellow">#FFFFE0</color>
+    <color name="handybase_lightyellow">#FFFFE0</color>
     <!--黄色-->
-    <color name="handy_yellow">#FFFF00</color>
+    <color name="handybase_yellow">#FFFF00</color>
     <!--雪白色-->
-    <color name="handy_snow">#FFFAFA</color>
+    <color name="handybase_snow">#FFFAFA</color>
     <!--花白色-->
-    <color name="handy_floralwhite">#FFFAF0</color>
+    <color name="handybase_floralwhite">#FFFAF0</color>
     <!--柠檬绸色-->
-    <color name="handy_lemonchiffon">#FFFACD</color>
+    <color name="handybase_lemonchiffon">#FFFACD</color>
     <!--米绸色-->
-    <color name="handy_cornsilk">#FFF8DC</color>
+    <color name="handybase_cornsilk">#FFF8DC</color>
     <!--海贝色-->
-    <color name="handy_seashell">#FFF5EE</color>
+    <color name="handybase_seashell">#FFF5EE</color>
     <!--淡紫红-->
-    <color name="handy_lavenderblush">#FFF0F5</color>
+    <color name="handybase_lavenderblush">#FFF0F5</color>
     <!--番木色-->
-    <color name="handy_papayawhip">#FFEFD5</color>
+    <color name="handybase_papayawhip">#FFEFD5</color>
     <!--白杏色-->
-    <color name="handy_blanchedalmond">#FFEBCD</color>
+    <color name="handybase_blanchedalmond">#FFEBCD</color>
     <!--浅玫瑰色-->
-    <color name="handy_mistyrose">#FFE4E1</color>
+    <color name="handybase_mistyrose">#FFE4E1</color>
     <!--桔黄色-->
-    <color name="handy_bisque">#FFE4C4</color>
+    <color name="handybase_bisque">#FFE4C4</color>
     <!--鹿皮色-->
-    <color name="handy_moccasin">#FFE4B5</color>
+    <color name="handybase_moccasin">#FFE4B5</color>
     <!--纳瓦白-->
-    <color name="handy_navajowhite">#FFDEAD</color>
+    <color name="handybase_navajowhite">#FFDEAD</color>
     <!--桃色-->
-    <color name="handy_peachpuff">#FFDAB9</color>
+    <color name="handybase_peachpuff">#FFDAB9</color>
     <!--金色-->
-    <color name="handy_gold">#FFD700</color>
+    <color name="handybase_gold">#FFD700</color>
     <!--粉红色-->
-    <color name="handy_pink">#FFC0CB</color>
+    <color name="handybase_pink">#FFC0CB</color>
     <!--亮粉红色-->
-    <color name="handy_lightpink">#FFB6C1</color>
+    <color name="handybase_lightpink">#FFB6C1</color>
     <!--橙色-->
-    <color name="handy_orange">#FFA500</color>
+    <color name="handybase_orange">#FFA500</color>
     <!--亮肉色-->
-    <color name="handy_lightsalmon">#FFA07A</color>
+    <color name="handybase_lightsalmon">#FFA07A</color>
     <!--暗桔黄色-->
-    <color name="handy_darkorange">#FF8C00</color>
+    <color name="handybase_darkorange">#FF8C00</color>
     <!--珊瑚色-->
-    <color name="handy_coral">#FF7F50</color>
+    <color name="handybase_coral">#FF7F50</color>
     <!--热粉红色-->
-    <color name="handy_hotpink">#FF69B4</color>
+    <color name="handybase_hotpink">#FF69B4</color>
     <!--西红柿色-->
-    <color name="handy_tomato">#FF6347</color>
+    <color name="handybase_tomato">#FF6347</color>
     <!--红橙色-->
-    <color name="handy_orangered">#FF4500</color>
+    <color name="handybase_orangered">#FF4500</color>
     <!--深粉红色-->
-    <color name="handy_deeppink">#FF1493</color>
+    <color name="handybase_deeppink">#FF1493</color>
     <!--紫红色-->
-    <color name="handy_fuchsia">#FF00FF</color>
+    <color name="handybase_fuchsia">#FF00FF</color>
     <!--红紫色-->
-    <color name="handy_magenta">#FF00FF</color>
+    <color name="handybase_magenta">#FF00FF</color>
     <!--红色-->
-    <color name="handy_red">#FF0000</color>
+    <color name="handybase_red">#FF0000</color>
     <!--老花色-->
-    <color name="handy_oldlace">#FDF5E6</color>
+    <color name="handybase_oldlace">#FDF5E6</color>
     <!--亮金黄色-->
-    <color name="handy_lightgoldenrodyellow">#FAFAD2</color>
+    <color name="handybase_lightgoldenrodyellow">#FAFAD2</color>
     <!--亚麻色-->
-    <color name="handy_linen">#FAF0E6</color>
+    <color name="handybase_linen">#FAF0E6</color>
     <!--古董白-->
-    <color name="handy_antiquewhite">#FAEBD7</color>
+    <color name="handybase_antiquewhite">#FAEBD7</color>
     <!--鲜肉色-->
-    <color name="handy_salmon">#FA8072</color>
+    <color name="handybase_salmon">#FA8072</color>
     <!--幽灵白-->
-    <color name="handy_ghostwhite">#F8F8FF</color>
+    <color name="handybase_ghostwhite">#F8F8FF</color>
     <!--薄荷色-->
-    <color name="handy_mintcream">#F5FFFA</color>
+    <color name="handybase_mintcream">#F5FFFA</color>
     <!--烟白色-->
-    <color name="handy_whitesmoke">#F5F5F5</color>
+    <color name="handybase_whitesmoke">#F5F5F5</color>
     <!--米色-->
-    <color name="handy_beige">#F5F5DC</color>
+    <color name="handybase_beige">#F5F5DC</color>
     <!--浅黄色-->
-    <color name="handy_wheat">#F5DEB3</color>
+    <color name="handybase_wheat">#F5DEB3</color>
     <!--沙褐色-->
-    <color name="handy_sandybrown">#F4A460</color>
+    <color name="handybase_sandybrown">#F4A460</color>
     <!--天蓝色-->
-    <color name="handy_azure">#F0FFFF</color>
+    <color name="handybase_azure">#F0FFFF</color>
     <!--蜜色-->
-    <color name="handy_honeydew">#F0FFF0</color>
+    <color name="handybase_honeydew">#F0FFF0</color>
     <!--艾利斯兰-->
-    <color name="handy_aliceblue">#F0F8FF</color>
+    <color name="handybase_aliceblue">#F0F8FF</color>
     <!--黄褐色-->
-    <color name="handy_khaki">#F0E68C</color>
+    <color name="handybase_khaki">#F0E68C</color>
     <!--亮珊瑚色-->
-    <color name="handy_lightcoral">#F08080</color>
+    <color name="handybase_lightcoral">#F08080</color>
     <!--苍麒麟色-->
-    <color name="handy_palegoldenrod">#EEE8AA</color>
+    <color name="handybase_palegoldenrod">#EEE8AA</color>
     <!--紫罗兰色-->
-    <color name="handy_violet">#EE82EE</color>
+    <color name="handybase_violet">#EE82EE</color>
     <!--暗肉色-->
-    <color name="handy_darksalmon">#E9967A</color>
+    <color name="handybase_darksalmon">#E9967A</color>
     <!--淡紫色-->
-    <color name="handy_lavender">#E6E6FA</color>
+    <color name="handybase_lavender">#E6E6FA</color>
     <!--亮青色-->
-    <color name="handy_lightcyan">#E0FFFF</color>
+    <color name="handybase_lightcyan">#E0FFFF</color>
     <!--实木色-->
-    <color name="handy_burlywood">#DEB887</color>
+    <color name="handybase_burlywood">#DEB887</color>
     <!--洋李色-->
-    <color name="handy_plum">#DDA0DD</color>
+    <color name="handybase_plum">#DDA0DD</color>
     <!--淡灰色-->
-    <color name="handy_gainsboro">#DCDCDC</color>
+    <color name="handybase_gainsboro">#DCDCDC</color>
     <!--暗深红色-->
-    <color name="handy_crimson">#DC143C</color>
+    <color name="handybase_crimson">#DC143C</color>
     <!--苍紫罗兰色-->
-    <color name="handy_palevioletred">#DB7093</color>
+    <color name="handybase_palevioletred">#DB7093</color>
     <!--金麒麟色-->
-    <color name="handy_goldenrod">#DAA520</color>
+    <color name="handybase_goldenrod">#DAA520</color>
     <!--淡紫色-->
-    <color name="handy_orchid">#DA70D6</color>
+    <color name="handybase_orchid">#DA70D6</color>
     <!--蓟色-->
-    <color name="handy_thistle">#D8BFD8</color>
+    <color name="handybase_thistle">#D8BFD8</color>
     <!--亮灰色-->
-    <color name="handy_lightgray">#D3D3D3</color>
+    <color name="handybase_lightgray">#D3D3D3</color>
     <!--茶色-->
-    <color name="handy_tan">#D2B48C</color>
+    <color name="handybase_tan">#D2B48C</color>
     <!--巧可力色-->
-    <color name="handy_chocolate">#D2691E</color>
+    <color name="handybase_chocolate">#D2691E</color>
     <!--秘鲁色-->
-    <color name="handy_peru">#CD853F</color>
+    <color name="handybase_peru">#CD853F</color>
     <!--印第安红-->
-    <color name="handy_indianred">#CD5C5C</color>
+    <color name="handybase_indianred">#CD5C5C</color>
     <!--中紫罗兰色-->
-    <color name="handy_mediumvioletred">#C71585</color>
+    <color name="handybase_mediumvioletred">#C71585</color>
     <!--银色-->
-    <color name="handy_silver">#C0C0C0</color>
+    <color name="handybase_silver">#C0C0C0</color>
     <!--暗黄褐色-->
-    <color name="handy_darkkhaki">#BDB76B</color>
+    <color name="handybase_darkkhaki">#BDB76B</color>
     <!--褐玫瑰红-->
-    <color name="handy_rosybrown">#BC8F8F</color>
+    <color name="handybase_rosybrown">#BC8F8F</color>
     <!--中粉紫色-->
-    <color name="handy_mediumorchid">#BA55D3</color>
+    <color name="handybase_mediumorchid">#BA55D3</color>
     <!--暗金黄色-->
-    <color name="handy_darkgoldenrod">#B8860B</color>
+    <color name="handybase_darkgoldenrod">#B8860B</color>
     <!--火砖色-->
-    <color name="handy_firebrick">#B22222</color>
+    <color name="handybase_firebrick">#B22222</color>
     <!--粉蓝色-->
-    <color name="handy_powderblue">#B0E0E6</color>
+    <color name="handybase_powderblue">#B0E0E6</color>
     <!--亮钢兰色-->
-    <color name="handy_lightsteelblue">#B0C4DE</color>
+    <color name="handybase_lightsteelblue">#B0C4DE</color>
     <!--苍宝石绿-->
-    <color name="handy_paleturquoise">#AFEEEE</color>
+    <color name="handybase_paleturquoise">#AFEEEE</color>
     <!--黄绿色-->
-    <color name="handy_greenyellow">#ADFF2F</color>
+    <color name="handybase_greenyellow">#ADFF2F</color>
     <!--亮蓝色-->
-    <color name="handy_lightblue">#ADD8E6</color>
+    <color name="handybase_lightblue">#ADD8E6</color>
     <!--暗灰色-->
-    <color name="handy_darkgray">#A9A9A9</color>
+    <color name="handybase_darkgray">#A9A9A9</color>
     <!--褐色-->
-    <color name="handy_brown">#A52A2A</color>
+    <color name="handybase_brown">#A52A2A</color>
     <!--赭色-->
-    <color name="handy_sienna">#A0522D</color>
+    <color name="handybase_sienna">#A0522D</color>
     <!--暗紫色-->
-    <color name="handy_darkorchid">#9932CC</color>
+    <color name="handybase_darkorchid">#9932CC</color>
     <!--苍绿色-->
-    <color name="handy_palegreen">#98FB98</color>
+    <color name="handybase_palegreen">#98FB98</color>
     <!--暗紫罗兰色-->
-    <color name="handy_darkviolet">#9400D3</color>
+    <color name="handybase_darkviolet">#9400D3</color>
     <!--中紫色-->
-    <color name="handy_mediumpurple">#9370DB</color>
+    <color name="handybase_mediumpurple">#9370DB</color>
     <!--亮绿色-->
-    <color name="handy_lightgreen">#90EE90</color>
+    <color name="handybase_lightgreen">#90EE90</color>
     <!--暗海兰色-->
-    <color name="handy_darkseagreen">#8FBC8F</color>
+    <color name="handybase_darkseagreen">#8FBC8F</color>
     <!--重褐色-->
-    <color name="handy_saddlebrown">#8B4513</color>
+    <color name="handybase_saddlebrown">#8B4513</color>
     <!--暗洋红-->
-    <color name="handy_darkmagenta">#8B008B</color>
+    <color name="handybase_darkmagenta">#8B008B</color>
     <!--暗红色-->
-    <color name="handy_darkred">#8B0000</color>
+    <color name="handybase_darkred">#8B0000</color>
     <!--紫罗兰蓝色-->
-    <color name="handy_blueviolet">#8A2BE2</color>
+    <color name="handybase_blueviolet">#8A2BE2</color>
     <!--亮天蓝色-->
-    <color name="handy_lightskyblue">#87CEFA</color>
+    <color name="handybase_lightskyblue">#87CEFA</color>
     <!--天蓝色-->
-    <color name="handy_skyblue">#87CEEB</color>
+    <color name="handybase_skyblue">#87CEEB</color>
     <!--灰色-->
-    <color name="handy_gray">#808080</color>
+    <color name="handybase_gray">#808080</color>
     <!--橄榄色-->
-    <color name="handy_olive">#808000</color>
+    <color name="handybase_olive">#808000</color>
     <!--紫色-->
-    <color name="handy_purple">#800080</color>
+    <color name="handybase_purple">#800080</color>
     <!--粟色-->
-    <color name="handy_maroon">#800000</color>
+    <color name="handybase_maroon">#800000</color>
     <!--碧绿色-->
-    <color name="handy_aquamarine">#7FFFD4</color>
+    <color name="handybase_aquamarine">#7FFFD4</color>
     <!--黄绿色-->
-    <color name="handy_chartreuse">#7FFF00</color>
+    <color name="handybase_chartreuse">#7FFF00</color>
     <!--草绿色-->
-    <color name="handy_lawngreen">#7CFC00</color>
+    <color name="handybase_lawngreen">#7CFC00</color>
     <!--中暗蓝色-->
-    <color name="handy_mediumslateblue">#7B68EE</color>
+    <color name="handybase_mediumslateblue">#7B68EE</color>
     <!--亮蓝灰-->
-    <color name="handy_lightslategray">#778899</color>
+    <color name="handybase_lightslategray">#778899</color>
     <!--灰石色-->
-    <color name="handy_slategray">#708090</color>
+    <color name="handybase_slategray">#708090</color>
     <!--深绿褐色-->
-    <color name="handy_olivedrab">#6B8E23</color>
+    <color name="handybase_olivedrab">#6B8E23</color>
     <!--石蓝色-->
-    <color name="handy_slateblue">#6A5ACD</color>
+    <color name="handybase_slateblue">#6A5ACD</color>
     <!--暗灰色-->
-    <color name="handy_dimgray">#696969</color>
+    <color name="handybase_dimgray">#696969</color>
     <!--暗灰色-->
-    <color name="handy_dimgrey">#696969</color>
+    <color name="handybase_dimgrey">#696969</color>
     <!--中绿色-->
-    <color name="handy_mediumaquamarine">#66CDAA</color>
+    <color name="handybase_mediumaquamarine">#66CDAA</color>
     <!--菊兰色-->
-    <color name="handy_cornflowerblue">#6495ED</color>
+    <color name="handybase_cornflowerblue">#6495ED</color>
     <!--军兰色-->
-    <color name="handy_cadetblue">#5F9EA0</color>
+    <color name="handybase_cadetblue">#5F9EA0</color>
     <!--暗橄榄绿-->
-    <color name="handy_darkolivegreen">#556B2F</color>
+    <color name="handybase_darkolivegreen">#556B2F</color>
     <!--靛青色-->
-    <color name="handy_indigo">#4B0082</color>
+    <color name="handybase_indigo">#4B0082</color>
     <!--中绿宝石-->
-    <color name="handy_mediumturquoise">#48D1CC</color>
+    <color name="handybase_mediumturquoise">#48D1CC</color>
     <!--暗灰蓝色-->
-    <color name="handy_darkslateblue">#483D8B</color>
+    <color name="handybase_darkslateblue">#483D8B</color>
     <!--钢兰色-->
-    <color name="handy_steelblue">#4682B4</color>
+    <color name="handybase_steelblue">#4682B4</color>
     <!--皇家蓝-->
-    <color name="handy_royalblue">#4169E1</color>
+    <color name="handybase_royalblue">#4169E1</color>
     <!--青绿色-->
-    <color name="handy_turquoise">#40E0D0</color>
+    <color name="handybase_turquoise">#40E0D0</color>
     <!--中海蓝-->
-    <color name="handy_mediumseagreen">#3CB371</color>
+    <color name="handybase_mediumseagreen">#3CB371</color>
     <!--橙绿色-->
-    <color name="handy_limegreen">#32CD32</color>
+    <color name="handybase_limegreen">#32CD32</color>
     <!--暗瓦灰色-->
-    <color name="handy_darkslategray">#2F4F4F</color>
+    <color name="handybase_darkslategray">#2F4F4F</color>
     <!--海绿色-->
-    <color name="handy_seagreen">#2E8B57</color>
+    <color name="handybase_seagreen">#2E8B57</color>
     <!--森林绿-->
-    <color name="handy_forestgreen">#228B22</color>
+    <color name="handybase_forestgreen">#228B22</color>
     <!--亮海蓝色-->
-    <color name="handy_lightseagreen">#20B2AA</color>
+    <color name="handybase_lightseagreen">#20B2AA</color>
     <!--闪兰色-->
-    <color name="handy_dodgerblue">#1E90FF</color>
+    <color name="handybase_dodgerblue">#1E90FF</color>
     <!--中灰兰色-->
-    <color name="handy_midnightblue">#191970</color>
+    <color name="handybase_midnightblue">#191970</color>
     <!--浅绿色-->
-    <color name="handy_aqua">#00FFFF</color>
+    <color name="handybase_aqua">#00FFFF</color>
     <!--青色-->
-    <color name="handy_cyan">#00FFFF</color>
+    <color name="handybase_cyan">#00FFFF</color>
     <!--春绿色-->
-    <color name="handy_springgreen">#00FF7F</color>
+    <color name="handybase_springgreen">#00FF7F</color>
     <!--酸橙色-->
-    <color name="handy_lime">#00FF00</color>
+    <color name="handybase_lime">#00FF00</color>
     <!--中春绿色-->
-    <color name="handy_mediumspringgreen">#00FA9A</color>
+    <color name="handybase_mediumspringgreen">#00FA9A</color>
     <!--暗宝石绿-->
-    <color name="handy_darkturquoise">#00CED1</color>
+    <color name="handybase_darkturquoise">#00CED1</color>
     <!--深天蓝色-->
-    <color name="handy_deepskyblue">#00BFFF</color>
+    <color name="handybase_deepskyblue">#00BFFF</color>
     <!--暗青色-->
-    <color name="handy_darkcyan">#008B8B</color>
+    <color name="handybase_darkcyan">#008B8B</color>
     <!--水鸭色-->
-    <color name="handy_teal">#008080</color>
+    <color name="handybase_teal">#008080</color>
     <!--绿色-->
-    <color name="handy_green">#008000</color>
+    <color name="handybase_green">#008000</color>
     <!--暗绿色-->
-    <color name="handy_darkgreen">#006400</color>
+    <color name="handybase_darkgreen">#006400</color>
     <!--蓝色-->
-    <color name="handy_blue">#0000FF</color>
+    <color name="handybase_blue">#0000FF</color>
     <!--中兰色-->
-    <color name="handy_mediumblue">#0000CD</color>
+    <color name="handybase_mediumblue">#0000CD</color>
     <!--暗蓝色-->
-    <color name="handy_darkblue">#00008B</color>
+    <color name="handybase_darkblue">#00008B</color>
     <!--海军色-->
-    <color name="handy_navy">#000080</color>
+    <color name="handybase_navy">#000080</color>
     <!--黑色-->
-    <color name="handy_black">#000000</color>
+    <color name="handybase_black">#000000</color>
     <!--透明色-->
-    <color name="handy_transparent">#00000000</color>
+    <color name="handybase_transparent">#00000000</color>
 </resources>
