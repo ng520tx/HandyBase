@@ -22,12 +22,12 @@ class BaseAppApi {
         void initActivityView(@Nullable Bundle savedInstanceState);
 
         /**
-         * 在onStart方法中且initView执行完后被调用，用于初始化界面有关数据。
+         * 在onStart方法中且initActivityView执行完后被调用，用于初始化界面有关数据。
          */
         void initActivityData();
 
         /**
-         * 在onStart方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于访问网络数据等耗时或可能重复执行的操作。
+         * 在onResume方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
          */
         void onActivityRequest();
 
@@ -83,7 +83,7 @@ class BaseAppApi {
         void onFragmentRefresh();
 
         /**
-         * 在onStart方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于访问网络数据等耗时或可能重复执行的操作。
+         * 在onResume方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
          */
         void onFragmentRequest();
     }
