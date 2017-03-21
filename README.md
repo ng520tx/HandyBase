@@ -2,13 +2,13 @@
 ![](HandyBase.png)
 
 ##  更新日志
-***2017年3月21日***
+***2017年3月21日 v1.1***
 * 更新BaseAppApi注释
 * 新接入Glide:3.7.0
 * 新接入EventBus:3.0.0
 * 新接入Retrofit:2.2.0
 
-***2017年3月20日***
+***2017年3月20日 v1.0***
 * 初始化敏捷开发框架项目
 * 新增base包，含有Activity、Fragment、Application的基类
 * 新增simplemvp和strongmvp包，含有Mvp模式的基类
