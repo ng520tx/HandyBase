@@ -8,19 +8,19 @@
 ```javascript
 
     allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
 ```
 ***Step 2.添加compile引用到Module的build.gradle配置文件中***
 
 ```javascript
 
-	dependencies {
-		compile 'com.github.liujie045:HandyBase:1.2'
-	}
+    dependencies {
+        compile 'com.github.liujie045:HandyBase:1.2'
+    }
 ```
 
 ##  更新日志
