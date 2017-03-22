@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ##  更新日志
-***2017年3月22日 v1.1***
+***2017年3月22日 v1.2***
 
 * 新接入[Litepal](https://github.com/LitePalFramework/LitePal#latest-downloads/):1.5.1
 * 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.5.1
