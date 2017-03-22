@@ -46,7 +46,11 @@
         compile 'com.github.liujie045:HandyBase:1.2.1'
     }
 ```
-***Step 3.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
+***Step 3.在项目的Application或BaseActivity中添加***
+
+    Utils.init(context);
+
+***Step 4.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
 
 ```javascript
     <?xml version="1.0" encoding="utf-8"?>
@@ -74,7 +78,7 @@
         <storage value="internal"/>
     </litepal>
 ```
-***Step 4.若要在Library中使用Butterknife，正确配置后应使用R2标注资源***
+***Step 5.若要在Library中使用Butterknife，正确配置后应使用R2标注资源***
 
 ```javascript
     class ExampleActivity extends Activity {
