@@ -1,6 +1,28 @@
 #   敏捷开发基本框架
 ![](HandyBase.png)
 
+## 项目引用
+
+***Step 2.添加maven地址到Project的build.gradle配置文件中***
+
+```java
+
+    allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}Copy
+```
+***Step 2.添加compile引用到Module的build.gradle配置文件中***
+
+```java
+
+	dependencies {
+		compile 'com.github.liujie045:HandyBase:1.2'
+	}
+```
+
 ##  更新日志
 ***2017年3月22日 v1.2***
 
