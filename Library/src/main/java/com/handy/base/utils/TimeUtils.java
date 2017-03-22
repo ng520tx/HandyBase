@@ -2,7 +2,7 @@ package com.handy.base.utils;
 
 import android.annotation.SuppressLint;
 
-import com.handy.base.constants.TimeConstant;
+import com.handy.base.utils.constants.TimeConstant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

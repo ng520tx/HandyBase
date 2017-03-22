@@ -1,4 +1,4 @@
-package com.handy.base.constants;
+package com.handy.base.utils.constants;
 
 import android.support.annotation.IntDef;
 

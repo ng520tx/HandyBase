@@ -1,7 +1,7 @@
 package com.handy.base.utils;
 
 
-import com.handy.base.constants.RegexConstant;
+import com.handy.base.utils.constants.RegexConstant;
 
 import java.util.ArrayList;
 import java.util.List;
