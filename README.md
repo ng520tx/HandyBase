@@ -1,9 +1,11 @@
 #   敏捷开发基本框架
 ![](HandyBase.png)
 
-## 项目引用
+## 最新版本
+    compile 'com.github.liujie045:HandyBase:1.2'
 
-***Step 2.添加maven地址到Project的build.gradle配置文件中***
+## 项目引用
+***Step 1.添加maven地址到Project的build.gradle配置文件中***
 
 ```javascript
     buildscript {
