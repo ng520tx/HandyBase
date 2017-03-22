@@ -5,18 +5,18 @@
 
 ***Step 2.添加maven地址到Project的build.gradle配置文件中***
 
-```java
+```javascript
 
     allprojects {
 		repositories {
 			...
 			maven { url 'https://jitpack.io' }
 		}
-	}Copy
+	}
 ```
 ***Step 2.添加compile引用到Module的build.gradle配置文件中***
 
-```java
+```javascript
 
 	dependencies {
 		compile 'com.github.liujie045:HandyBase:1.2'
