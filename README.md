@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:1.2'
+    compile 'com.github.liujie045:HandyBase:1.2.1'
 
 ## 项目引用
 ***Step 1.添加maven地址到Project的build.gradle配置文件中***
@@ -43,7 +43,7 @@
     }
     
     dependencies {
-        compile 'com.github.liujie045:HandyBase:1.2'
+        compile 'com.github.liujie045:HandyBase:1.2.1'
     }
 ```
 ***Step 3.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
@@ -85,6 +85,10 @@
 ```
 
 ##  更新日志
+***2017年3月22日 v1.2.1***
+
+* 更新utils中部分变量的访问权限为public
+
 ***2017年3月22日 v1.2***
 
 * 更新build.gradle配置
