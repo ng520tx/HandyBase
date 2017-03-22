@@ -6,10 +6,21 @@
 ***Step 2.添加maven地址到Project的build.gradle配置文件中***
 
 ```javascript
-
+    buildscript {
+        repositories {
+            jcenter()
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:2.3.0'
+            classpath 'me.tatarka:gradle-retrolambda:3.6.0'
+            classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+        }
+    }
+    
     allprojects {
         repositories {
-            ...
+            jcenter()
+            mavenCentral()
             maven { url 'https://jitpack.io' }
         }
     }
@@ -17,9 +28,57 @@
 ***Step 2.添加compile引用到Module的build.gradle配置文件中***
 
 ```javascript
+    apply plugin: 'com.android.application'（or：apply plugin: 'com.android.library'）
+    apply plugin: 'me.tatarka.retrolambda'
+    apply plugin: 'com.jakewharton.butterknife'
 
+    android {
+        ...
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
+    
     dependencies {
         compile 'com.github.liujie045:HandyBase:1.2'
+    }
+```
+***Step 3.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
+
+```javascript
+    <?xml version="1.0" encoding="utf-8"?>
+    <litepal>
+        <!--<dbname>是数据库的名字-->
+        <dbname value="collectres"/>
+        <!--<version>是数据库的版本号-->
+        <version value="1"/>
+        <!--<list>是数据库的映射模型（数据库表）-->
+        <list>
+            <!--<mapping>是数据库的映射模型的地址（数据库表结构）-->
+            <!--只有private修饰的字段才会被映射到数据库表中，即如果有某一个字段不想映射的话，就设置为public、protected或者default修饰符就可以了。-->
+            <mapping class="com.boco.gx.areacollect.model.collect.Community"/>
+        </list>
+    
+        <!--keep ：按类和字段名大小写作为表名和列名-->
+        <!--upper ：将所有的类和字段名称以大写的方式作为表明和列名。-->
+        <!--lower ：将所有的类和字段名称以小写的方式作为表明和列名。-->
+        <cases value="keep"/>
+    
+        <!--不设置则默认internal-->
+        <!--internal：设置internal将把数据库存在应用内部文件夹，非本应用和root权限无法查看-->
+        <!--external：如果设置external，数据库文件将储存在/storage/sdcard1/Android/data/应用包名/files/databases-->
+        <!--如果是不想被别人查看的数据，最好不要设置external。在设置external的时候别忘了加权限<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>-->
+        <storage value="internal"/>
+    </litepal>
+```
+***Step 4.若要在Library中使用Butterknife，正确配置后应使用R2标注资源***
+
+```javascript
+    class ExampleActivity extends Activity {
+      @BindView(R2.id.user) EditText username;
+      @BindView(R2.id.pass) EditText password;
+    ...
     }
 ```
 
