@@ -25,9 +25,10 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by LiuJie on 2016/1/19.
  */
 public class AesUtils {
+
     private static final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
-    private static AesUtils aesUtils = null;
-    private static String DEFAULT_KEY = "HANDY_SECRET_KEY";
+
+    public static String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
     private AesUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

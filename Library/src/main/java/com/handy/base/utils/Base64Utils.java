@@ -6,7 +6,7 @@ package com.handy.base.utils;
  * Created by LiuJie on 2016/1/19.
  */
 public class Base64Utils {
-    private static Base64Utils base64Utils = null;
+
     private static char[] base64EncodeChars = new char[]{'A', 'B', 'C', 'D',
             'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
             'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',

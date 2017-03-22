@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
  */
 public class ShareUtils {
 
-    private static String SP_NAME = "HANDYBASE.sp";
+    public static String SP_NAME = "HANDYBASE.sp";
 
     private ShareUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

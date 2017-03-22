@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class PermissionsUT {
 
-    private static List<String> Permissions = new ArrayList<>();
+    public static List<String> Permissions = new ArrayList<>();
 
     private PermissionsUT() {
         throw new UnsupportedOperationException("u can't instantiate me...");
