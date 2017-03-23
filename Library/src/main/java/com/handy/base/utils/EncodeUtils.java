@@ -18,8 +18,20 @@ import java.net.URLEncoder;
  */
 public class EncodeUtils {
 
-    private EncodeUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static EncodeUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static EncodeUtils getInstance() {
+        if (instance == null) {
+            synchronized (EncodeUtils.class) {
+                if (instance == null) {
+                    instance = new EncodeUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -29,7 +41,7 @@ public class EncodeUtils {
      * @param input 要编码的字符
      * @return 编码为UTF-8的字符串
      */
-    public static String urlEncode(String input) {
+    public String urlEncode(String input) {
         return urlEncode(input, "UTF-8");
     }
 
@@ -41,7 +53,7 @@ public class EncodeUtils {
      * @param charset 字符集
      * @return 编码为字符集的字符串
      */
-    public static String urlEncode(String input, String charset) {
+    public String urlEncode(String input, String charset) {
         try {
             return URLEncoder.encode(input, charset);
         } catch (UnsupportedEncodingException e) {
@@ -56,7 +68,7 @@ public class EncodeUtils {
      * @param input 要解码的字符串
      * @return URL解码后的字符串
      */
-    public static String urlDecode(String input) {
+    public String urlDecode(String input) {
         return urlDecode(input, "UTF-8");
     }
 
@@ -68,7 +80,7 @@ public class EncodeUtils {
      * @param charset 字符集
      * @return URL解码为指定字符集的字符串
      */
-    public static String urlDecode(String input, String charset) {
+    public String urlDecode(String input, String charset) {
         try {
             return URLDecoder.decode(input, charset);
         } catch (UnsupportedEncodingException e) {
@@ -82,7 +94,7 @@ public class EncodeUtils {
      * @param input 要编码的字符串
      * @return Base64编码后的字符串
      */
-    public static byte[] base64Encode(String input) {
+    public byte[] base64Encode(String input) {
         return base64Encode(input.getBytes());
     }
 
@@ -92,7 +104,7 @@ public class EncodeUtils {
      * @param input 要编码的字节数组
      * @return Base64编码后的字符串
      */
-    public static byte[] base64Encode(byte[] input) {
+    public byte[] base64Encode(byte[] input) {
         return Base64.encode(input, Base64.NO_WRAP);
     }
 
@@ -102,7 +114,7 @@ public class EncodeUtils {
      * @param input 要编码的字节数组
      * @return Base64编码后的字符串
      */
-    public static String base64Encode2String(byte[] input) {
+    public String base64Encode2String(byte[] input) {
         return Base64.encodeToString(input, Base64.NO_WRAP);
     }
 
@@ -112,7 +124,7 @@ public class EncodeUtils {
      * @param input 要解码的字符串
      * @return Base64解码后的字符串
      */
-    public static byte[] base64Decode(String input) {
+    public byte[] base64Decode(String input) {
         return Base64.decode(input, Base64.NO_WRAP);
     }
 
@@ -122,7 +134,7 @@ public class EncodeUtils {
      * @param input 要解码的字符串
      * @return Base64解码后的字符串
      */
-    public static byte[] base64Decode(byte[] input) {
+    public byte[] base64Decode(byte[] input) {
         return Base64.decode(input, Base64.NO_WRAP);
     }
 
@@ -133,7 +145,7 @@ public class EncodeUtils {
      * @param input 要Base64URL安全编码的字符串
      * @return Base64URL安全编码后的字符串
      */
-    public static byte[] base64UrlSafeEncode(String input) {
+    public byte[] base64UrlSafeEncode(String input) {
         return Base64.encode(input.getBytes(), Base64.URL_SAFE);
     }
 
@@ -143,7 +155,7 @@ public class EncodeUtils {
      * @param input 要Html编码的字符串
      * @return Html编码后的字符串
      */
-    public static String htmlEncode(CharSequence input) {
+    public String htmlEncode(CharSequence input) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             return Html.escapeHtml(input);
         } else {
@@ -189,7 +201,7 @@ public class EncodeUtils {
      * @return Html解码后的字符串
      */
     @SuppressWarnings("deprecation")
-    public static CharSequence htmlDecode(String input) {
+    public CharSequence htmlDecode(String input) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(input, Html.FROM_HTML_MODE_LEGACY);
         } else {
