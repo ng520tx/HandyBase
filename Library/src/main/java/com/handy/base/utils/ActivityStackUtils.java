@@ -12,8 +12,8 @@ import java.util.Stack;
  * Created by LiuJie on 2016/1/19.
  */
 public class ActivityStackUtils {
-    private static ActivityStackUtils activityStackUtils; //单例模式
-    private static Stack<Activity> activityStack; //Activity栈
+
+    public static Stack<Activity> activityStack; //Activity栈
 
     private ActivityStackUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
