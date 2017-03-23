@@ -31,7 +31,6 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
-import static android.graphics.BlurMaskFilter.Blur;
 
 /**
  * <pre>
@@ -43,8 +42,20 @@ import static android.graphics.BlurMaskFilter.Blur;
  */
 public class SpannableStringUtils {
 
-    private SpannableStringUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static SpannableStringUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static SpannableStringUtils getInstance() {
+        if (instance == null) {
+            synchronized (SpannableStringUtils.class) {
+                if (instance == null) {
+                    instance = new SpannableStringUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -53,11 +64,11 @@ public class SpannableStringUtils {
      * @param text 样式字符串文本
      * @return {@link Builder}
      */
-    public static Builder getBuilder(@NonNull CharSequence text) {
+    public Builder getBuilder(@NonNull CharSequence text) {
         return new Builder(text);
     }
 
-    public static class Builder {
+    public class Builder {
 
         private int defaultValue = 0x12000000;
         private CharSequence text;
@@ -97,6 +108,7 @@ public class SpannableStringUtils {
         private boolean imageIsUri;
         private Uri uri;
         private boolean imageIsResourceId;
+
         @DrawableRes
         private int resourceId;
 
@@ -105,7 +117,7 @@ public class SpannableStringUtils {
 
         private boolean isBlur;
         private float radius;
-        private Blur style;
+        private BlurMaskFilter.Blur style;
 
         private SpannableStringBuilder mBuilder;
 
@@ -401,14 +413,14 @@ public class SpannableStringUtils {
          *
          * @param radius 模糊半径（需大于0）
          * @param style  模糊样式<ul>
-         *               <li>{@link Blur#NORMAL}</li>
-         *               <li>{@link Blur#SOLID}</li>
-         *               <li>{@link Blur#OUTER}</li>
-         *               <li>{@link Blur#INNER}</li>
+         *               <li>{@link BlurMaskFilter.Blur#NORMAL}</li>
+         *               <li>{@link BlurMaskFilter.Blur#SOLID}</li>
+         *               <li>{@link BlurMaskFilter.Blur#OUTER}</li>
+         *               <li>{@link BlurMaskFilter.Blur#INNER}</li>
          *               </ul>
          * @return {@link Builder}
          */
-        public Builder setBlur(float radius, Blur style) {
+        public Builder setBlur(float radius, BlurMaskFilter.Blur style) {
             this.radius = radius;
             this.style = style;
             this.isBlur = true;
@@ -510,7 +522,7 @@ public class SpannableStringUtils {
             }
             if (imageIsBitmap || imageIsDrawable || imageIsUri || imageIsResourceId) {
                 if (imageIsBitmap) {
-                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getContext(), bitmap), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getInstance().getContext(), bitmap), start, end, flag);
                     bitmap = null;
                     imageIsBitmap = false;
                 } else if (imageIsDrawable) {
@@ -518,11 +530,11 @@ public class SpannableStringUtils {
                     drawable = null;
                     imageIsDrawable = false;
                 } else if (imageIsUri) {
-                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getContext(), uri), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getInstance().getContext(), uri), start, end, flag);
                     uri = null;
                     imageIsUri = false;
                 } else {
-                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getContext(), resourceId), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getInstance().getContext(), resourceId), start, end, flag);
                     resourceId = 0;
                     imageIsResourceId = false;
                 }
