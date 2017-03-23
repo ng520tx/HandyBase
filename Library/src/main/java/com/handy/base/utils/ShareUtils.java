@@ -15,7 +15,7 @@ import java.util.Set;
  *     desc  : SP相关工具类
  * </pre>
  */
-public class SPUtils {
+public class ShareUtils {
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -26,7 +26,7 @@ public class SPUtils {
      *
      * @param spName spName
      */
-    public SPUtils(String spName) {
+    public ShareUtils(String spName) {
         sp = HandyBaseUtils.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
         editor = sp.edit();
         editor.apply();
