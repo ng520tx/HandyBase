@@ -12,10 +12,21 @@ import android.content.Context;
  */
 public class HandyBaseUtils {
 
-    private static Context context;
+    private volatile static HandyBaseUtils instance;
+    private Context context;
 
-    private HandyBaseUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static HandyBaseUtils getInstance() {
+        if (instance == null) {
+            synchronized (HandyBaseUtils.class) {
+                if (instance == null) {
+                    instance = new HandyBaseUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -23,8 +34,8 @@ public class HandyBaseUtils {
      *
      * @param context 上下文
      */
-    public static void registerContext(Context context) {
-        HandyBaseUtils.context = context.getApplicationContext();
+    public void registerContext(Context context) {
+        this.context = context.getApplicationContext();
     }
 
     /**
@@ -32,8 +43,8 @@ public class HandyBaseUtils {
      *
      * @return ApplicationContext
      */
-    public static Context getContext() {
-        if (context != null) return context;
+    public Context getContext() {
+        if (this.context != null) return this.context;
         throw new NullPointerException("u should registerContext first");
     }
 }
