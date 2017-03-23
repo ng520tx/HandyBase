@@ -26,12 +26,23 @@ import java.util.Locale;
  */
 public class LocationUtils {
 
-    private static OnLocationChangeListener mListener;
-    private static MyLocationListener myLocationListener;
-    private static LocationManager mLocationManager;
+    private volatile static LocationUtils instance;
+    private OnLocationChangeListener mListener;
+    private MyLocationListener myLocationListener;
+    private LocationManager mLocationManager;
 
-    private LocationUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static LocationUtils getInstance() {
+        if (instance == null) {
+            synchronized (LocationUtils.class) {
+                if (instance == null) {
+                    instance = new LocationUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -39,8 +50,8 @@ public class LocationUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isGpsEnabled() {
-        LocationManager lm = (LocationManager) HandyBaseUtils.getContext().getSystemService(Context.LOCATION_SERVICE);
+    public boolean isGpsEnabled() {
+        LocationManager lm = (LocationManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -49,18 +60,18 @@ public class LocationUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isLocationEnabled() {
-        LocationManager lm = (LocationManager) HandyBaseUtils.getContext().getSystemService(Context.LOCATION_SERVICE);
+    public boolean isLocationEnabled() {
+        LocationManager lm = (LocationManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
      * 打开Gps设置界面
      */
-    public static void openGpsSettings() {
+    public void openGpsSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        HandyBaseUtils.getContext().startActivity(intent);
+        HandyBaseUtils.getInstance().getContext().startActivity(intent);
     }
 
     /**
@@ -78,9 +89,9 @@ public class LocationUtils {
      * @param listener    位置刷新的回调接口
      * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    public static boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
+    public boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) HandyBaseUtils.getContext().getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled()) {
             ToastUtils.showShortToastSafe("无法定位，请打开定位服务");
@@ -98,7 +109,7 @@ public class LocationUtils {
     /**
      * 注销
      */
-    public static void unregister() {
+    public void unregister() {
         if (mLocationManager != null) {
             if (myLocationListener != null) {
                 mLocationManager.removeUpdates(myLocationListener);
@@ -113,7 +124,7 @@ public class LocationUtils {
      *
      * @return {@link Criteria}
      */
-    private static Criteria getCriteria() {
+    private Criteria getCriteria() {
         Criteria criteria = new Criteria();
         //设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -137,8 +148,8 @@ public class LocationUtils {
      * @param longitude 经度
      * @return {@link Address}
      */
-    public static Address getAddress(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(HandyBaseUtils.getContext(), Locale.getDefault());
+    public Address getAddress(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(HandyBaseUtils.getInstance().getContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);
@@ -155,7 +166,7 @@ public class LocationUtils {
      * @param longitude 经度
      * @return 所在国家
      */
-    public static String getCountryName(double latitude, double longitude) {
+    public String getCountryName(double latitude, double longitude) {
         Address address = getAddress(latitude, longitude);
         return address == null ? "unknown" : address.getCountryName();
     }
@@ -167,7 +178,7 @@ public class LocationUtils {
      * @param longitude 经度
      * @return 所在地
      */
-    public static String getLocality(double latitude, double longitude) {
+    public String getLocality(double latitude, double longitude) {
         Address address = getAddress(latitude, longitude);
         return address == null ? "unknown" : address.getLocality();
     }
@@ -179,7 +190,7 @@ public class LocationUtils {
      * @param longitude 经度
      * @return 所在街道
      */
-    public static String getStreet(double latitude, double longitude) {
+    public String getStreet(double latitude, double longitude) {
         Address address = getAddress(latitude, longitude);
         return address == null ? "unknown" : address.getAddressLine(0);
     }
@@ -210,7 +221,7 @@ public class LocationUtils {
         void onStatusChanged(String provider, int status, Bundle extras);//位置状态发生改变
     }
 
-    private static class MyLocationListener
+    private class MyLocationListener
             implements LocationListener {
         /**
          * 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
