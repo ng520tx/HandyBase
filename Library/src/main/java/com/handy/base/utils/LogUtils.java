@@ -21,15 +21,26 @@ import java.util.Locale;
  */
 public class LogUtils {
 
-    private static boolean logSwitch = true;
-    private static boolean log2FileSwitch = false;
-    private static char logFilter = 'v';
-    private static String tag = "HandyBase";
-    private static String dir = null;
-    private static int stackIndex = 0;
+    private volatile static LogUtils instance;
+    private boolean logSwitch = true;
+    private boolean log2FileSwitch = false;
+    private char logFilter = 'v';
+    private String tag = "HandyBase";
+    private String dir = null;
+    private int stackIndex = 0;
 
-    private LogUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static LogUtils getInstance() {
+        if (instance == null) {
+            synchronized (LogUtils.class) {
+                if (instance == null) {
+                    instance = new LogUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -41,16 +52,16 @@ public class LogUtils {
      * @param logFilter      输入日志类型有{@code v, d, i, w, e}<br>v代表输出所有信息，w则只输出警告...
      * @param tag            标签
      */
-    public static void init(boolean logSwitch, boolean log2FileSwitch, char logFilter, String tag) {
+    public void init(boolean logSwitch, boolean log2FileSwitch, char logFilter, String tag) {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            dir = HandyBaseUtils.getContext().getExternalCacheDir().getPath() + File.separator;
+            dir = HandyBaseUtils.getInstance().getContext().getExternalCacheDir().getPath() + File.separator;
         } else {
-            dir = HandyBaseUtils.getContext().getCacheDir().getPath() + File.separator;
+            dir = HandyBaseUtils.getInstance().getContext().getCacheDir().getPath() + File.separator;
         }
-        LogUtils.logSwitch = logSwitch;
-        LogUtils.log2FileSwitch = log2FileSwitch;
-        LogUtils.logFilter = logFilter;
-        LogUtils.tag = tag;
+        LogUtils.getInstance().logSwitch = logSwitch;
+        LogUtils.getInstance().log2FileSwitch = log2FileSwitch;
+        LogUtils.getInstance().logFilter = logFilter;
+        LogUtils.getInstance().tag = tag;
     }
 
     /**
@@ -59,11 +70,11 @@ public class LogUtils {
      *
      * @return Builder对象
      */
-    public static Builder getBuilder() {
+    public Builder getBuilder() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            dir = HandyBaseUtils.getContext().getExternalCacheDir().getPath() + File.separator + "log" + File.separator;
+            dir = HandyBaseUtils.getInstance().getContext().getExternalCacheDir().getPath() + File.separator + "log" + File.separator;
         } else {
-            dir = HandyBaseUtils.getContext().getCacheDir().getPath() + File.separator + "log" + File.separator;
+            dir = HandyBaseUtils.getInstance().getContext().getCacheDir().getPath() + File.separator + "log" + File.separator;
         }
         return new Builder();
     }
@@ -73,7 +84,7 @@ public class LogUtils {
      *
      * @param msg 消息
      */
-    public static void v(Object msg) {
+    public void v(Object msg) {
         log(tag, msg.toString(), null, 'i');
     }
 
@@ -83,7 +94,7 @@ public class LogUtils {
      * @param tag 标签
      * @param msg 消息
      */
-    public static void v(String tag, Object msg) {
+    public void v(String tag, Object msg) {
         log(tag, msg.toString(), null, 'i');
     }
 
@@ -94,7 +105,7 @@ public class LogUtils {
      * @param msg 消息
      * @param tr  异常
      */
-    public static void v(String tag, Object msg, Throwable tr) {
+    public void v(String tag, Object msg, Throwable tr) {
         log(tag, msg.toString(), tr, 'v');
     }
 
@@ -103,7 +114,7 @@ public class LogUtils {
      *
      * @param msg 消息
      */
-    public static void d(Object msg) {
+    public void d(Object msg) {
         log(tag, msg.toString(), null, 'd');
     }
 
@@ -113,7 +124,7 @@ public class LogUtils {
      * @param tag 标签
      * @param msg 消息
      */
-    public static void d(String tag, Object msg) {
+    public void d(String tag, Object msg) {
         log(tag, msg.toString(), null, 'd');
     }
 
@@ -124,7 +135,7 @@ public class LogUtils {
      * @param msg 消息
      * @param tr  异常
      */
-    public static void d(String tag, Object msg, Throwable tr) {
+    public void d(String tag, Object msg, Throwable tr) {
         log(tag, msg.toString(), tr, 'd');
     }
 
@@ -133,7 +144,7 @@ public class LogUtils {
      *
      * @param msg 消息
      */
-    public static void i(Object msg) {
+    public void i(Object msg) {
         log(tag, msg.toString(), null, 'i');
     }
 
@@ -143,7 +154,7 @@ public class LogUtils {
      * @param tag 标签
      * @param msg 消息
      */
-    public static void i(String tag, Object msg) {
+    public void i(String tag, Object msg) {
         log(tag, msg.toString(), null, 'i');
     }
 
@@ -154,7 +165,7 @@ public class LogUtils {
      * @param msg 消息
      * @param tr  异常
      */
-    public static void i(String tag, Object msg, Throwable tr) {
+    public void i(String tag, Object msg, Throwable tr) {
         log(tag, msg.toString(), tr, 'i');
     }
 
@@ -163,7 +174,7 @@ public class LogUtils {
      *
      * @param msg 消息
      */
-    public static void w(Object msg) {
+    public void w(Object msg) {
         log(tag, msg.toString(), null, 'w');
     }
 
@@ -173,7 +184,7 @@ public class LogUtils {
      * @param tag 标签
      * @param msg 消息
      */
-    public static void w(String tag, Object msg) {
+    public void w(String tag, Object msg) {
         log(tag, msg.toString(), null, 'w');
     }
 
@@ -184,7 +195,7 @@ public class LogUtils {
      * @param msg 消息
      * @param tr  异常
      */
-    public static void w(String tag, Object msg, Throwable tr) {
+    public void w(String tag, Object msg, Throwable tr) {
         log(tag, msg.toString(), tr, 'w');
     }
 
@@ -193,7 +204,7 @@ public class LogUtils {
      *
      * @param msg 消息
      */
-    public static void e(Object msg) {
+    public void e(Object msg) {
         log(tag, msg.toString(), null, 'e');
     }
 
@@ -203,7 +214,7 @@ public class LogUtils {
      * @param tag 标签
      * @param msg 消息
      */
-    public static void e(String tag, Object msg) {
+    public void e(String tag, Object msg) {
         log(tag, msg.toString(), null, 'e');
     }
 
@@ -214,7 +225,7 @@ public class LogUtils {
      * @param msg 消息
      * @param tr  异常
      */
-    public static void e(String tag, Object msg, Throwable tr) {
+    public void e(String tag, Object msg, Throwable tr) {
         log(tag, msg.toString(), tr, 'e');
     }
 
@@ -226,7 +237,7 @@ public class LogUtils {
      * @param tr   异常
      * @param type 日志类型
      */
-    private static void log(String tag, String msg, Throwable tr, char type) {
+    private void log(String tag, String msg, Throwable tr, char type) {
         if (msg == null || msg.isEmpty()) return;
         if (logSwitch) {
             if ('e' == type && ('e' == logFilter || 'v' == logFilter)) {
@@ -252,7 +263,7 @@ public class LogUtils {
      * @param tr   异常
      * @param type 日志类型
      */
-    private static void printLog(final String tag, final String msg, Throwable tr, char type) {
+    private void printLog(final String tag, final String msg, Throwable tr, char type) {
         final int maxLen = 4000;
         for (int i = 0, len = msg.length(); i * maxLen < len; ++i) {
             String subMsg = msg.substring(i * maxLen, (i + 1) * maxLen < len ? (i + 1) * maxLen : len);
@@ -280,11 +291,11 @@ public class LogUtils {
      * @param tag  标签
      * @param msg  信息
      **/
-    private synchronized static void log2File(final char type, final String tag, final String msg) {
+    private synchronized void log2File(final char type, final String tag, final String msg) {
         Date now = new Date();
         String date = new SimpleDateFormat("MM-dd", Locale.getDefault()).format(now);
         final String fullPath = dir + date + ".txt";
-        if (!FileUtils.createOrExistsFile(fullPath)) return;
+        if (!FileUtils.getInstance().createOrExistsFile(fullPath)) return;
         String time = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(now);
         final String dateLogContent = time + ":" + type + ":" + tag + ":" + msg + '\n';
         new Thread(new Runnable() {
@@ -297,7 +308,7 @@ public class LogUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    CloseUtils.closeIO(bw);
+                    CloseUtils.getInstance().closeIO(bw);
                 }
             }
         }).start();
@@ -308,7 +319,7 @@ public class LogUtils {
      *
      * @return tag
      */
-    private static String generateTag(String tag) {
+    private String generateTag(String tag) {
         StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
         if (stackIndex == 0) {
             while (!stacks[stackIndex].getMethodName().equals("generateTag")) {
@@ -323,7 +334,7 @@ public class LogUtils {
         return String.format(format, caller.getMethodName(), callerClazzName, caller.getLineNumber());
     }
 
-    public static class Builder {
+    public class Builder {
 
         private boolean logSwitch = true;
         private boolean log2FileSwitch = false;
@@ -351,10 +362,10 @@ public class LogUtils {
         }
 
         public void create() {
-            LogUtils.logSwitch = logSwitch;
-            LogUtils.log2FileSwitch = log2FileSwitch;
-            LogUtils.logFilter = logFilter;
-            LogUtils.tag = tag;
+            LogUtils.getInstance().logSwitch = logSwitch;
+            LogUtils.getInstance().log2FileSwitch = log2FileSwitch;
+            LogUtils.getInstance().logFilter = logFilter;
+            LogUtils.getInstance().tag = tag;
         }
     }
 }
