@@ -20,8 +20,20 @@ import java.util.Map;
  */
 public class EmptyUtils {
 
-    private EmptyUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static EmptyUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static EmptyUtils getInstance() {
+        if (instance == null) {
+            synchronized (EmptyUtils.class) {
+                if (instance == null) {
+                    instance = new EmptyUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -30,7 +42,7 @@ public class EmptyUtils {
      * @param obj 对象
      * @return {@code true}: 为空<br>{@code false}: 不为空
      */
-    public static boolean isEmpty(Object obj) {
+    public boolean isEmpty(Object obj) {
         if (obj == null) {
             return true;
         }
@@ -69,7 +81,7 @@ public class EmptyUtils {
      * @param obj 对象
      * @return {@code true}: 非空<br>{@code false}: 空
      */
-    public static boolean isNotEmpty(Object obj) {
+    public boolean isNotEmpty(Object obj) {
         return !isEmpty(obj);
     }
 }
