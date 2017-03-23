@@ -10,12 +10,12 @@ import android.content.Context;
  *     desc  : Utils初始化相关
  * </pre>
  */
-public class Utils {
+public class HandyBaseUtils {
 
     private static Context context;
     private static SPUtils spUtils;
 
-    private Utils() {
+    private HandyBaseUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
@@ -25,7 +25,7 @@ public class Utils {
      * @param context 上下文
      */
     public static void init(Context context) {
-        Utils.context = context.getApplicationContext();
+        HandyBaseUtils.context = context.getApplicationContext();
         spUtils = new SPUtils("utilcode");
     }
 

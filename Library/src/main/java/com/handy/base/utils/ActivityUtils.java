@@ -37,9 +37,9 @@ public class ActivityUtils {
     public static boolean isActivityExists(String packageName, String className) {
         Intent intent = new Intent();
         intent.setClassName(packageName, className);
-        return !(Utils.getContext().getPackageManager().resolveActivity(intent, 0) == null ||
-                intent.resolveActivity(Utils.getContext().getPackageManager()) == null ||
-                Utils.getContext().getPackageManager().queryIntentActivities(intent, 0).size() == 0);
+        return !(HandyBaseUtils.getContext().getPackageManager().resolveActivity(intent, 0) == null ||
+                intent.resolveActivity(HandyBaseUtils.getContext().getPackageManager()) == null ||
+                HandyBaseUtils.getContext().getPackageManager().queryIntentActivities(intent, 0).size() == 0);
     }
 
     /**
@@ -60,7 +60,7 @@ public class ActivityUtils {
      * @param bundle      bundle
      */
     public static void launchActivity(String packageName, String className, Bundle bundle) {
-        Utils.getContext().startActivity(IntentUtils.getComponentIntent(packageName, className, bundle));
+        HandyBaseUtils.getContext().startActivity(IntentUtils.getComponentIntent(packageName, className, bundle));
     }
 
     /**
@@ -73,7 +73,7 @@ public class ActivityUtils {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PackageManager pm = Utils.getContext().getPackageManager();
+        PackageManager pm = HandyBaseUtils.getContext().getPackageManager();
         List<ResolveInfo> infos = pm.queryIntentActivities(intent, 0);
         for (ResolveInfo info : infos) {
             if (info.activityInfo.packageName.equals(packageName)) {

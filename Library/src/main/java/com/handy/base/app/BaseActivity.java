@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
 import com.handy.base.utils.ActivityStackUtils;
+import com.handy.base.utils.HandyBaseUtils;
 import com.handy.base.utils.PermissionsUT;
 
 /**
@@ -40,8 +41,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
         this.application = getApplication();
         this.savedInstanceState = savedInstanceState;
 
-        GetScreenSize();
-        ActivityStackUtils.addActivity(this);
+        try {
+            GetScreenSize();
+            HandyBaseUtils.init(this);
+            ActivityStackUtils.addActivity(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
