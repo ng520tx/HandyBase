@@ -23,8 +23,20 @@ import java.util.Map;
  */
 public class ActivityUtils {
 
-    private ActivityUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static ActivityUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static ActivityUtils getInstance() {
+        if (instance == null) {
+            synchronized (ActivityUtils.class) {
+                if (instance == null) {
+                    instance = new ActivityUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -34,7 +46,7 @@ public class ActivityUtils {
      * @param className   activity全路径类名
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isActivityExists(String packageName, String className) {
+    public boolean isActivityExists(String packageName, String className) {
         Intent intent = new Intent();
         intent.setClassName(packageName, className);
         return !(HandyBaseUtils.getContext().getPackageManager().resolveActivity(intent, 0) == null ||
@@ -48,7 +60,7 @@ public class ActivityUtils {
      * @param packageName 包名
      * @param className   全类名
      */
-    public static void launchActivity(String packageName, String className) {
+    public void launchActivity(String packageName, String className) {
         launchActivity(packageName, className, null);
     }
 
@@ -59,7 +71,7 @@ public class ActivityUtils {
      * @param className   全类名
      * @param bundle      bundle
      */
-    public static void launchActivity(String packageName, String className, Bundle bundle) {
+    public void launchActivity(String packageName, String className, Bundle bundle) {
         HandyBaseUtils.getContext().startActivity(IntentUtils.getComponentIntent(packageName, className, bundle));
     }
 
@@ -69,7 +81,7 @@ public class ActivityUtils {
      * @param packageName 包名
      * @return launcher activity
      */
-    public static String getLauncherActivity(String packageName) {
+    public String getLauncherActivity(String packageName) {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -89,7 +101,7 @@ public class ActivityUtils {
      *
      * @return 栈顶Activity
      */
-    public static Activity getTopActivity() {
+    public Activity getTopActivity() {
         try {
             Class activityThreadClass = Class.forName("android.app.ActivityThread");
             Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
