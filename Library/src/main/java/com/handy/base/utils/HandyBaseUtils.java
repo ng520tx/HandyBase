@@ -34,7 +34,7 @@ public class HandyBaseUtils {
      *
      * @param context 上下文
      */
-    public void registerContext(Context context) {
+    public void registerUtils(Context context) {
         this.context = context.getApplicationContext();
     }
 
@@ -45,6 +45,6 @@ public class HandyBaseUtils {
      */
     public Context getContext() {
         if (this.context != null) return this.context;
-        throw new NullPointerException("u should registerContext first");
+        throw new NullPointerException("u should registerUtils first");
     }
 }

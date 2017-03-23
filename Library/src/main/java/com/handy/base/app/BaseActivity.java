@@ -43,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
         try {
             GetScreenSize();
-            HandyBaseUtils.getInstance().registerContext(this);
+            HandyBaseUtils.getInstance().registerUtils(this);
             ActivityStackUtils.getInstance().addActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
