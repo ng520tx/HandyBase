@@ -10,8 +10,20 @@ package com.handy.base.utils;
  */
 public class StringUtils {
 
-    private StringUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static StringUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static StringUtils getInstance() {
+        if (instance == null) {
+            synchronized (StringUtils.class) {
+                if (instance == null) {
+                    instance = new StringUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -20,7 +32,7 @@ public class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: 空<br> {@code false}: 不为空
      */
-    public static boolean isEmpty(CharSequence s) {
+    public boolean isEmpty(CharSequence s) {
         return s == null || s.length() == 0;
     }
 
@@ -30,7 +42,7 @@ public class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: null或全空格<br> {@code false}: 不为null且不全空格
      */
-    public static boolean isSpace(String s) {
+    public boolean isSpace(String s) {
         return (s == null || s.trim().length() == 0);
     }
 
@@ -41,7 +53,7 @@ public class StringUtils {
      * @param b 待校验字符串b
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
-    public static boolean equals(CharSequence a, CharSequence b) {
+    public boolean equals(CharSequence a, CharSequence b) {
         if (a == b) return true;
         int length;
         if (a != null && b != null && (length = a.length()) == b.length()) {
@@ -64,7 +76,7 @@ public class StringUtils {
      * @param b 待校验字符串b
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
-    public static boolean equalsIgnoreCase(String a, String b) {
+    public boolean equalsIgnoreCase(String a, String b) {
         return (a == b) || (b != null) && (a.length() == b.length()) && a.regionMatches(true, 0, b, 0, b.length());
     }
 
@@ -74,7 +86,7 @@ public class StringUtils {
      * @param s 待转字符串
      * @return s为null转为长度为0字符串，否则不改变
      */
-    public static String null2Length0(String s) {
+    public String null2Length0(String s) {
         return s == null ? "" : s;
     }
 
@@ -84,7 +96,7 @@ public class StringUtils {
      * @param s 字符串
      * @return null返回0，其他返回自身长度
      */
-    public static int length(CharSequence s) {
+    public int length(CharSequence s) {
         return s == null ? 0 : s.length();
     }
 
@@ -94,7 +106,7 @@ public class StringUtils {
      * @param s 待转字符串
      * @return 首字母大写字符串
      */
-    public static String upperFirstLetter(String s) {
+    public String upperFirstLetter(String s) {
         if (isEmpty(s) || !Character.isLowerCase(s.charAt(0))) return s;
         return String.valueOf((char) (s.charAt(0) - 32)) + s.substring(1);
     }
@@ -105,7 +117,7 @@ public class StringUtils {
      * @param s 待转字符串
      * @return 首字母小写字符串
      */
-    public static String lowerFirstLetter(String s) {
+    public String lowerFirstLetter(String s) {
         if (isEmpty(s) || !Character.isUpperCase(s.charAt(0))) return s;
         return String.valueOf((char) (s.charAt(0) + 32)) + s.substring(1);
     }
@@ -116,7 +128,7 @@ public class StringUtils {
      * @param s 待反转字符串
      * @return 反转字符串
      */
-    public static String reverse(String s) {
+    public String reverse(String s) {
         int len = length(s);
         if (len <= 1) return s;
         int mid = len >> 1;
@@ -136,7 +148,7 @@ public class StringUtils {
      * @param s 待转字符串
      * @return 半角字符串
      */
-    public static String toDBC(String s) {
+    public String toDBC(String s) {
         if (isEmpty(s)) return s;
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
@@ -157,7 +169,7 @@ public class StringUtils {
      * @param s 待转字符串
      * @return 全角字符串
      */
-    public static String toSBC(String s) {
+    public String toSBC(String s) {
         if (isEmpty(s)) return s;
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
