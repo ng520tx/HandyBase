@@ -24,8 +24,20 @@ import java.util.List;
  */
 public class DeviceUtils {
 
-    private DeviceUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static DeviceUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static DeviceUtils getInstance() {
+        if (instance == null) {
+            synchronized (DeviceUtils.class) {
+                if (instance == null) {
+                    instance = new DeviceUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -33,7 +45,7 @@ public class DeviceUtils {
      *
      * @return the boolean{@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isDeviceRooted() {
+    public boolean isDeviceRooted() {
         String su = "su";
         String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/", "/system/bin/failsafe/",
                 "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
@@ -50,7 +62,7 @@ public class DeviceUtils {
      *
      * @return 设备系统版本号
      */
-    public static int getSDKVersion() {
+    public int getSDKVersion() {
         return Build.VERSION.SDK_INT;
     }
 
@@ -61,7 +73,7 @@ public class DeviceUtils {
      * @return AndroidID
      */
     @SuppressLint("HardwareIds")
-    public static String getAndroidID() {
+    public String getAndroidID() {
         return Settings.Secure.getString(HandyBaseUtils.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
@@ -72,7 +84,7 @@ public class DeviceUtils {
      *
      * @return MAC地址
      */
-    public static String getMacAddress() {
+    public String getMacAddress() {
         String macAddress = getMacAddressByWifiInfo();
         if (!"02:00:00:00:00:00".equals(macAddress)) {
             return macAddress;
@@ -95,7 +107,7 @@ public class DeviceUtils {
      * @return MAC地址
      */
     @SuppressLint("HardwareIds")
-    private static String getMacAddressByWifiInfo() {
+    private String getMacAddressByWifiInfo() {
         try {
             WifiManager wifi = (WifiManager) HandyBaseUtils.getContext().getSystemService(Context.WIFI_SERVICE);
             if (wifi != null) {
@@ -114,7 +126,7 @@ public class DeviceUtils {
      *
      * @return MAC地址
      */
-    private static String getMacAddressByNetworkInterface() {
+    private String getMacAddressByNetworkInterface() {
         try {
             List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface ni : nis) {
@@ -139,7 +151,7 @@ public class DeviceUtils {
      *
      * @return MAC地址
      */
-    private static String getMacAddressByFile() {
+    private String getMacAddressByFile() {
         ShellUtils.CommandResult result = ShellUtils.execCmd("getprop wifi.interface", false);
         if (result.result == 0) {
             String name = result.successMsg;
@@ -162,7 +174,7 @@ public class DeviceUtils {
      * @return 设备厂商
      */
 
-    public static String getManufacturer() {
+    public String getManufacturer() {
         return Build.MANUFACTURER;
     }
 
@@ -172,7 +184,7 @@ public class DeviceUtils {
      *
      * @return 设备型号
      */
-    public static String getModel() {
+    public String getModel() {
         String model = Build.MODEL;
         if (model != null) {
             model = model.trim().replaceAll("\\s*", "");
@@ -186,7 +198,7 @@ public class DeviceUtils {
      * 关机
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      */
-    public static void shutdown() {
+    public void shutdown() {
         ShellUtils.execCmd("reboot -p", true);
         Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
@@ -198,7 +210,7 @@ public class DeviceUtils {
      * 重启
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      */
-    public static void reboot() {
+    public void reboot() {
         ShellUtils.execCmd("reboot", true);
         Intent intent = new Intent(Intent.ACTION_REBOOT);
         intent.putExtra("nowait", 1);
@@ -213,7 +225,7 @@ public class DeviceUtils {
      *
      * @param reason 传递给内核来请求特殊的引导模式，如"recovery"
      */
-    public static void reboot(String reason) {
+    public void reboot(String reason) {
         PowerManager mPowerManager = (PowerManager) HandyBaseUtils.getContext().getSystemService(Context.POWER_SERVICE);
         try {
             mPowerManager.reboot(reason);
@@ -226,7 +238,7 @@ public class DeviceUtils {
      * 重启到recovery
      * <p>需要root权限</p>
      */
-    public static void reboot2Recovery() {
+    public void reboot2Recovery() {
         ShellUtils.execCmd("reboot recovery", true);
     }
 
@@ -234,7 +246,7 @@ public class DeviceUtils {
      * 重启到bootloader
      * <p>需要root权限</p>
      */
-    public static void reboot2Bootloader() {
+    public void reboot2Bootloader() {
         ShellUtils.execCmd("reboot bootloader", true);
     }
 }
