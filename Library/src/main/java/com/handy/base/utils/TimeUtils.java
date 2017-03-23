@@ -20,6 +20,7 @@ import java.util.Locale;
  */
 public class TimeUtils {
 
+    private volatile static TimeUtils instance;
     /**
      * <p>在工具类中经常使用到工具类的格式化描述，这个主要是一个日期的操作类，所以日志格式主要使用 SimpleDateFormat的定义格式.</p>
      * 格式的意义如下： 日期和时间模式 <br>
@@ -177,13 +178,23 @@ public class TimeUtils {
      * </pre>
      * 注意：SimpleDateFormat不是线程安全的，线程安全需用{@code ThreadLocal<SimpleDateFormat>}
      */
-    public static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    private static final String[] CHINESE_ZODIAC = {"猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊"};
-    private static final String[] ZODIAC = {"水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "魔羯座"};
-    private static final int[] ZODIAC_FLAGS = {20, 19, 21, 21, 21, 22, 23, 23, 23, 24, 23, 22};
+    private final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private final String[] CHINESE_ZODIAC = {"猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊"};
+    private final String[] ZODIAC = {"水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "魔羯座"};
+    private final int[] ZODIAC_FLAGS = {20, 19, 21, 21, 21, 22, 23, 23, 23, 24, 23, 22};
 
-    private TimeUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static TimeUtils getInstance() {
+        if (instance == null) {
+            synchronized (TimeUtils.class) {
+                if (instance == null) {
+                    instance = new TimeUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -193,7 +204,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 时间字符串
      */
-    public static String millis2String(long millis) {
+    public String millis2String(long millis) {
         return new SimpleDateFormat(DEFAULT_PATTERN, Locale.getDefault()).format(new Date(millis));
     }
 
@@ -205,7 +216,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 时间字符串
      */
-    public static String millis2String(long millis, String pattern) {
+    public String millis2String(long millis, String pattern) {
         return new SimpleDateFormat(pattern, Locale.getDefault()).format(new Date(millis));
     }
 
@@ -216,7 +227,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 毫秒时间戳
      */
-    public static long string2Millis(String time) {
+    public long string2Millis(String time) {
         return string2Millis(time, DEFAULT_PATTERN);
     }
 
@@ -228,7 +239,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 毫秒时间戳
      */
-    public static long string2Millis(String time, String pattern) {
+    public long string2Millis(String time, String pattern) {
         try {
             return new SimpleDateFormat(pattern, Locale.getDefault()).parse(time).getTime();
         } catch (ParseException e) {
@@ -244,7 +255,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return Date类型
      */
-    public static Date string2Date(String time) {
+    public Date string2Date(String time) {
         return string2Date(time, DEFAULT_PATTERN);
     }
 
@@ -256,7 +267,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return Date类型
      */
-    public static Date string2Date(String time, String pattern) {
+    public Date string2Date(String time, String pattern) {
         return new Date(string2Millis(time, pattern));
     }
 
@@ -267,7 +278,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 时间字符串
      */
-    public static String date2String(Date date) {
+    public String date2String(Date date) {
         return date2String(date, DEFAULT_PATTERN);
     }
 
@@ -279,7 +290,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 时间字符串
      */
-    public static String date2String(Date date, String pattern) {
+    public String date2String(Date date, String pattern) {
         return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
     }
 
@@ -289,7 +300,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 毫秒时间戳
      */
-    public static long date2Millis(Date date) {
+    public long date2Millis(Date date) {
         return date.getTime();
     }
 
@@ -299,7 +310,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return Date类型时间
      */
-    public static Date millis2Date(long millis) {
+    public Date millis2Date(long millis) {
         return new Date(millis);
     }
 
@@ -319,7 +330,7 @@ public class TimeUtils {
      *              </ul>
      * @return unit时间戳
      */
-    public static long getTimeSpan(String time0, String time1, @TimeConstant.Unit int unit) {
+    public long getTimeSpan(String time0, String time1, @TimeConstant.Unit int unit) {
         return getTimeSpan(time0, time1, unit, DEFAULT_PATTERN);
     }
 
@@ -340,8 +351,8 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return unit时间戳
      */
-    public static long getTimeSpan(String time0, String time1, @TimeConstant.Unit int unit, String pattern) {
-        return ConvertUtils.millis2TimeSpan(Math.abs(string2Millis(time0, pattern) - string2Millis(time1, pattern)), unit);
+    public long getTimeSpan(String time0, String time1, @TimeConstant.Unit int unit, String pattern) {
+        return ConvertUtils.getInstance().millis2TimeSpan(Math.abs(string2Millis(time0, pattern) - string2Millis(time1, pattern)), unit);
     }
 
     /**
@@ -359,8 +370,8 @@ public class TimeUtils {
      *              </ul>
      * @return unit时间戳
      */
-    public static long getTimeSpan(Date date0, Date date1, @TimeConstant.Unit int unit) {
-        return ConvertUtils.millis2TimeSpan(Math.abs(date2Millis(date0) - date2Millis(date1)), unit);
+    public long getTimeSpan(Date date0, Date date1, @TimeConstant.Unit int unit) {
+        return ConvertUtils.getInstance().millis2TimeSpan(Math.abs(date2Millis(date0) - date2Millis(date1)), unit);
     }
 
     /**
@@ -378,8 +389,8 @@ public class TimeUtils {
      *                </ul>
      * @return unit时间戳
      */
-    public static long getTimeSpan(long millis0, long millis1, @TimeConstant.Unit int unit) {
-        return ConvertUtils.millis2TimeSpan(Math.abs(millis0 - millis1), unit);
+    public long getTimeSpan(long millis0, long millis1, @TimeConstant.Unit int unit) {
+        return ConvertUtils.getInstance().millis2TimeSpan(Math.abs(millis0 - millis1), unit);
     }
 
     /**
@@ -397,8 +408,8 @@ public class TimeUtils {
      *                  <p>precision &gt;= 5，返回天、小时、分钟、秒和毫秒</p>
      * @return 合适型两个时间差
      */
-    public static String getFitTimeSpan(String time0, String time1, int precision) {
-        return ConvertUtils.millis2FitTimeSpan(Math.abs(string2Millis(time0, DEFAULT_PATTERN) - string2Millis(time1, DEFAULT_PATTERN)), precision);
+    public String getFitTimeSpan(String time0, String time1, int precision) {
+        return ConvertUtils.getInstance().millis2FitTimeSpan(Math.abs(string2Millis(time0, DEFAULT_PATTERN) - string2Millis(time1, DEFAULT_PATTERN)), precision);
     }
 
     /**
@@ -417,8 +428,8 @@ public class TimeUtils {
      * @param pattern   时间格式
      * @return 合适型两个时间差
      */
-    public static String getFitTimeSpan(String time0, String time1, int precision, String pattern) {
-        return ConvertUtils.millis2FitTimeSpan(Math.abs(string2Millis(time0, pattern) - string2Millis(time1, pattern)), precision);
+    public String getFitTimeSpan(String time0, String time1, int precision, String pattern) {
+        return ConvertUtils.getInstance().millis2FitTimeSpan(Math.abs(string2Millis(time0, pattern) - string2Millis(time1, pattern)), precision);
     }
 
     /**
@@ -435,8 +446,8 @@ public class TimeUtils {
      *                  <p>precision &gt;= 5，返回天、小时、分钟、秒和毫秒</p>
      * @return 合适型两个时间差
      */
-    public static String getFitTimeSpan(Date date0, Date date1, int precision) {
-        return ConvertUtils.millis2FitTimeSpan(Math.abs(date2Millis(date0) - date2Millis(date1)), precision);
+    public String getFitTimeSpan(Date date0, Date date1, int precision) {
+        return ConvertUtils.getInstance().millis2FitTimeSpan(Math.abs(date2Millis(date0) - date2Millis(date1)), precision);
     }
 
     /**
@@ -453,8 +464,8 @@ public class TimeUtils {
      *                  <p>precision &gt;= 5，返回天、小时、分钟、秒和毫秒</p>
      * @return 合适型两个时间差
      */
-    public static String getFitTimeSpan(long millis0, long millis1, int precision) {
-        return ConvertUtils.millis2FitTimeSpan(Math.abs(millis0 - millis1), precision);
+    public String getFitTimeSpan(long millis0, long millis1, int precision) {
+        return ConvertUtils.getInstance().millis2FitTimeSpan(Math.abs(millis0 - millis1), precision);
     }
 
     /**
@@ -462,7 +473,7 @@ public class TimeUtils {
      *
      * @return 毫秒时间戳
      */
-    public static long getNowTimeMills() {
+    public long getNowTimeMills() {
         return System.currentTimeMillis();
     }
 
@@ -472,7 +483,7 @@ public class TimeUtils {
      *
      * @return 时间字符串
      */
-    public static String getNowTimeString() {
+    public String getNowTimeString() {
         return millis2String(System.currentTimeMillis(), DEFAULT_PATTERN);
     }
 
@@ -483,7 +494,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 时间字符串
      */
-    public static String getNowTimeString(String pattern) {
+    public String getNowTimeString(String pattern) {
         return millis2String(System.currentTimeMillis(), pattern);
     }
 
@@ -492,7 +503,7 @@ public class TimeUtils {
      *
      * @return Date类型时间
      */
-    public static Date getNowTimeDate() {
+    public Date getNowTimeDate() {
         return new Date();
     }
 
@@ -511,7 +522,7 @@ public class TimeUtils {
      *             </ul>
      * @return unit时间戳
      */
-    public static long getTimeSpanByNow(String time, @TimeConstant.Unit int unit) {
+    public long getTimeSpanByNow(String time, @TimeConstant.Unit int unit) {
         return getTimeSpan(getNowTimeString(), time, unit, DEFAULT_PATTERN);
     }
 
@@ -531,7 +542,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return unit时间戳
      */
-    public static long getTimeSpanByNow(String time, @TimeConstant.Unit int unit, String pattern) {
+    public long getTimeSpanByNow(String time, @TimeConstant.Unit int unit, String pattern) {
         return getTimeSpan(getNowTimeString(), time, unit, pattern);
     }
 
@@ -549,7 +560,7 @@ public class TimeUtils {
      *             </ul>
      * @return unit时间戳
      */
-    public static long getTimeSpanByNow(Date date, @TimeConstant.Unit int unit) {
+    public long getTimeSpanByNow(Date date, @TimeConstant.Unit int unit) {
         return getTimeSpan(new Date(), date, unit);
     }
 
@@ -567,7 +578,7 @@ public class TimeUtils {
      *               </ul>
      * @return unit时间戳
      */
-    public static long getTimeSpanByNow(long millis, @TimeConstant.Unit int unit) {
+    public long getTimeSpanByNow(long millis, @TimeConstant.Unit int unit) {
         return getTimeSpan(System.currentTimeMillis(), millis, unit);
     }
 
@@ -587,7 +598,7 @@ public class TimeUtils {
      *                  </ul>
      * @return 合适型与当前时间的差
      */
-    public static String getFitTimeSpanByNow(String time, int precision) {
+    public String getFitTimeSpanByNow(String time, int precision) {
         return getFitTimeSpan(getNowTimeString(), time, precision, DEFAULT_PATTERN);
     }
 
@@ -608,7 +619,7 @@ public class TimeUtils {
      *                  </ul>
      * @return 合适型与当前时间的差
      */
-    public static String getFitTimeSpanByNow(String time, int precision, String pattern) {
+    public String getFitTimeSpanByNow(String time, int precision, String pattern) {
         return getFitTimeSpan(getNowTimeString(), time, precision, pattern);
     }
 
@@ -627,7 +638,7 @@ public class TimeUtils {
      *                  </ul>
      * @return 合适型与当前时间的差
      */
-    public static String getFitTimeSpanByNow(Date date, int precision) {
+    public String getFitTimeSpanByNow(Date date, int precision) {
         return getFitTimeSpan(getNowTimeDate(), date, precision);
     }
 
@@ -646,7 +657,7 @@ public class TimeUtils {
      *                  </ul>
      * @return 合适型与当前时间的差
      */
-    public static String getFitTimeSpanByNow(long millis, int precision) {
+    public String getFitTimeSpanByNow(long millis, int precision) {
         return getFitTimeSpan(System.currentTimeMillis(), millis, precision);
     }
 
@@ -666,7 +677,7 @@ public class TimeUtils {
      * <li>时间不合法的情况全部日期和时间信息，如星期六 十月 27 14:21:20 CST 2007</li>
      * </ul>
      */
-    public static String getFriendlyTimeSpanByNow(String time) {
+    public String getFriendlyTimeSpanByNow(String time) {
         return getFriendlyTimeSpanByNow(time, DEFAULT_PATTERN);
     }
 
@@ -687,7 +698,7 @@ public class TimeUtils {
      * <li>时间不合法的情况全部日期和时间信息，如星期六 十月 27 14:21:20 CST 2007</li>
      * </ul>
      */
-    public static String getFriendlyTimeSpanByNow(String time, String pattern) {
+    public String getFriendlyTimeSpanByNow(String time, String pattern) {
         return getFriendlyTimeSpanByNow(string2Millis(time, pattern));
     }
 
@@ -706,7 +717,7 @@ public class TimeUtils {
      * <li>时间不合法的情况全部日期和时间信息，如星期六 十月 27 14:21:20 CST 2007</li>
      * </ul>
      */
-    public static String getFriendlyTimeSpanByNow(Date date) {
+    public String getFriendlyTimeSpanByNow(Date date) {
         return getFriendlyTimeSpanByNow(date.getTime());
     }
 
@@ -726,7 +737,7 @@ public class TimeUtils {
      * </ul>
      */
     @SuppressLint("DefaultLocale")
-    public static String getFriendlyTimeSpanByNow(long millis) {
+    public String getFriendlyTimeSpanByNow(long millis) {
         long now = System.currentTimeMillis();
         long span = now - millis;
         if (span < 0)
@@ -756,7 +767,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isSameDay(String time) {
+    public boolean isSameDay(String time) {
         return isSameDay(string2Millis(time, DEFAULT_PATTERN));
     }
 
@@ -768,7 +779,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isSameDay(String time, String pattern) {
+    public boolean isSameDay(String time, String pattern) {
         return isSameDay(string2Millis(time, pattern));
     }
 
@@ -778,7 +789,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isSameDay(Date date) {
+    public boolean isSameDay(Date date) {
         return isSameDay(date.getTime());
     }
 
@@ -788,7 +799,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isSameDay(long millis) {
+    public boolean isSameDay(long millis) {
         long wee = (System.currentTimeMillis() / TimeConstant.DAY) * TimeConstant.DAY - 8 * TimeConstant.HOUR;
         return millis >= wee && millis < wee + TimeConstant.DAY;
     }
@@ -800,7 +811,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return {@code true}: 闰年<br>{@code false}: 平年
      */
-    public static boolean isLeapYear(String time) {
+    public boolean isLeapYear(String time) {
         return isLeapYear(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -812,7 +823,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return {@code true}: 闰年<br>{@code false}: 平年
      */
-    public static boolean isLeapYear(String time, String pattern) {
+    public boolean isLeapYear(String time, String pattern) {
         return isLeapYear(string2Date(time, pattern));
     }
 
@@ -822,7 +833,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return {@code true}: 闰年<br>{@code false}: 平年
      */
-    public static boolean isLeapYear(Date date) {
+    public boolean isLeapYear(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         int year = cal.get(Calendar.YEAR);
@@ -835,7 +846,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return {@code true}: 闰年<br>{@code false}: 平年
      */
-    public static boolean isLeapYear(long millis) {
+    public boolean isLeapYear(long millis) {
         return isLeapYear(millis2Date(millis));
     }
 
@@ -845,7 +856,7 @@ public class TimeUtils {
      * @param year 年份
      * @return {@code true}: 闰年<br>{@code false}: 平年
      */
-    public static boolean isLeapYear(int year) {
+    public boolean isLeapYear(int year) {
         return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
     }
 
@@ -856,7 +867,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 星期
      */
-    public static String getWeek(String time) {
+    public String getWeek(String time) {
         return getWeek(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -868,7 +879,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 星期
      */
-    public static String getWeek(String time, String pattern) {
+    public String getWeek(String time, String pattern) {
         return getWeek(string2Date(time, pattern));
     }
 
@@ -878,7 +889,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 星期
      */
-    public static String getWeek(Date date) {
+    public String getWeek(Date date) {
         return new SimpleDateFormat("EEEE", Locale.getDefault()).format(date);
     }
 
@@ -888,7 +899,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 星期
      */
-    public static String getWeek(long millis) {
+    public String getWeek(long millis) {
         return getWeek(new Date(millis));
     }
 
@@ -900,7 +911,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 1...5
      */
-    public static int getWeekIndex(String time) {
+    public int getWeekIndex(String time) {
         return getWeekIndex(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -913,7 +924,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 1...7
      */
-    public static int getWeekIndex(String time, String pattern) {
+    public int getWeekIndex(String time, String pattern) {
         return getWeekIndex(string2Date(time, pattern));
     }
 
@@ -924,7 +935,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 1...7
      */
-    public static int getWeekIndex(Date date) {
+    public int getWeekIndex(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.DAY_OF_WEEK);
@@ -937,7 +948,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 1...7
      */
-    public static int getWeekIndex(long millis) {
+    public int getWeekIndex(long millis) {
         return getWeekIndex(millis2Date(millis));
     }
 
@@ -949,7 +960,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 1...5
      */
-    public static int getWeekOfMonth(String time) {
+    public int getWeekOfMonth(String time) {
         return getWeekOfMonth(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -962,7 +973,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 1...5
      */
-    public static int getWeekOfMonth(String time, String pattern) {
+    public int getWeekOfMonth(String time, String pattern) {
         return getWeekOfMonth(string2Date(time, pattern));
     }
 
@@ -973,7 +984,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 1...5
      */
-    public static int getWeekOfMonth(Date date) {
+    public int getWeekOfMonth(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.WEEK_OF_MONTH);
@@ -986,7 +997,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 1...5
      */
-    public static int getWeekOfMonth(long millis) {
+    public int getWeekOfMonth(long millis) {
         return getWeekOfMonth(millis2Date(millis));
     }
 
@@ -998,7 +1009,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 1...54
      */
-    public static int getWeekOfYear(String time) {
+    public int getWeekOfYear(String time) {
         return getWeekOfYear(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -1011,7 +1022,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 1...54
      */
-    public static int getWeekOfYear(String time, String pattern) {
+    public int getWeekOfYear(String time, String pattern) {
         return getWeekOfYear(string2Date(time, pattern));
     }
 
@@ -1022,7 +1033,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 1...54
      */
-    public static int getWeekOfYear(Date date) {
+    public int getWeekOfYear(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.WEEK_OF_YEAR);
@@ -1035,7 +1046,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 1...54
      */
-    public static int getWeekOfYear(long millis) {
+    public int getWeekOfYear(long millis) {
         return getWeekOfYear(millis2Date(millis));
     }
 
@@ -1046,7 +1057,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 生肖
      */
-    public static String getChineseZodiac(String time) {
+    public String getChineseZodiac(String time) {
         return getChineseZodiac(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -1058,7 +1069,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 生肖
      */
-    public static String getChineseZodiac(String time, String pattern) {
+    public String getChineseZodiac(String time, String pattern) {
         return getChineseZodiac(string2Date(time, pattern));
     }
 
@@ -1068,7 +1079,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 生肖
      */
-    public static String getChineseZodiac(Date date) {
+    public String getChineseZodiac(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return CHINESE_ZODIAC[cal.get(Calendar.YEAR) % 12];
@@ -1080,7 +1091,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 生肖
      */
-    public static String getChineseZodiac(long millis) {
+    public String getChineseZodiac(long millis) {
         return getChineseZodiac(millis2Date(millis));
     }
 
@@ -1090,7 +1101,7 @@ public class TimeUtils {
      * @param year 年
      * @return 生肖
      */
-    public static String getChineseZodiac(int year) {
+    public String getChineseZodiac(int year) {
         return CHINESE_ZODIAC[year % 12];
     }
 
@@ -1101,7 +1112,7 @@ public class TimeUtils {
      * @param time 时间字符串
      * @return 生肖
      */
-    public static String getZodiac(String time) {
+    public String getZodiac(String time) {
         return getZodiac(string2Date(time, DEFAULT_PATTERN));
     }
 
@@ -1113,7 +1124,7 @@ public class TimeUtils {
      * @param pattern 时间格式
      * @return 生肖
      */
-    public static String getZodiac(String time, String pattern) {
+    public String getZodiac(String time, String pattern) {
         return getZodiac(string2Date(time, pattern));
     }
 
@@ -1123,7 +1134,7 @@ public class TimeUtils {
      * @param date Date类型时间
      * @return 星座
      */
-    public static String getZodiac(Date date) {
+    public String getZodiac(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         int month = cal.get(Calendar.MONTH) + 1;
@@ -1137,7 +1148,7 @@ public class TimeUtils {
      * @param millis 毫秒时间戳
      * @return 星座
      */
-    public static String getZodiac(long millis) {
+    public String getZodiac(long millis) {
         return getZodiac(millis2Date(millis));
     }
 
@@ -1148,7 +1159,7 @@ public class TimeUtils {
      * @param day   日
      * @return 星座
      */
-    public static String getZodiac(int month, int day) {
+    public String getZodiac(int month, int day) {
         return ZODIAC[day >= ZODIAC_FLAGS[month - 1]
                 ? month - 1
                 : (month + 10) % 12];
