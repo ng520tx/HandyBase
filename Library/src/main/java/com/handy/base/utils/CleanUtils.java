@@ -35,7 +35,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalCache() {
-        return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getCacheDir());
+        return FileUtils.getInstance().deleteFilesInDir(HandyBaseUtils.getInstance().getContext().getCacheDir());
     }
 
     /**
@@ -45,7 +45,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalFiles() {
-        return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getFilesDir());
+        return FileUtils.getInstance().deleteFilesInDir(HandyBaseUtils.getInstance().getContext().getFilesDir());
     }
 
     /**
@@ -55,7 +55,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalDbs() {
-        return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getFilesDir().getParent() + File.separator + "databases");
+        return FileUtils.getInstance().deleteFilesInDir(HandyBaseUtils.getInstance().getContext().getFilesDir().getParent() + File.separator + "databases");
     }
 
     /**
@@ -66,7 +66,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalDbByName(String dbName) {
-        return HandyBaseUtils.getContext().deleteDatabase(dbName);
+        return HandyBaseUtils.getInstance().getContext().deleteDatabase(dbName);
     }
 
     /**
@@ -76,7 +76,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalSP() {
-        return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getFilesDir().getParent() + File.separator + "shared_prefs");
+        return FileUtils.getInstance().deleteFilesInDir(HandyBaseUtils.getInstance().getContext().getFilesDir().getParent() + File.separator + "shared_prefs");
     }
 
     /**
@@ -86,7 +86,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanExternalCache() {
-        return SDCardUtils.isSDCardEnable() && FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getExternalCacheDir());
+        return SDCardUtils.getInstance().isSDCardEnable() && FileUtils.getInstance().deleteFilesInDir(HandyBaseUtils.getInstance().getContext().getExternalCacheDir());
     }
 
     /**
@@ -96,7 +96,7 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanCustomCache(String dirPath) {
-        return FileUtils.deleteFilesInDir(dirPath);
+        return FileUtils.getInstance().deleteFilesInDir(dirPath);
     }
 
     /**
@@ -106,6 +106,6 @@ public class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanCustomCache(File dir) {
-        return FileUtils.deleteFilesInDir(dir);
+        return FileUtils.getInstance().deleteFilesInDir(dir);
     }
 }

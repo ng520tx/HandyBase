@@ -160,7 +160,7 @@ public class EncryptUtils {
      * @return 文件的16进制密文
      */
     public String encryptMD5File2String(String filePath) {
-        File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
+        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
         return encryptMD5File2String(file);
     }
 
@@ -171,7 +171,7 @@ public class EncryptUtils {
      * @return 文件的MD5校验码
      */
     public byte[] encryptMD5File(String filePath) {
-        File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
+        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
         return encryptMD5File(file);
     }
 
@@ -207,7 +207,7 @@ public class EncryptUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(fis);
+            CloseUtils.getInstance().closeIO(fis);
         }
     }
 
@@ -857,7 +857,7 @@ public class EncryptUtils {
      * @return 字节数组
      */
     private byte[] hexString2Bytes(String hexString) {
-        if (StringUtils.isSpace(hexString)) return null;
+        if (StringUtils.getInstance().isSpace(hexString)) return null;
         int len = hexString.length();
         if (len % 2 != 0) {
             hexString = "0" + hexString;

@@ -87,16 +87,16 @@ public class CrashUtils implements UncaughtExceptionHandler {
     public boolean initCrashUtils() {
         if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            File baseCache = HandyBaseUtils.getContext().getExternalCacheDir();
+            File baseCache = HandyBaseUtils.getInstance().getContext().getExternalCacheDir();
             if (baseCache == null) return false;
             crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         } else {
-            File baseCache = HandyBaseUtils.getContext().getCacheDir();
+            File baseCache = HandyBaseUtils.getInstance().getContext().getCacheDir();
             if (baseCache == null) return false;
             crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         }
         try {
-            PackageInfo pi = HandyBaseUtils.getContext().getPackageManager().getPackageInfo(HandyBaseUtils.getContext().getPackageName(), 0);
+            PackageInfo pi = HandyBaseUtils.getInstance().getContext().getPackageManager().getPackageInfo(HandyBaseUtils.getInstance().getContext().getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -129,7 +129,7 @@ public class CrashUtils implements UncaughtExceptionHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    CloseUtils.closeIO(pw);
+                    CloseUtils.getInstance().closeIO(pw);
                 }
             }
         }).start();

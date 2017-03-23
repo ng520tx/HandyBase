@@ -74,7 +74,7 @@ public class DeviceUtils {
      */
     @SuppressLint("HardwareIds")
     public String getAndroidID() {
-        return Settings.Secure.getString(HandyBaseUtils.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(HandyBaseUtils.getInstance().getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     /**
@@ -109,7 +109,7 @@ public class DeviceUtils {
     @SuppressLint("HardwareIds")
     private String getMacAddressByWifiInfo() {
         try {
-            WifiManager wifi = (WifiManager) HandyBaseUtils.getContext().getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.WIFI_SERVICE);
             if (wifi != null) {
                 WifiInfo info = wifi.getConnectionInfo();
                 if (info != null) return info.getMacAddress();
@@ -152,11 +152,11 @@ public class DeviceUtils {
      * @return MAC地址
      */
     private String getMacAddressByFile() {
-        ShellUtils.CommandResult result = ShellUtils.execCmd("getprop wifi.interface", false);
+        ShellUtils.CommandResult result = ShellUtils.getInstance().execCmd("getprop wifi.interface", false);
         if (result.result == 0) {
             String name = result.successMsg;
             if (name != null) {
-                result = ShellUtils.execCmd("cat /sys/class/net/" + name + "/address", false);
+                result = ShellUtils.getInstance().execCmd("cat /sys/class/net/" + name + "/address", false);
                 if (result.result == 0) {
                     if (result.successMsg != null) {
                         return result.successMsg;
@@ -199,11 +199,11 @@ public class DeviceUtils {
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      */
     public void shutdown() {
-        ShellUtils.execCmd("reboot -p", true);
+        ShellUtils.getInstance().execCmd("reboot -p", true);
         Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        HandyBaseUtils.getContext().startActivity(intent);
+        HandyBaseUtils.getInstance().getContext().startActivity(intent);
     }
 
     /**
@@ -211,12 +211,12 @@ public class DeviceUtils {
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      */
     public void reboot() {
-        ShellUtils.execCmd("reboot", true);
+        ShellUtils.getInstance().execCmd("reboot", true);
         Intent intent = new Intent(Intent.ACTION_REBOOT);
         intent.putExtra("nowait", 1);
         intent.putExtra("interval", 1);
         intent.putExtra("window", 0);
-        HandyBaseUtils.getContext().sendBroadcast(intent);
+        HandyBaseUtils.getInstance().getContext().sendBroadcast(intent);
     }
 
     /**
@@ -226,7 +226,7 @@ public class DeviceUtils {
      * @param reason 传递给内核来请求特殊的引导模式，如"recovery"
      */
     public void reboot(String reason) {
-        PowerManager mPowerManager = (PowerManager) HandyBaseUtils.getContext().getSystemService(Context.POWER_SERVICE);
+        PowerManager mPowerManager = (PowerManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.POWER_SERVICE);
         try {
             mPowerManager.reboot(reason);
         } catch (Exception e) {
@@ -239,7 +239,7 @@ public class DeviceUtils {
      * <p>需要root权限</p>
      */
     public void reboot2Recovery() {
-        ShellUtils.execCmd("reboot recovery", true);
+        ShellUtils.getInstance().execCmd("reboot recovery", true);
     }
 
     /**
@@ -247,6 +247,6 @@ public class DeviceUtils {
      * <p>需要root权限</p>
      */
     public void reboot2Bootloader() {
-        ShellUtils.execCmd("reboot bootloader", true);
+        ShellUtils.getInstance().execCmd("reboot bootloader", true);
     }
 }

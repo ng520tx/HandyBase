@@ -147,7 +147,7 @@ public class ProcessUtils {
      * @return {@code true}: 杀死成功<br>{@code false}: 杀死失败
      */
     public boolean killBackgroundProcesses(String packageName) {
-        if (StringUtils.isSpace(packageName)) return false;
+        if (StringUtils.getInstance().isSpace(packageName)) return false;
         ActivityManager am = (ActivityManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         if (infos == null || infos.size() == 0) return true;

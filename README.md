@@ -89,6 +89,11 @@
 ```
 
 ##  更新日志
+***2017年3月23日 v1.2.2***
+
+* 移除了SPUtils工具类，替换为ShareUtils
+* 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
+
 ***2017年3月22日 v1.2.1***
 
 * 更新utils中部分变量的访问权限为public

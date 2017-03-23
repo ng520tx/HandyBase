@@ -61,7 +61,7 @@ public class FileUtils {
      * @return 文件
      */
     public File getFileByPath(String filePath) {
-        return StringUtils.isSpace(filePath) ? null : new File(filePath);
+        return StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
     }
 
     /**
@@ -108,7 +108,7 @@ public class FileUtils {
         // 文件不存在返回false
         if (!file.exists()) return false;
         // 新的文件名为空返回false
-        if (StringUtils.isSpace(newName)) return false;
+        if (StringUtils.getInstance().isSpace(newName)) return false;
         // 如果文件名没有改变返回true
         if (newName.equals(file.getName())) return true;
         File newFile = new File(file.getParent() + File.separator + newName);
@@ -778,7 +778,7 @@ public class FileUtils {
             e.printStackTrace();
             return false;
         } finally {
-            CloseUtils.closeIO(is, os);
+            CloseUtils.getInstance().closeIO(is, os);
         }
     }
 
@@ -814,7 +814,7 @@ public class FileUtils {
             e.printStackTrace();
             return false;
         } finally {
-            CloseUtils.closeIO(bw);
+            CloseUtils.getInstance().closeIO(bw);
         }
     }
 
@@ -871,7 +871,7 @@ public class FileUtils {
             String line;
             int curLine = 1;
             List<String> list = new ArrayList<>();
-            if (StringUtils.isSpace(charsetName)) {
+            if (StringUtils.getInstance().isSpace(charsetName)) {
                 reader = new BufferedReader(new FileReader(file));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -886,7 +886,7 @@ public class FileUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(reader);
+            CloseUtils.getInstance().closeIO(reader);
         }
     }
 
@@ -913,7 +913,7 @@ public class FileUtils {
         BufferedReader reader = null;
         try {
             StringBuilder sb = new StringBuilder();
-            if (StringUtils.isSpace(charsetName)) {
+            if (StringUtils.getInstance().isSpace(charsetName)) {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -928,7 +928,7 @@ public class FileUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(reader);
+            CloseUtils.getInstance().closeIO(reader);
         }
     }
 
@@ -1004,7 +1004,7 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.closeIO(is);
+            CloseUtils.getInstance().closeIO(is);
         }
         switch (p) {
             case 0xefbb:
@@ -1049,7 +1049,7 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.closeIO(is);
+            CloseUtils.getInstance().closeIO(is);
         }
         return count;
     }
@@ -1156,7 +1156,7 @@ public class FileUtils {
      * @return 文件的MD5校验码
      */
     public String getFileMD5ToString(String filePath) {
-        File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
+        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
         return getFileMD5ToString(file);
     }
 
@@ -1167,7 +1167,7 @@ public class FileUtils {
      * @return 文件的MD5校验码
      */
     public byte[] getFileMD5(String filePath) {
-        File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
+        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
         return getFileMD5(file);
     }
 
@@ -1201,7 +1201,7 @@ public class FileUtils {
         } catch (NoSuchAlgorithmException | IOException e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.closeIO(dis);
+            CloseUtils.getInstance().closeIO(dis);
         }
         return null;
     }
@@ -1224,7 +1224,7 @@ public class FileUtils {
      * @return filePath最长目录
      */
     public String getDirName(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? "" : filePath.substring(0, lastSep + 1);
     }
@@ -1247,7 +1247,7 @@ public class FileUtils {
      * @return 文件名
      */
     public String getFileName(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? filePath : filePath.substring(lastSep + 1);
     }
@@ -1270,7 +1270,7 @@ public class FileUtils {
      * @return 不带拓展名的文件名
      */
     public String getFileNameNoExtension(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastSep == -1) {
@@ -1302,7 +1302,7 @@ public class FileUtils {
      * @return 文件拓展名
      */
     public String getFileExtension(String filePath) {
-        if (StringUtils.isSpace(filePath)) return filePath;
+        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastPoi == -1 || lastSep >= lastPoi) return "";
@@ -1340,7 +1340,7 @@ public class FileUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(is);
+            CloseUtils.getInstance().closeIO(is);
         }
     }
 

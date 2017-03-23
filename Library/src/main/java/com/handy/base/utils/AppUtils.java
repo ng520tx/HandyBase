@@ -48,7 +48,7 @@ public class AppUtils {
      * @return {@code true}: 已安装<br>{@code false}: 未安装
      */
     public boolean isInstallApp(Context context, String packageName) {
-        return !StringUtils.isSpace(packageName) && IntentUtils.getLaunchAppIntent(packageName) != null;
+        return !StringUtils.getInstance().isSpace(packageName) && IntentUtils.getInstance().getLaunchAppIntent(packageName) != null;
     }
 
     /**
@@ -58,7 +58,7 @@ public class AppUtils {
      * @param filePath 文件路径
      */
     public void installApp(Context context, String filePath) {
-        installApp(context, FileUtils.getFileByPath(filePath));
+        installApp(context, FileUtils.getInstance().getFileByPath(filePath));
     }
 
     /**
@@ -68,8 +68,8 @@ public class AppUtils {
      * @param file    文件
      */
     public void installApp(Context context, File file) {
-        if (!FileUtils.isFileExists(file)) return;
-        context.startActivity(IntentUtils.getInstallAppIntent(file));
+        if (!FileUtils.getInstance().isFileExists(file)) return;
+        context.startActivity(IntentUtils.getInstance().getInstallAppIntent(file));
     }
 
     /**
@@ -80,7 +80,7 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public void installApp(Activity activity, String filePath, int requestCode) {
-        installApp(activity, FileUtils.getFileByPath(filePath), requestCode);
+        installApp(activity, FileUtils.getInstance().getFileByPath(filePath), requestCode);
     }
 
     /**
@@ -91,8 +91,8 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public void installApp(Activity activity, File file, int requestCode) {
-        if (!FileUtils.isFileExists(file)) return;
-        activity.startActivityForResult(IntentUtils.getInstallAppIntent(file), requestCode);
+        if (!FileUtils.getInstance().isFileExists(file)) return;
+        activity.startActivityForResult(IntentUtils.getInstance().getInstallAppIntent(file), requestCode);
     }
 
     /**
@@ -103,10 +103,10 @@ public class AppUtils {
      * @return {@code true}: 安装成功<br>{@code false}: 安装失败
      */
     public boolean installAppSilent(String filePath) {
-        File file = FileUtils.getFileByPath(filePath);
-        if (!FileUtils.isFileExists(file)) return false;
+        File file = FileUtils.getInstance().getFileByPath(filePath);
+        if (!FileUtils.getInstance().isFileExists(file)) return false;
         String command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install " + filePath;
-        ShellUtils.CommandResult commandResult = ShellUtils.execCmd(command, !isSystemApp(HandyBaseUtils.getContext()), true);
+        ShellUtils.CommandResult commandResult = ShellUtils.getInstance().execCmd(command, !isSystemApp(HandyBaseUtils.getInstance().getContext()), true);
         return commandResult.successMsg != null && commandResult.successMsg.toLowerCase().contains("success");
     }
 
@@ -117,8 +117,8 @@ public class AppUtils {
      * @param packageName 包名
      */
     public void uninstallApp(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return;
-        context.startActivity(IntentUtils.getUninstallAppIntent(packageName));
+        if (StringUtils.getInstance().isSpace(packageName)) return;
+        context.startActivity(IntentUtils.getInstance().getUninstallAppIntent(packageName));
     }
 
     /**
@@ -129,8 +129,8 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public void uninstallApp(Activity activity, String packageName, int requestCode) {
-        if (StringUtils.isSpace(packageName)) return;
-        activity.startActivityForResult(IntentUtils.getUninstallAppIntent(packageName), requestCode);
+        if (StringUtils.getInstance().isSpace(packageName)) return;
+        activity.startActivityForResult(IntentUtils.getInstance().getUninstallAppIntent(packageName), requestCode);
     }
 
     /**
@@ -143,9 +143,9 @@ public class AppUtils {
      * @return {@code true}: 卸载成功<br>{@code false}: 卸载成功
      */
     public boolean uninstallAppSilent(Context context, String packageName, boolean isKeepData) {
-        if (StringUtils.isSpace(packageName)) return false;
+        if (StringUtils.getInstance().isSpace(packageName)) return false;
         String command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm uninstall " + (isKeepData ? "-k " : "") + packageName;
-        ShellUtils.CommandResult commandResult = ShellUtils.execCmd(command, !isSystemApp(context), true);
+        ShellUtils.CommandResult commandResult = ShellUtils.getInstance().execCmd(command, !isSystemApp(context), true);
         return commandResult.successMsg != null && commandResult.successMsg.toLowerCase().contains("success");
     }
 
@@ -156,12 +156,12 @@ public class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public boolean isAppRoot() {
-        ShellUtils.CommandResult result = ShellUtils.execCmd("echo root", true);
+        ShellUtils.CommandResult result = ShellUtils.getInstance().execCmd("echo root", true);
         if (result.result == 0) {
             return true;
         }
         if (result.errorMsg != null) {
-            LogUtils.d("isAppRoot", result.errorMsg);
+            LogUtils.getInstance().d("isAppRoot", result.errorMsg);
         }
         return false;
     }
@@ -172,8 +172,8 @@ public class AppUtils {
      * @param packageName 包名
      */
     public void launchApp(String packageName) {
-        if (StringUtils.isSpace(packageName)) return;
-        HandyBaseUtils.getContext().startActivity(IntentUtils.getLaunchAppIntent(packageName));
+        if (StringUtils.getInstance().isSpace(packageName)) return;
+        HandyBaseUtils.getInstance().getContext().startActivity(IntentUtils.getInstance().getLaunchAppIntent(packageName));
     }
 
     /**
@@ -184,8 +184,8 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public void launchApp(Activity activity, String packageName, int requestCode) {
-        if (StringUtils.isSpace(packageName)) return;
-        activity.startActivityForResult(IntentUtils.getLaunchAppIntent(packageName), requestCode);
+        if (StringUtils.getInstance().isSpace(packageName)) return;
+        activity.startActivityForResult(IntentUtils.getInstance().getLaunchAppIntent(packageName), requestCode);
     }
 
     /**
@@ -214,8 +214,8 @@ public class AppUtils {
      * @param packageName 包名
      */
     public void getAppDetailsSettings(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return;
-        context.startActivity(IntentUtils.getAppDetailsSettingsIntent(packageName));
+        if (StringUtils.getInstance().isSpace(packageName)) return;
+        context.startActivity(IntentUtils.getInstance().getAppDetailsSettingsIntent(packageName));
     }
 
     /**
@@ -236,7 +236,7 @@ public class AppUtils {
      * @return App名称
      */
     public String getAppName(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (StringUtils.getInstance().isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
@@ -265,7 +265,7 @@ public class AppUtils {
      * @return App图标
      */
     public Drawable getAppIcon(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (StringUtils.getInstance().isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
@@ -294,7 +294,7 @@ public class AppUtils {
      * @return App路径
      */
     public String getAppPath(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (StringUtils.getInstance().isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
@@ -323,7 +323,7 @@ public class AppUtils {
      * @return App版本号
      */
     public String getAppVersionName(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (StringUtils.getInstance().isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
@@ -352,7 +352,7 @@ public class AppUtils {
      * @return App版本码
      */
     public int getAppVersionCode(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return -1;
+        if (StringUtils.getInstance().isSpace(packageName)) return -1;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
@@ -381,7 +381,7 @@ public class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public boolean isSystemApp(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return false;
+        if (StringUtils.getInstance().isSpace(packageName)) return false;
         try {
             PackageManager pm = context.getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
@@ -410,7 +410,7 @@ public class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public boolean isAppDebug(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return false;
+        if (StringUtils.getInstance().isSpace(packageName)) return false;
         try {
             PackageManager pm = context.getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
@@ -440,7 +440,7 @@ public class AppUtils {
      */
     @SuppressLint("PackageManagerGetSignatures")
     public Signature[] getAppSignature(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (StringUtils.getInstance().isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
@@ -473,7 +473,7 @@ public class AppUtils {
     public String getAppSignatureSHA1(Context context, String packageName) {
         Signature[] signature = getAppSignature(context, packageName);
         if (signature == null) return null;
-        return EncryptUtils.encryptSHA1ToString(signature[0].toByteArray()).
+        return EncryptUtils.getInstance().encryptSHA1ToString(signature[0].toByteArray()).
                 replaceAll("(?<=[0-9A-F]{2})[0-9A-F]{2}", ":$0");
     }
 
@@ -505,7 +505,7 @@ public class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public boolean isAppForeground(Context context, String packageName) {
-        return !StringUtils.isSpace(packageName) && packageName.equals(ProcessUtils.getForegroundProcessName());
+        return !StringUtils.getInstance().isSpace(packageName) && packageName.equals(ProcessUtils.getInstance().getForegroundProcessName());
     }
 
     /**
@@ -602,13 +602,13 @@ public class AppUtils {
      * @return {@code true}: 成功<br>{@code false}: 失败
      */
     public boolean cleanAppData(File... dirs) {
-        boolean isSuccess = CleanUtils.cleanInternalCache();
-        isSuccess &= CleanUtils.cleanInternalDbs();
-        isSuccess &= CleanUtils.cleanInternalSP();
-        isSuccess &= CleanUtils.cleanInternalFiles();
-        isSuccess &= CleanUtils.cleanExternalCache();
+        boolean isSuccess = CleanUtils.getInstance().cleanInternalCache();
+        isSuccess &= CleanUtils.getInstance().cleanInternalDbs();
+        isSuccess &= CleanUtils.getInstance().cleanInternalSP();
+        isSuccess &= CleanUtils.getInstance().cleanInternalFiles();
+        isSuccess &= CleanUtils.getInstance().cleanExternalCache();
         for (File dir : dirs) {
-            isSuccess &= CleanUtils.cleanCustomCache(dir);
+            isSuccess &= CleanUtils.getInstance().cleanCustomCache(dir);
         }
         return isSuccess;
     }
@@ -617,7 +617,6 @@ public class AppUtils {
      * 封装App信息的Bean类
      */
     public class AppInfo {
-
         private String name;
         private Drawable icon;
         private String packageName;
@@ -635,8 +634,7 @@ public class AppUtils {
          * @param versionCode 版本码
          * @param isSystem    是否系统应用
          */
-        public AppInfo(String packageName, String name, Drawable icon, String packagePath,
-                       String versionName, int versionCode, boolean isSystem) {
+        public AppInfo(String packageName, String name, Drawable icon, String packagePath, String versionName, int versionCode, boolean isSystem) {
             this.setName(name);
             this.setIcon(icon);
             this.setPackageName(packageName);

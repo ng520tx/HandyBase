@@ -76,7 +76,7 @@ public class ConvertUtils {
      * @return 字节数组
      */
     public byte[] hexString2Bytes(String hexString) {
-        if (StringUtils.isSpace(hexString)) return null;
+        if (StringUtils.getInstance().isSpace(hexString)) return null;
         int len = hexString.length();
         if (len % 2 != 0) {
             hexString = "0" + hexString;
@@ -328,7 +328,7 @@ public class ConvertUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(is);
+            CloseUtils.getInstance().closeIO(is);
         }
     }
 
@@ -382,7 +382,7 @@ public class ConvertUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(os);
+            CloseUtils.getInstance().closeIO(os);
         }
     }
 
@@ -394,7 +394,7 @@ public class ConvertUtils {
      * @return 字符串
      */
     public String inputStream2String(InputStream is, String charsetName) {
-        if (is == null || StringUtils.isSpace(charsetName)) return null;
+        if (is == null || StringUtils.getInstance().isSpace(charsetName)) return null;
         try {
             return new String(inputStream2Bytes(is), charsetName);
         } catch (UnsupportedEncodingException e) {
@@ -411,7 +411,7 @@ public class ConvertUtils {
      * @return 输入流
      */
     public InputStream string2InputStream(String string, String charsetName) {
-        if (string == null || StringUtils.isSpace(charsetName)) return null;
+        if (string == null || StringUtils.getInstance().isSpace(charsetName)) return null;
         try {
             return new ByteArrayInputStream(string.getBytes(charsetName));
         } catch (UnsupportedEncodingException e) {
@@ -428,7 +428,7 @@ public class ConvertUtils {
      * @return 字符串
      */
     public String outputStream2String(OutputStream out, String charsetName) {
-        if (out == null || StringUtils.isSpace(charsetName)) return null;
+        if (out == null || StringUtils.getInstance().isSpace(charsetName)) return null;
         try {
             return new String(outputStream2Bytes(out), charsetName);
         } catch (UnsupportedEncodingException e) {
@@ -445,7 +445,7 @@ public class ConvertUtils {
      * @return 输入流
      */
     public OutputStream string2OutputStream(String string, String charsetName) {
-        if (string == null || StringUtils.isSpace(charsetName)) return null;
+        if (string == null || StringUtils.getInstance().isSpace(charsetName)) return null;
         try {
             return bytes2OutputStream(string.getBytes(charsetName));
         } catch (UnsupportedEncodingException e) {
@@ -548,7 +548,7 @@ public class ConvertUtils {
      * @return px值
      */
     public int dp2px(float dpValue) {
-        final float scale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().density;
+        final float scale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
@@ -559,7 +559,7 @@ public class ConvertUtils {
      * @return dp值
      */
     public int px2dp(float pxValue) {
-        final float scale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().density;
+        final float scale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -570,7 +570,7 @@ public class ConvertUtils {
      * @return px值
      */
     public int sp2px(float spValue) {
-        final float fontScale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -581,7 +581,7 @@ public class ConvertUtils {
      * @return sp值
      */
     public int px2sp(float pxValue) {
-        final float fontScale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 
