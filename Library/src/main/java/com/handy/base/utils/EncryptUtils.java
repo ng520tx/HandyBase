@@ -25,36 +25,46 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class EncryptUtils {
 
-    private static final String DES_Algorithm = "DES";
-
+    private volatile static EncryptUtils instance;
+    private final String DES_Algorithm = "DES";
     /*********************** 哈希加密相关 ***********************/
-    private static final String TripleDES_Algorithm = "DESede";
-    private static final String AES_Algorithm = "AES";
-    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private final String TripleDES_Algorithm = "DESede";
+    private final String AES_Algorithm = "AES";
+    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
     /**
      * DES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    public static String DES_Transformation = "DES/ECB/NoPadding";
+    private String DES_Transformation = "DES/ECB/NoPadding";
     /**
      * 3DES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    public static String TripleDES_Transformation = "DESede/ECB/NoPadding";
+    private String TripleDES_Transformation = "DESede/ECB/NoPadding";
     /**
      * AES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    public static String AES_Transformation = "AES/ECB/NoPadding";
+    private String AES_Transformation = "AES/ECB/NoPadding";
 
-    private EncryptUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static EncryptUtils getInstance() {
+        if (instance == null) {
+            synchronized (EncryptUtils.class) {
+                if (instance == null) {
+                    instance = new EncryptUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -63,7 +73,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptMD2ToString(String data) {
+    public String encryptMD2ToString(String data) {
         return encryptMD2ToString(data.getBytes());
     }
 
@@ -73,7 +83,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptMD2ToString(byte[] data) {
+    public String encryptMD2ToString(byte[] data) {
         return bytes2HexString(encryptMD2(data));
     }
 
@@ -83,7 +93,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptMD2(byte[] data) {
+    public byte[] encryptMD2(byte[] data) {
         return hashTemplate(data, "MD2");
     }
 
@@ -93,7 +103,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptMD5ToString(String data) {
+    public String encryptMD5ToString(String data) {
         return encryptMD5ToString(data.getBytes());
     }
 
@@ -104,7 +114,7 @@ public class EncryptUtils {
      * @param salt 盐
      * @return 16进制加盐密文
      */
-    public static String encryptMD5ToString(String data, String salt) {
+    public String encryptMD5ToString(String data, String salt) {
         return bytes2HexString(encryptMD5((data + salt).getBytes()));
     }
 
@@ -114,7 +124,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptMD5ToString(byte[] data) {
+    public String encryptMD5ToString(byte[] data) {
         return bytes2HexString(encryptMD5(data));
     }
 
@@ -125,7 +135,7 @@ public class EncryptUtils {
      * @param salt 盐字节数组
      * @return 16进制加盐密文
      */
-    public static String encryptMD5ToString(byte[] data, byte[] salt) {
+    public String encryptMD5ToString(byte[] data, byte[] salt) {
         if (data == null || salt == null) return null;
         byte[] dataSalt = new byte[data.length + salt.length];
         System.arraycopy(data, 0, dataSalt, 0, data.length);
@@ -139,7 +149,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptMD5(byte[] data) {
+    public byte[] encryptMD5(byte[] data) {
         return hashTemplate(data, "MD5");
     }
 
@@ -149,7 +159,7 @@ public class EncryptUtils {
      * @param filePath 文件路径
      * @return 文件的16进制密文
      */
-    public static String encryptMD5File2String(String filePath) {
+    public String encryptMD5File2String(String filePath) {
         File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
         return encryptMD5File2String(file);
     }
@@ -160,7 +170,7 @@ public class EncryptUtils {
      * @param filePath 文件路径
      * @return 文件的MD5校验码
      */
-    public static byte[] encryptMD5File(String filePath) {
+    public byte[] encryptMD5File(String filePath) {
         File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
         return encryptMD5File(file);
     }
@@ -171,7 +181,7 @@ public class EncryptUtils {
      * @param file 文件
      * @return 文件的16进制密文
      */
-    public static String encryptMD5File2String(File file) {
+    public String encryptMD5File2String(File file) {
         return bytes2HexString(encryptMD5File(file));
     }
 
@@ -181,7 +191,7 @@ public class EncryptUtils {
      * @param file 文件
      * @return 文件的MD5校验码
      */
-    public static byte[] encryptMD5File(File file) {
+    public byte[] encryptMD5File(File file) {
         if (file == null) return null;
         FileInputStream fis = null;
         DigestInputStream digestInputStream;
@@ -207,7 +217,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptSHA1ToString(String data) {
+    public String encryptSHA1ToString(String data) {
         return encryptSHA1ToString(data.getBytes());
     }
 
@@ -217,7 +227,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptSHA1ToString(byte[] data) {
+    public String encryptSHA1ToString(byte[] data) {
         return bytes2HexString(encryptSHA1(data));
     }
 
@@ -227,7 +237,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptSHA1(byte[] data) {
+    public byte[] encryptSHA1(byte[] data) {
         return hashTemplate(data, "SHA1");
     }
 
@@ -237,7 +247,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptSHA224ToString(String data) {
+    public String encryptSHA224ToString(String data) {
         return encryptSHA224ToString(data.getBytes());
     }
 
@@ -247,7 +257,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptSHA224ToString(byte[] data) {
+    public String encryptSHA224ToString(byte[] data) {
         return bytes2HexString(encryptSHA224(data));
     }
 
@@ -257,7 +267,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptSHA224(byte[] data) {
+    public byte[] encryptSHA224(byte[] data) {
         return hashTemplate(data, "SHA224");
     }
 
@@ -267,7 +277,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptSHA256ToString(String data) {
+    public String encryptSHA256ToString(String data) {
         return encryptSHA256ToString(data.getBytes());
     }
 
@@ -277,7 +287,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptSHA256ToString(byte[] data) {
+    public String encryptSHA256ToString(byte[] data) {
         return bytes2HexString(encryptSHA256(data));
     }
 
@@ -287,7 +297,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptSHA256(byte[] data) {
+    public byte[] encryptSHA256(byte[] data) {
         return hashTemplate(data, "SHA256");
     }
 
@@ -297,7 +307,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptSHA384ToString(String data) {
+    public String encryptSHA384ToString(String data) {
         return encryptSHA384ToString(data.getBytes());
     }
 
@@ -307,7 +317,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptSHA384ToString(byte[] data) {
+    public String encryptSHA384ToString(byte[] data) {
         return bytes2HexString(encryptSHA384(data));
     }
 
@@ -317,7 +327,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptSHA384(byte[] data) {
+    public byte[] encryptSHA384(byte[] data) {
         return hashTemplate(data, "SHA384");
     }
 
@@ -327,7 +337,7 @@ public class EncryptUtils {
      * @param data 明文字符串
      * @return 16进制密文
      */
-    public static String encryptSHA512ToString(String data) {
+    public String encryptSHA512ToString(String data) {
         return encryptSHA512ToString(data.getBytes());
     }
 
@@ -337,7 +347,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 16进制密文
      */
-    public static String encryptSHA512ToString(byte[] data) {
+    public String encryptSHA512ToString(byte[] data) {
         return bytes2HexString(encryptSHA512(data));
     }
 
@@ -347,7 +357,7 @@ public class EncryptUtils {
      * @param data 明文字节数组
      * @return 密文字节数组
      */
-    public static byte[] encryptSHA512(byte[] data) {
+    public byte[] encryptSHA512(byte[] data) {
         return hashTemplate(data, "SHA512");
     }
 
@@ -358,7 +368,7 @@ public class EncryptUtils {
      * @param algorithm 加密算法
      * @return 密文字节数组
      */
-    private static byte[] hashTemplate(byte[] data, String algorithm) {
+    private byte[] hashTemplate(byte[] data, String algorithm) {
         if (data == null || data.length <= 0) return null;
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
@@ -377,7 +387,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacMD5ToString(String data, String key) {
+    public String encryptHmacMD5ToString(String data, String key) {
         return encryptHmacMD5ToString(data.getBytes(), key.getBytes());
     }
 
@@ -388,7 +398,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacMD5ToString(byte[] data, byte[] key) {
+    public String encryptHmacMD5ToString(byte[] data, byte[] key) {
         return bytes2HexString(encryptHmacMD5(data, key));
     }
 
@@ -399,7 +409,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 密文字节数组
      */
-    public static byte[] encryptHmacMD5(byte[] data, byte[] key) {
+    public byte[] encryptHmacMD5(byte[] data, byte[] key) {
         return hmacTemplate(data, key, "HmacMD5");
     }
 
@@ -410,7 +420,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA1ToString(String data, String key) {
+    public String encryptHmacSHA1ToString(String data, String key) {
         return encryptHmacSHA1ToString(data.getBytes(), key.getBytes());
     }
 
@@ -421,7 +431,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA1ToString(byte[] data, byte[] key) {
+    public String encryptHmacSHA1ToString(byte[] data, byte[] key) {
         return bytes2HexString(encryptHmacSHA1(data, key));
     }
 
@@ -432,7 +442,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 密文字节数组
      */
-    public static byte[] encryptHmacSHA1(byte[] data, byte[] key) {
+    public byte[] encryptHmacSHA1(byte[] data, byte[] key) {
         return hmacTemplate(data, key, "HmacSHA1");
     }
 
@@ -443,7 +453,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA224ToString(String data, String key) {
+    public String encryptHmacSHA224ToString(String data, String key) {
         return encryptHmacSHA224ToString(data.getBytes(), key.getBytes());
     }
 
@@ -454,7 +464,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA224ToString(byte[] data, byte[] key) {
+    public String encryptHmacSHA224ToString(byte[] data, byte[] key) {
         return bytes2HexString(encryptHmacSHA224(data, key));
     }
 
@@ -465,7 +475,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 密文字节数组
      */
-    public static byte[] encryptHmacSHA224(byte[] data, byte[] key) {
+    public byte[] encryptHmacSHA224(byte[] data, byte[] key) {
         return hmacTemplate(data, key, "HmacSHA224");
     }
 
@@ -476,7 +486,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA256ToString(String data, String key) {
+    public String encryptHmacSHA256ToString(String data, String key) {
         return encryptHmacSHA256ToString(data.getBytes(), key.getBytes());
     }
 
@@ -487,7 +497,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA256ToString(byte[] data, byte[] key) {
+    public String encryptHmacSHA256ToString(byte[] data, byte[] key) {
         return bytes2HexString(encryptHmacSHA256(data, key));
     }
 
@@ -498,7 +508,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 密文字节数组
      */
-    public static byte[] encryptHmacSHA256(byte[] data, byte[] key) {
+    public byte[] encryptHmacSHA256(byte[] data, byte[] key) {
         return hmacTemplate(data, key, "HmacSHA256");
     }
 
@@ -511,7 +521,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA384ToString(String data, String key) {
+    public String encryptHmacSHA384ToString(String data, String key) {
         return encryptHmacSHA384ToString(data.getBytes(), key.getBytes());
     }
 
@@ -522,7 +532,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA384ToString(byte[] data, byte[] key) {
+    public String encryptHmacSHA384ToString(byte[] data, byte[] key) {
         return bytes2HexString(encryptHmacSHA384(data, key));
     }
 
@@ -533,7 +543,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 密文字节数组
      */
-    public static byte[] encryptHmacSHA384(byte[] data, byte[] key) {
+    public byte[] encryptHmacSHA384(byte[] data, byte[] key) {
         return hmacTemplate(data, key, "HmacSHA384");
     }
 
@@ -544,7 +554,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA512ToString(String data, String key) {
+    public String encryptHmacSHA512ToString(String data, String key) {
         return encryptHmacSHA512ToString(data.getBytes(), key.getBytes());
     }
 
@@ -555,7 +565,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 16进制密文
      */
-    public static String encryptHmacSHA512ToString(byte[] data, byte[] key) {
+    public String encryptHmacSHA512ToString(byte[] data, byte[] key) {
         return bytes2HexString(encryptHmacSHA512(data, key));
     }
 
@@ -566,7 +576,7 @@ public class EncryptUtils {
      * @param key  秘钥
      * @return 密文字节数组
      */
-    public static byte[] encryptHmacSHA512(byte[] data, byte[] key) {
+    public byte[] encryptHmacSHA512(byte[] data, byte[] key) {
         return hmacTemplate(data, key, "HmacSHA512");
     }
 
@@ -578,7 +588,7 @@ public class EncryptUtils {
      * @param algorithm 加密算法
      * @return 密文字节数组
      */
-    private static byte[] hmacTemplate(byte[] data, byte[] key, String algorithm) {
+    private byte[] hmacTemplate(byte[] data, byte[] key, String algorithm) {
         if (data == null || data.length == 0 || key == null || key.length == 0) return null;
         try {
             SecretKeySpec secretKey = new SecretKeySpec(key, algorithm);
@@ -598,7 +608,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return Base64密文
      */
-    public static byte[] encryptDES2Base64(byte[] data, byte[] key) {
+    public byte[] encryptDES2Base64(byte[] data, byte[] key) {
         return base64Encode(encryptDES(data, key));
     }
 
@@ -611,7 +621,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return 16进制密文
      */
-    public static String encryptDES2HexString(byte[] data, byte[] key) {
+    public String encryptDES2HexString(byte[] data, byte[] key) {
         return bytes2HexString(encryptDES(data, key));
     }
 
@@ -622,7 +632,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return 密文
      */
-    public static byte[] encryptDES(byte[] data, byte[] key) {
+    public byte[] encryptDES(byte[] data, byte[] key) {
         return desTemplate(data, key, DES_Algorithm, DES_Transformation, true);
     }
 
@@ -633,7 +643,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return 明文
      */
-    public static byte[] decryptBase64DES(byte[] data, byte[] key) {
+    public byte[] decryptBase64DES(byte[] data, byte[] key) {
         return decryptDES(base64Decode(data), key);
     }
 
@@ -644,7 +654,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return 明文
      */
-    public static byte[] decryptHexStringDES(String data, byte[] key) {
+    public byte[] decryptHexStringDES(String data, byte[] key) {
         return decryptDES(hexString2Bytes(data), key);
     }
 
@@ -655,7 +665,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return 明文
      */
-    public static byte[] decryptDES(byte[] data, byte[] key) {
+    public byte[] decryptDES(byte[] data, byte[] key) {
         return desTemplate(data, key, DES_Algorithm, DES_Transformation, false);
     }
 
@@ -666,7 +676,7 @@ public class EncryptUtils {
      * @param key  24字节秘钥
      * @return Base64密文
      */
-    public static byte[] encrypt3DES2Base64(byte[] data, byte[] key) {
+    public byte[] encrypt3DES2Base64(byte[] data, byte[] key) {
         return base64Encode(encrypt3DES(data, key));
     }
 
@@ -677,7 +687,7 @@ public class EncryptUtils {
      * @param key  24字节秘钥
      * @return 16进制密文
      */
-    public static String encrypt3DES2HexString(byte[] data, byte[] key) {
+    public String encrypt3DES2HexString(byte[] data, byte[] key) {
         return bytes2HexString(encrypt3DES(data, key));
     }
 
@@ -688,7 +698,7 @@ public class EncryptUtils {
      * @param key  24字节密钥
      * @return 密文
      */
-    public static byte[] encrypt3DES(byte[] data, byte[] key) {
+    public byte[] encrypt3DES(byte[] data, byte[] key) {
         return desTemplate(data, key, TripleDES_Algorithm, TripleDES_Transformation, true);
     }
 
@@ -701,7 +711,7 @@ public class EncryptUtils {
      * @param key  24字节秘钥
      * @return 明文
      */
-    public static byte[] decryptBase64_3DES(byte[] data, byte[] key) {
+    public byte[] decryptBase64_3DES(byte[] data, byte[] key) {
         return decrypt3DES(base64Decode(data), key);
     }
 
@@ -712,7 +722,7 @@ public class EncryptUtils {
      * @param key  24字节秘钥
      * @return 明文
      */
-    public static byte[] decryptHexString3DES(String data, byte[] key) {
+    public byte[] decryptHexString3DES(String data, byte[] key) {
         return decrypt3DES(hexString2Bytes(data), key);
     }
 
@@ -723,7 +733,7 @@ public class EncryptUtils {
      * @param key  24字节密钥
      * @return 明文
      */
-    public static byte[] decrypt3DES(byte[] data, byte[] key) {
+    public byte[] decrypt3DES(byte[] data, byte[] key) {
         return desTemplate(data, key, TripleDES_Algorithm, TripleDES_Transformation, false);
     }
 
@@ -734,7 +744,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return Base64密文
      */
-    public static byte[] encryptAES2Base64(byte[] data, byte[] key) {
+    public byte[] encryptAES2Base64(byte[] data, byte[] key) {
         return base64Encode(encryptAES(data, key));
     }
 
@@ -745,7 +755,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return 16进制密文
      */
-    public static String encryptAES2HexString(byte[] data, byte[] key) {
+    public String encryptAES2HexString(byte[] data, byte[] key) {
         return bytes2HexString(encryptAES(data, key));
     }
 
@@ -756,7 +766,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return 密文
      */
-    public static byte[] encryptAES(byte[] data, byte[] key) {
+    public byte[] encryptAES(byte[] data, byte[] key) {
         return desTemplate(data, key, AES_Algorithm, AES_Transformation, true);
     }
 
@@ -767,7 +777,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return 明文
      */
-    public static byte[] decryptBase64AES(byte[] data, byte[] key) {
+    public byte[] decryptBase64AES(byte[] data, byte[] key) {
         return decryptAES(base64Decode(data), key);
     }
 
@@ -778,7 +788,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return 明文
      */
-    public static byte[] decryptHexStringAES(String data, byte[] key) {
+    public byte[] decryptHexStringAES(String data, byte[] key) {
         return decryptAES(hexString2Bytes(data), key);
     }
 
@@ -789,7 +799,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return 明文
      */
-    public static byte[] decryptAES(byte[] data, byte[] key) {
+    public byte[] decryptAES(byte[] data, byte[] key) {
         return desTemplate(data, key, AES_Algorithm, AES_Transformation, false);
     }
 
@@ -803,7 +813,7 @@ public class EncryptUtils {
      * @param isEncrypt      {@code true}: 加密 {@code false}: 解密
      * @return 密文或者明文，适用于DES，3DES，AES
      */
-    public static byte[] desTemplate(byte[] data, byte[] key, String algorithm, String transformation, boolean isEncrypt) {
+    public byte[] desTemplate(byte[] data, byte[] key, String algorithm, String transformation, boolean isEncrypt) {
         if (data == null || data.length == 0 || key == null || key.length == 0) return null;
         try {
             SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
@@ -825,7 +835,7 @@ public class EncryptUtils {
      * @param bytes 字节数组
      * @return 16进制大写字符串
      */
-    private static String bytes2HexString(byte[] bytes) {
+    private String bytes2HexString(byte[] bytes) {
         if (bytes == null) return null;
         int len = bytes.length;
         if (len <= 0) return null;
@@ -846,7 +856,7 @@ public class EncryptUtils {
      * @param hexString 十六进制字符串
      * @return 字节数组
      */
-    private static byte[] hexString2Bytes(String hexString) {
+    private byte[] hexString2Bytes(String hexString) {
         if (StringUtils.isSpace(hexString)) return null;
         int len = hexString.length();
         if (len % 2 != 0) {
@@ -867,7 +877,7 @@ public class EncryptUtils {
      * @param hexChar hex单个字节
      * @return 0..15
      */
-    private static int hex2Dec(char hexChar) {
+    private int hex2Dec(char hexChar) {
         if (hexChar >= '0' && hexChar <= '9') {
             return hexChar - '0';
         } else if (hexChar >= 'A' && hexChar <= 'F') {
@@ -883,7 +893,7 @@ public class EncryptUtils {
      * @param input 要编码的字节数组
      * @return Base64编码后的字符串
      */
-    private static byte[] base64Encode(byte[] input) {
+    private byte[] base64Encode(byte[] input) {
         return Base64.encode(input, Base64.NO_WRAP);
     }
 
@@ -893,7 +903,7 @@ public class EncryptUtils {
      * @param input 要解码的字符串
      * @return Base64解码后的字符串
      */
-    private static byte[] base64Decode(byte[] input) {
+    private byte[] base64Decode(byte[] input) {
         return Base64.decode(input, Base64.NO_WRAP);
     }
 }
