@@ -17,8 +17,20 @@ import android.widget.EditText;
  */
 public class KeyboardUtils {
 
-    private KeyboardUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static KeyboardUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static KeyboardUtils getInstance() {
+        if (instance == null) {
+            synchronized (KeyboardUtils.class) {
+                if (instance == null) {
+                    instance = new KeyboardUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -32,7 +44,7 @@ public class KeyboardUtils {
      *
      * @param activity activity
      */
-    public static void hideSoftInput(Activity activity) {
+    public void hideSoftInput(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view == null) view = new View(activity);
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -46,7 +58,7 @@ public class KeyboardUtils {
      * @param context 上下文
      * @param view    视图
      */
-    public static void hideSoftInput(Context context, View view) {
+    public void hideSoftInput(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -58,7 +70,7 @@ public class KeyboardUtils {
      * <p>需重写dispatchTouchEvent</p>
      * <p>参照以下注释代码</p>
      */
-    public static void clickBlankArea2HideSoftInput() {
+    public void clickBlankArea2HideSoftInput() {
         Log.d("tips", "U should copy the following code.");
         /*
         @Override
@@ -95,11 +107,11 @@ public class KeyboardUtils {
      *
      * @param edit 输入框
      */
-    public static void showSoftInput(EditText edit) {
+    public void showSoftInput(EditText edit) {
         edit.setFocusable(true);
         edit.setFocusableInTouchMode(true);
         edit.requestFocus();
-        InputMethodManager imm = (InputMethodManager) HandyBaseUtils.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         imm.showSoftInput(edit, 0);
     }
@@ -107,8 +119,8 @@ public class KeyboardUtils {
     /**
      * 切换键盘显示与否状态
      */
-    public static void toggleSoftInput() {
-        InputMethodManager imm = (InputMethodManager) HandyBaseUtils.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    public void toggleSoftInput() {
+        InputMethodManager imm = (InputMethodManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
