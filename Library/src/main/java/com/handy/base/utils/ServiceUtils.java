@@ -20,8 +20,20 @@ import java.util.Set;
  */
 public class ServiceUtils {
 
-    private ServiceUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static ServiceUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static ServiceUtils getInstance() {
+        if (instance == null) {
+            synchronized (ServiceUtils.class) {
+                if (instance == null) {
+                    instance = new ServiceUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -30,7 +42,7 @@ public class ServiceUtils {
      * @param context 上下文
      * @return 服务名集合
      */
-    public static Set getAllRunningService(Context context) {
+    public Set getAllRunningService(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningServiceInfo> infos = activityManager.getRunningServices(0x7FFFFFFF);
         Set<String> names = new HashSet<>();
@@ -47,7 +59,7 @@ public class ServiceUtils {
      * @param context   上下文
      * @param className 完整包名的服务类名
      */
-    public static void startService(Context context, String className) {
+    public void startService(Context context, String className) {
         try {
             startService(context, Class.forName(className));
         } catch (Exception e) {
@@ -61,7 +73,7 @@ public class ServiceUtils {
      * @param context 上下文
      * @param cls     服务类
      */
-    public static void startService(Context context, Class<?> cls) {
+    public void startService(Context context, Class<?> cls) {
         Intent intent = new Intent(context, cls);
         context.startService(intent);
     }
@@ -73,7 +85,7 @@ public class ServiceUtils {
      * @param className 完整包名的服务类名
      * @return {@code true}: 停止成功<br>{@code false}: 停止失败
      */
-    public static boolean stopService(Context context, String className) {
+    public boolean stopService(Context context, String className) {
         try {
             return stopService(context, Class.forName(className));
         } catch (Exception e) {
@@ -89,7 +101,7 @@ public class ServiceUtils {
      * @param cls     服务类
      * @return {@code true}: 停止成功<br>{@code false}: 停止失败
      */
-    public static boolean stopService(Context context, Class<?> cls) {
+    public boolean stopService(Context context, Class<?> cls) {
         Intent intent = new Intent(context, cls);
         return context.stopService(intent);
     }
@@ -110,7 +122,7 @@ public class ServiceUtils {
      *                  <li>{@link Context#BIND_WAIVE_PRIORITY}</li>
      *                  </ul>
      */
-    public static void bindService(Context context, String className, ServiceConnection conn, int flags) {
+    public void bindService(Context context, String className, ServiceConnection conn, int flags) {
         try {
             bindService(context, Class.forName(className), conn, flags);
         } catch (Exception e) {
@@ -134,7 +146,7 @@ public class ServiceUtils {
      *                <li>{@link Context#BIND_WAIVE_PRIORITY}</li>
      *                </ul>
      */
-    public static void bindService(Context context, Class<?> cls, ServiceConnection conn, int flags) {
+    public void bindService(Context context, Class<?> cls, ServiceConnection conn, int flags) {
         Intent intent = new Intent(context, cls);
         context.bindService(intent, conn, flags);
     }
@@ -145,7 +157,7 @@ public class ServiceUtils {
      * @param context 上下文
      * @param conn    服务连接对象
      */
-    public static void unbindService(Context context, ServiceConnection conn) {
+    public void unbindService(Context context, ServiceConnection conn) {
         context.unbindService(conn);
     }
 
@@ -156,7 +168,7 @@ public class ServiceUtils {
      * @param className 完整包名的服务类名
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isServiceRunning(Context context, String className) {
+    public boolean isServiceRunning(Context context, String className) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningServiceInfo> infos = activityManager.getRunningServices(0x7FFFFFFF);
         if (infos == null || infos.size() == 0) return false;
