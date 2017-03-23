@@ -19,11 +19,11 @@ public class HandyBaseUtils {
     }
 
     /**
-     * 初始化工具类
+     * 注册工具类的Context
      *
      * @param context 上下文
      */
-    public static void init(Context context) {
+    public static void registerContext(Context context) {
         HandyBaseUtils.context = context.getApplicationContext();
     }
 
@@ -34,6 +34,6 @@ public class HandyBaseUtils {
      */
     public static Context getContext() {
         if (context != null) return context;
-        throw new NullPointerException("u should init first");
+        throw new NullPointerException("u should registerContext first");
     }
 }
