@@ -15,8 +15,20 @@ import java.util.List;
  */
 public class ShellUtils {
 
-    private ShellUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static ShellUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static ShellUtils getInstance() {
+        if (instance == null) {
+            synchronized (ShellUtils.class) {
+                if (instance == null) {
+                    instance = new ShellUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -26,7 +38,7 @@ public class ShellUtils {
      * @param isRoot  是否需要root权限执行
      * @return CommandResult
      */
-    public static CommandResult execCmd(String command, boolean isRoot) {
+    public CommandResult execCmd(String command, boolean isRoot) {
         return execCmd(new String[]{command}, isRoot, true);
     }
 
@@ -37,7 +49,7 @@ public class ShellUtils {
      * @param isRoot   是否需要root权限执行
      * @return CommandResult
      */
-    public static CommandResult execCmd(List<String> commands, boolean isRoot) {
+    public CommandResult execCmd(List<String> commands, boolean isRoot) {
         return execCmd(commands == null ? null : commands.toArray(new String[]{}), isRoot, true);
     }
 
@@ -48,7 +60,7 @@ public class ShellUtils {
      * @param isRoot   是否需要root权限执行
      * @return CommandResult
      */
-    public static CommandResult execCmd(String[] commands, boolean isRoot) {
+    public CommandResult execCmd(String[] commands, boolean isRoot) {
         return execCmd(commands, isRoot, true);
     }
 
@@ -60,7 +72,7 @@ public class ShellUtils {
      * @param isNeedResultMsg 是否需要结果消息
      * @return CommandResult
      */
-    public static CommandResult execCmd(String command, boolean isRoot, boolean isNeedResultMsg) {
+    public CommandResult execCmd(String command, boolean isRoot, boolean isNeedResultMsg) {
         return execCmd(new String[]{command}, isRoot, isNeedResultMsg);
     }
 
@@ -72,7 +84,7 @@ public class ShellUtils {
      * @param isNeedResultMsg 是否需要结果消息
      * @return CommandResult
      */
-    public static CommandResult execCmd(List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
+    public CommandResult execCmd(List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
         return execCmd(commands == null ? null : commands.toArray(new String[]{}), isRoot, isNeedResultMsg);
     }
 
@@ -84,7 +96,7 @@ public class ShellUtils {
      * @param isNeedResultMsg 是否需要结果消息
      * @return CommandResult
      */
-    public static CommandResult execCmd(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+    public CommandResult execCmd(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
         int result = -1;
         if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
@@ -138,7 +150,7 @@ public class ShellUtils {
     /**
      * 返回的命令结果
      */
-    public static class CommandResult {
+    public class CommandResult {
         /**
          * 结果码
          **/
