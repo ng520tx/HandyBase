@@ -37,10 +37,21 @@ import java.util.List;
  */
 public class FileUtils {
 
-    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private volatile static FileUtils instance;
+    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    private FileUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static FileUtils getInstance() {
+        if (instance == null) {
+            synchronized (FileUtils.class) {
+                if (instance == null) {
+                    instance = new FileUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -49,7 +60,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件
      */
-    public static File getFileByPath(String filePath) {
+    public File getFileByPath(String filePath) {
         return StringUtils.isSpace(filePath) ? null : new File(filePath);
     }
 
@@ -59,7 +70,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return {@code true}: 存在<br>{@code false}: 不存在
      */
-    public static boolean isFileExists(String filePath) {
+    public boolean isFileExists(String filePath) {
         return isFileExists(getFileByPath(filePath));
     }
 
@@ -69,7 +80,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 存在<br>{@code false}: 不存在
      */
-    public static boolean isFileExists(File file) {
+    public boolean isFileExists(File file) {
         return file != null && file.exists();
     }
 
@@ -80,7 +91,7 @@ public class FileUtils {
      * @param newName  新名称
      * @return {@code true}: 重命名成功<br>{@code false}: 重命名失败
      */
-    public static boolean rename(String filePath, String newName) {
+    public boolean rename(String filePath, String newName) {
         return rename(getFileByPath(filePath), newName);
     }
 
@@ -91,7 +102,7 @@ public class FileUtils {
      * @param newName 新名称
      * @return {@code true}: 重命名成功<br>{@code false}: 重命名失败
      */
-    public static boolean rename(File file, String newName) {
+    public boolean rename(File file, String newName) {
         // 文件为空返回false
         if (file == null) return false;
         // 文件不存在返回false
@@ -112,7 +123,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isDir(String dirPath) {
+    public boolean isDir(String dirPath) {
         return isDir(getFileByPath(dirPath));
     }
 
@@ -122,7 +133,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isDir(File file) {
+    public boolean isDir(File file) {
         return isFileExists(file) && file.isDirectory();
     }
 
@@ -132,7 +143,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isFile(String filePath) {
+    public boolean isFile(String filePath) {
         return isFile(getFileByPath(filePath));
     }
 
@@ -142,7 +153,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isFile(File file) {
+    public boolean isFile(File file) {
         return isFileExists(file) && file.isFile();
     }
 
@@ -152,7 +163,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
      */
-    public static boolean createOrExistsDir(String dirPath) {
+    public boolean createOrExistsDir(String dirPath) {
         return createOrExistsDir(getFileByPath(dirPath));
     }
 
@@ -162,7 +173,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
      */
-    public static boolean createOrExistsDir(File file) {
+    public boolean createOrExistsDir(File file) {
         // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
         return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
     }
@@ -173,7 +184,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
      */
-    public static boolean createOrExistsFile(String filePath) {
+    public boolean createOrExistsFile(String filePath) {
         return createOrExistsFile(getFileByPath(filePath));
     }
 
@@ -183,7 +194,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
      */
-    public static boolean createOrExistsFile(File file) {
+    public boolean createOrExistsFile(File file) {
         if (file == null) return false;
         // 如果存在，是文件则返回true，是目录则返回false
         if (file.exists()) return file.isFile();
@@ -202,7 +213,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return {@code true}: 创建成功<br>{@code false}: 创建失败
      */
-    public static boolean createFileByDeleteOldFile(String filePath) {
+    public boolean createFileByDeleteOldFile(String filePath) {
         return createFileByDeleteOldFile(getFileByPath(filePath));
     }
 
@@ -212,7 +223,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 创建成功<br>{@code false}: 创建失败
      */
-    public static boolean createFileByDeleteOldFile(File file) {
+    public boolean createFileByDeleteOldFile(File file) {
         if (file == null) return false;
         // 文件存在并且删除失败返回false
         if (file.exists() && file.isFile() && !file.delete()) return false;
@@ -234,7 +245,7 @@ public class FileUtils {
      * @param isMove      是否移动
      * @return {@code true}: 复制或移动成功<br>{@code false}: 复制或移动失败
      */
-    private static boolean copyOrMoveDir(String srcDirPath, String destDirPath, boolean isMove) {
+    private boolean copyOrMoveDir(String srcDirPath, String destDirPath, boolean isMove) {
         return copyOrMoveDir(getFileByPath(srcDirPath), getFileByPath(destDirPath), isMove);
     }
 
@@ -246,7 +257,7 @@ public class FileUtils {
      * @param isMove  是否移动
      * @return {@code true}: 复制或移动成功<br>{@code false}: 复制或移动失败
      */
-    private static boolean copyOrMoveDir(File srcDir, File destDir, boolean isMove) {
+    private boolean copyOrMoveDir(File srcDir, File destDir, boolean isMove) {
         if (srcDir == null || destDir == null) return false;
         // 如果目标目录在源目录中则返回false，看不懂的话好好想想递归怎么结束
         // srcPath : F:\\MyGithub\\AndroidUtilCode\\utilcode\\src\\test\\res
@@ -281,7 +292,7 @@ public class FileUtils {
      * @param isMove       是否移动
      * @return {@code true}: 复制或移动成功<br>{@code false}: 复制或移动失败
      */
-    private static boolean copyOrMoveFile(String srcFilePath, String destFilePath, boolean isMove) {
+    private boolean copyOrMoveFile(String srcFilePath, String destFilePath, boolean isMove) {
         return copyOrMoveFile(getFileByPath(srcFilePath), getFileByPath(destFilePath), isMove);
     }
 
@@ -293,7 +304,7 @@ public class FileUtils {
      * @param isMove   是否移动
      * @return {@code true}: 复制或移动成功<br>{@code false}: 复制或移动失败
      */
-    private static boolean copyOrMoveFile(File srcFile, File destFile, boolean isMove) {
+    private boolean copyOrMoveFile(File srcFile, File destFile, boolean isMove) {
         if (srcFile == null || destFile == null) return false;
         // 源文件不存在或者不是文件则返回false
         if (!srcFile.exists() || !srcFile.isFile()) return false;
@@ -317,7 +328,7 @@ public class FileUtils {
      * @param destDirPath 目标目录路径
      * @return {@code true}: 复制成功<br>{@code false}: 复制失败
      */
-    public static boolean copyDir(String srcDirPath, String destDirPath) {
+    public boolean copyDir(String srcDirPath, String destDirPath) {
         return copyDir(getFileByPath(srcDirPath), getFileByPath(destDirPath));
     }
 
@@ -328,7 +339,7 @@ public class FileUtils {
      * @param destDir 目标目录
      * @return {@code true}: 复制成功<br>{@code false}: 复制失败
      */
-    public static boolean copyDir(File srcDir, File destDir) {
+    public boolean copyDir(File srcDir, File destDir) {
         return copyOrMoveDir(srcDir, destDir, false);
     }
 
@@ -339,7 +350,7 @@ public class FileUtils {
      * @param destFilePath 目标文件路径
      * @return {@code true}: 复制成功<br>{@code false}: 复制失败
      */
-    public static boolean copyFile(String srcFilePath, String destFilePath) {
+    public boolean copyFile(String srcFilePath, String destFilePath) {
         return copyFile(getFileByPath(srcFilePath), getFileByPath(destFilePath));
     }
 
@@ -350,7 +361,7 @@ public class FileUtils {
      * @param destFile 目标文件
      * @return {@code true}: 复制成功<br>{@code false}: 复制失败
      */
-    public static boolean copyFile(File srcFile, File destFile) {
+    public boolean copyFile(File srcFile, File destFile) {
         return copyOrMoveFile(srcFile, destFile, false);
     }
 
@@ -361,7 +372,7 @@ public class FileUtils {
      * @param destDirPath 目标目录路径
      * @return {@code true}: 移动成功<br>{@code false}: 移动失败
      */
-    public static boolean moveDir(String srcDirPath, String destDirPath) {
+    public boolean moveDir(String srcDirPath, String destDirPath) {
         return moveDir(getFileByPath(srcDirPath), getFileByPath(destDirPath));
     }
 
@@ -372,7 +383,7 @@ public class FileUtils {
      * @param destDir 目标目录
      * @return {@code true}: 移动成功<br>{@code false}: 移动失败
      */
-    public static boolean moveDir(File srcDir, File destDir) {
+    public boolean moveDir(File srcDir, File destDir) {
         return copyOrMoveDir(srcDir, destDir, true);
     }
 
@@ -383,7 +394,7 @@ public class FileUtils {
      * @param destFilePath 目标文件路径
      * @return {@code true}: 移动成功<br>{@code false}: 移动失败
      */
-    public static boolean moveFile(String srcFilePath, String destFilePath) {
+    public boolean moveFile(String srcFilePath, String destFilePath) {
         return moveFile(getFileByPath(srcFilePath), getFileByPath(destFilePath));
     }
 
@@ -394,7 +405,7 @@ public class FileUtils {
      * @param destFile 目标文件
      * @return {@code true}: 移动成功<br>{@code false}: 移动失败
      */
-    public static boolean moveFile(File srcFile, File destFile) {
+    public boolean moveFile(File srcFile, File destFile) {
         return copyOrMoveFile(srcFile, destFile, true);
     }
 
@@ -404,7 +415,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return {@code true}: 删除成功<br>{@code false}: 删除失败
      */
-    public static boolean deleteDir(String dirPath) {
+    public boolean deleteDir(String dirPath) {
         return deleteDir(getFileByPath(dirPath));
     }
 
@@ -414,7 +425,7 @@ public class FileUtils {
      * @param dir 目录
      * @return {@code true}: 删除成功<br>{@code false}: 删除失败
      */
-    public static boolean deleteDir(File dir) {
+    public boolean deleteDir(File dir) {
         if (dir == null) return false;
         // 目录不存在返回true
         if (!dir.exists()) return true;
@@ -440,7 +451,7 @@ public class FileUtils {
      * @param srcFilePath 文件路径
      * @return {@code true}: 删除成功<br>{@code false}: 删除失败
      */
-    public static boolean deleteFile(String srcFilePath) {
+    public boolean deleteFile(String srcFilePath) {
         return deleteFile(getFileByPath(srcFilePath));
     }
 
@@ -450,7 +461,7 @@ public class FileUtils {
      * @param file 文件
      * @return {@code true}: 删除成功<br>{@code false}: 删除失败
      */
-    public static boolean deleteFile(File file) {
+    public boolean deleteFile(File file) {
         return file != null && (!file.exists() || file.isFile() && file.delete());
     }
 
@@ -460,7 +471,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return {@code true}: 删除成功<br>{@code false}: 删除失败
      */
-    public static boolean deleteFilesInDir(String dirPath) {
+    public boolean deleteFilesInDir(String dirPath) {
         return deleteFilesInDir(getFileByPath(dirPath));
     }
 
@@ -470,7 +481,7 @@ public class FileUtils {
      * @param dir 目录
      * @return {@code true}: 删除成功<br>{@code false}: 删除失败
      */
-    public static boolean deleteFilesInDir(File dir) {
+    public boolean deleteFilesInDir(File dir) {
         if (dir == null) return false;
         // 目录不存在返回true
         if (!dir.exists()) return true;
@@ -497,7 +508,7 @@ public class FileUtils {
      * @param isRecursive 是否递归进子目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDir(String dirPath, boolean isRecursive) {
+    public List<File> listFilesInDir(String dirPath, boolean isRecursive) {
         return listFilesInDir(getFileByPath(dirPath), isRecursive);
     }
 
@@ -508,7 +519,7 @@ public class FileUtils {
      * @param isRecursive 是否递归进子目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDir(File dir, boolean isRecursive) {
+    public List<File> listFilesInDir(File dir, boolean isRecursive) {
         if (!isDir(dir)) return null;
         if (isRecursive) return listFilesInDir(dir);
         List<File> list = new ArrayList<>();
@@ -525,7 +536,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return 文件链表
      */
-    public static List<File> listFilesInDir(String dirPath) {
+    public List<File> listFilesInDir(String dirPath) {
         return listFilesInDir(getFileByPath(dirPath));
     }
 
@@ -535,7 +546,7 @@ public class FileUtils {
      * @param dir 目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDir(File dir) {
+    public List<File> listFilesInDir(File dir) {
         if (!isDir(dir)) return null;
         List<File> list = new ArrayList<>();
         File[] files = dir.listFiles();
@@ -559,7 +570,7 @@ public class FileUtils {
      * @param isRecursive 是否递归进子目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(String dirPath, String suffix, boolean isRecursive) {
+    public List<File> listFilesInDirWithFilter(String dirPath, String suffix, boolean isRecursive) {
         return listFilesInDirWithFilter(getFileByPath(dirPath), suffix, isRecursive);
     }
 
@@ -572,7 +583,7 @@ public class FileUtils {
      * @param isRecursive 是否递归进子目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(File dir, String suffix, boolean isRecursive) {
+    public List<File> listFilesInDirWithFilter(File dir, String suffix, boolean isRecursive) {
         if (isRecursive) return listFilesInDirWithFilter(dir, suffix);
         if (dir == null || !isDir(dir)) return null;
         List<File> list = new ArrayList<>();
@@ -595,7 +606,7 @@ public class FileUtils {
      * @param suffix  后缀名
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(String dirPath, String suffix) {
+    public List<File> listFilesInDirWithFilter(String dirPath, String suffix) {
         return listFilesInDirWithFilter(getFileByPath(dirPath), suffix);
     }
 
@@ -607,7 +618,7 @@ public class FileUtils {
      * @param suffix 后缀名
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(File dir, String suffix) {
+    public List<File> listFilesInDirWithFilter(File dir, String suffix) {
         if (dir == null || !isDir(dir)) return null;
         List<File> list = new ArrayList<>();
         File[] files = dir.listFiles();
@@ -632,7 +643,7 @@ public class FileUtils {
      * @param isRecursive 是否递归进子目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(String dirPath, FilenameFilter filter, boolean isRecursive) {
+    public List<File> listFilesInDirWithFilter(String dirPath, FilenameFilter filter, boolean isRecursive) {
         return listFilesInDirWithFilter(getFileByPath(dirPath), filter, isRecursive);
     }
 
@@ -644,7 +655,7 @@ public class FileUtils {
      * @param isRecursive 是否递归进子目录
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(File dir, FilenameFilter filter, boolean isRecursive) {
+    public List<File> listFilesInDirWithFilter(File dir, FilenameFilter filter, boolean isRecursive) {
         if (isRecursive) return listFilesInDirWithFilter(dir, filter);
         if (dir == null || !isDir(dir)) return null;
         List<File> list = new ArrayList<>();
@@ -666,7 +677,7 @@ public class FileUtils {
      * @param filter  过滤器
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(String dirPath, FilenameFilter filter) {
+    public List<File> listFilesInDirWithFilter(String dirPath, FilenameFilter filter) {
         return listFilesInDirWithFilter(getFileByPath(dirPath), filter);
     }
 
@@ -677,7 +688,7 @@ public class FileUtils {
      * @param filter 过滤器
      * @return 文件链表
      */
-    public static List<File> listFilesInDirWithFilter(File dir, FilenameFilter filter) {
+    public List<File> listFilesInDirWithFilter(File dir, FilenameFilter filter) {
         if (dir == null || !isDir(dir)) return null;
         List<File> list = new ArrayList<>();
         File[] files = dir.listFiles();
@@ -702,7 +713,7 @@ public class FileUtils {
      * @param fileName 文件名
      * @return 文件链表
      */
-    public static List<File> searchFileInDir(String dirPath, String fileName) {
+    public List<File> searchFileInDir(String dirPath, String fileName) {
         return searchFileInDir(getFileByPath(dirPath), fileName);
     }
 
@@ -714,7 +725,7 @@ public class FileUtils {
      * @param fileName 文件名
      * @return 文件链表
      */
-    public static List<File> searchFileInDir(File dir, String fileName) {
+    public List<File> searchFileInDir(File dir, String fileName) {
         if (dir == null || !isDir(dir)) return null;
         List<File> list = new ArrayList<>();
         File[] files = dir.listFiles();
@@ -739,7 +750,7 @@ public class FileUtils {
      * @param append   是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromIS(String filePath, InputStream is, boolean append) {
+    public boolean writeFileFromIS(String filePath, InputStream is, boolean append) {
         return writeFileFromIS(getFileByPath(filePath), is, append);
     }
 
@@ -751,7 +762,7 @@ public class FileUtils {
      * @param append 是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromIS(File file, InputStream is, boolean append) {
+    public boolean writeFileFromIS(File file, InputStream is, boolean append) {
         if (file == null || is == null) return false;
         if (!createOrExistsFile(file)) return false;
         OutputStream os = null;
@@ -779,7 +790,7 @@ public class FileUtils {
      * @param append   是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromString(String filePath, String content, boolean append) {
+    public boolean writeFileFromString(String filePath, String content, boolean append) {
         return writeFileFromString(getFileByPath(filePath), content, append);
     }
 
@@ -791,7 +802,7 @@ public class FileUtils {
      * @param append  是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromString(File file, String content, boolean append) {
+    public boolean writeFileFromString(File file, String content, boolean append) {
         if (file == null || content == null) return false;
         if (!createOrExistsFile(file)) return false;
         BufferedWriter bw = null;
@@ -814,7 +825,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 文件行链表
      */
-    public static List<String> readFile2List(String filePath, String charsetName) {
+    public List<String> readFile2List(String filePath, String charsetName) {
         return readFile2List(getFileByPath(filePath), charsetName);
     }
 
@@ -825,7 +836,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 文件行链表
      */
-    public static List<String> readFile2List(File file, String charsetName) {
+    public List<String> readFile2List(File file, String charsetName) {
         return readFile2List(file, 0, 0x7FFFFFFF, charsetName);
     }
 
@@ -838,7 +849,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 包含制定行的list
      */
-    public static List<String> readFile2List(String filePath, int st, int end, String
+    public List<String> readFile2List(String filePath, int st, int end, String
             charsetName) {
         return readFile2List(getFileByPath(filePath), st, end, charsetName);
     }
@@ -852,7 +863,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 包含从start行到end行的list
      */
-    public static List<String> readFile2List(File file, int st, int end, String charsetName) {
+    public List<String> readFile2List(File file, int st, int end, String charsetName) {
         if (file == null) return null;
         if (st > end) return null;
         BufferedReader reader = null;
@@ -886,7 +897,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 字符串
      */
-    public static String readFile2String(String filePath, String charsetName) {
+    public String readFile2String(String filePath, String charsetName) {
         return readFile2String(getFileByPath(filePath), charsetName);
     }
 
@@ -897,7 +908,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 字符串
      */
-    public static String readFile2String(File file, String charsetName) {
+    public String readFile2String(File file, String charsetName) {
         if (file == null) return null;
         BufferedReader reader = null;
         try {
@@ -927,7 +938,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 字符数组
      */
-    public static byte[] readFile2Bytes(String filePath) {
+    public byte[] readFile2Bytes(String filePath) {
         return readFile2Bytes(getFileByPath(filePath));
     }
 
@@ -937,7 +948,7 @@ public class FileUtils {
      * @param file 文件
      * @return 字符数组
      */
-    public static byte[] readFile2Bytes(File file) {
+    public byte[] readFile2Bytes(File file) {
         if (file == null) return null;
         try {
             return inputStream2Bytes(new FileInputStream(file));
@@ -953,7 +964,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件最后修改的毫秒时间戳
      */
-    public static long getFileLastModified(String filePath) {
+    public long getFileLastModified(String filePath) {
         return getFileLastModified(getFileByPath(filePath));
     }
 
@@ -963,7 +974,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件最后修改的毫秒时间戳
      */
-    public static long getFileLastModified(File file) {
+    public long getFileLastModified(File file) {
         if (file == null) return -1;
         return file.lastModified();
     }
@@ -974,7 +985,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件编码
      */
-    public static String getFileCharsetSimple(String filePath) {
+    public String getFileCharsetSimple(String filePath) {
         return getFileCharsetSimple(getFileByPath(filePath));
     }
 
@@ -984,7 +995,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件编码
      */
-    public static String getFileCharsetSimple(File file) {
+    public String getFileCharsetSimple(File file) {
         int p = 0;
         InputStream is = null;
         try {
@@ -1013,7 +1024,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件行数
      */
-    public static int getFileLines(String filePath) {
+    public int getFileLines(String filePath) {
         return getFileLines(getFileByPath(filePath));
     }
 
@@ -1023,7 +1034,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件行数
      */
-    public static int getFileLines(File file) {
+    public int getFileLines(File file) {
         int count = 1;
         InputStream is = null;
         try {
@@ -1049,7 +1060,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return 文件大小
      */
-    public static String getDirSize(String dirPath) {
+    public String getDirSize(String dirPath) {
         return getDirSize(getFileByPath(dirPath));
     }
 
@@ -1059,7 +1070,7 @@ public class FileUtils {
      * @param dir 目录
      * @return 文件大小
      */
-    public static String getDirSize(File dir) {
+    public String getDirSize(File dir) {
         long len = getDirLength(dir);
         return len == -1 ? "" : byte2FitMemorySize(len);
     }
@@ -1070,7 +1081,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件大小
      */
-    public static String getFileSize(String filePath) {
+    public String getFileSize(String filePath) {
         return getFileSize(getFileByPath(filePath));
     }
 
@@ -1080,7 +1091,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件大小
      */
-    public static String getFileSize(File file) {
+    public String getFileSize(File file) {
         long len = getFileLength(file);
         return len == -1 ? "" : byte2FitMemorySize(len);
     }
@@ -1091,7 +1102,7 @@ public class FileUtils {
      * @param dirPath 目录路径
      * @return 文件大小
      */
-    public static long getDirLength(String dirPath) {
+    public long getDirLength(String dirPath) {
         return getDirLength(getFileByPath(dirPath));
     }
 
@@ -1101,7 +1112,7 @@ public class FileUtils {
      * @param dir 目录
      * @return 文件大小
      */
-    public static long getDirLength(File dir) {
+    public long getDirLength(File dir) {
         if (!isDir(dir)) return -1;
         long len = 0;
         File[] files = dir.listFiles();
@@ -1123,7 +1134,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件大小
      */
-    public static long getFileLength(String filePath) {
+    public long getFileLength(String filePath) {
         return getFileLength(getFileByPath(filePath));
     }
 
@@ -1133,7 +1144,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件大小
      */
-    public static long getFileLength(File file) {
+    public long getFileLength(File file) {
         if (!isFile(file)) return -1;
         return file.length();
     }
@@ -1144,7 +1155,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件的MD5校验码
      */
-    public static String getFileMD5ToString(String filePath) {
+    public String getFileMD5ToString(String filePath) {
         File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
         return getFileMD5ToString(file);
     }
@@ -1155,7 +1166,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件的MD5校验码
      */
-    public static byte[] getFileMD5(String filePath) {
+    public byte[] getFileMD5(String filePath) {
         File file = StringUtils.isSpace(filePath) ? null : new File(filePath);
         return getFileMD5(file);
     }
@@ -1166,7 +1177,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件的MD5校验码
      */
-    public static String getFileMD5ToString(File file) {
+    public String getFileMD5ToString(File file) {
         return bytes2HexString(getFileMD5(file));
     }
 
@@ -1176,7 +1187,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件的MD5校验码
      */
-    public static byte[] getFileMD5(File file) {
+    public byte[] getFileMD5(File file) {
         if (file == null) return null;
         DigestInputStream dis = null;
         try {
@@ -1201,7 +1212,7 @@ public class FileUtils {
      * @param file 文件
      * @return filePath最长目录
      */
-    public static String getDirName(File file) {
+    public String getDirName(File file) {
         if (file == null) return null;
         return getDirName(file.getPath());
     }
@@ -1212,7 +1223,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return filePath最长目录
      */
-    public static String getDirName(String filePath) {
+    public String getDirName(String filePath) {
         if (StringUtils.isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? "" : filePath.substring(0, lastSep + 1);
@@ -1224,7 +1235,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件名
      */
-    public static String getFileName(File file) {
+    public String getFileName(File file) {
         if (file == null) return null;
         return getFileName(file.getPath());
     }
@@ -1235,7 +1246,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件名
      */
-    public static String getFileName(String filePath) {
+    public String getFileName(String filePath) {
         if (StringUtils.isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? filePath : filePath.substring(lastSep + 1);
@@ -1247,7 +1258,7 @@ public class FileUtils {
      * @param file 文件
      * @return 不带拓展名的文件名
      */
-    public static String getFileNameNoExtension(File file) {
+    public String getFileNameNoExtension(File file) {
         if (file == null) return null;
         return getFileNameNoExtension(file.getPath());
     }
@@ -1258,7 +1269,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 不带拓展名的文件名
      */
-    public static String getFileNameNoExtension(String filePath) {
+    public String getFileNameNoExtension(String filePath) {
         if (StringUtils.isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
@@ -1277,7 +1288,7 @@ public class FileUtils {
      * @param file 文件
      * @return 文件拓展名
      */
-    public static String getFileExtension(File file) {
+    public String getFileExtension(File file) {
         if (file == null) return null;
         return getFileExtension(file.getPath());
     }
@@ -1290,7 +1301,7 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文件拓展名
      */
-    public static String getFileExtension(String filePath) {
+    public String getFileExtension(String filePath) {
         if (StringUtils.isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
@@ -1304,7 +1315,7 @@ public class FileUtils {
      * @param is 输入流
      * @return 字节数组
      */
-    private static byte[] inputStream2Bytes(InputStream is) {
+    private byte[] inputStream2Bytes(InputStream is) {
         if (is == null) return null;
         return input2OutputStream(is).toByteArray();
     }
@@ -1315,7 +1326,7 @@ public class FileUtils {
      * @param is 输入流
      * @return outputStream子类
      */
-    private static ByteArrayOutputStream input2OutputStream(InputStream is) {
+    private ByteArrayOutputStream input2OutputStream(InputStream is) {
         if (is == null) return null;
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -1341,7 +1352,7 @@ public class FileUtils {
      * @param bytes 字节数组
      * @return 16进制大写字符串
      */
-    private static String bytes2HexString(byte[] bytes) {
+    private String bytes2HexString(byte[] bytes) {
         if (bytes == null) return null;
         int len = bytes.length;
         if (len <= 0) return null;
@@ -1361,7 +1372,7 @@ public class FileUtils {
      * @return 合适内存大小
      */
     @SuppressLint("DefaultLocale")
-    private static String byte2FitMemorySize(long byteNum) {
+    private String byte2FitMemorySize(long byteNum) {
         if (byteNum < 0) {
             return "shouldn't be less than zero!";
         } else if (byteNum < MemoryConstants.KB) {
