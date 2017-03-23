@@ -22,12 +22,9 @@ import java.util.concurrent.TimeoutException;
  */
 public class ThreadPoolUtils {
 
+    private volatile static ThreadPoolUtils instance;
     private ExecutorService exec;
     private ScheduledExecutorService scheduleExec;
-
-    private ThreadPoolUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
-    }
 
     /**
      * ThreadPoolUtils构造函数
@@ -59,6 +56,26 @@ public class ThreadPoolUtils {
                 exec = scheduleExec;
                 break;
         }
+    }
+
+    /**
+     * 获取单例
+     */
+    public static ThreadPoolUtils getInstance(Type type, int corePoolSize) {
+        if (instance == null) {
+            synchronized (ThreadPoolUtils.class) {
+                if (instance == null) {
+                    instance = new ThreadPoolUtils(type, corePoolSize);
+                }
+            }
+        }
+        return instance;
+    }
+
+    public static ThreadPoolUtils rebuildInstance(Type type, int corePoolSize) {
+        instance = null;
+        instance = new ThreadPoolUtils(type, corePoolSize);
+        return instance;
     }
 
     /**
