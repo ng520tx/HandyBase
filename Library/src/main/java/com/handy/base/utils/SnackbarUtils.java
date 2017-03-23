@@ -22,10 +22,21 @@ import java.lang.ref.WeakReference;
  */
 public class SnackbarUtils {
 
-    private static WeakReference<Snackbar> snackbarWeakReference;
+    private volatile static SnackbarUtils instance;
+    private WeakReference<Snackbar> snackbarWeakReference;
 
-    private SnackbarUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static SnackbarUtils getInstance() {
+        if (instance == null) {
+            synchronized (SnackbarUtils.class) {
+                if (instance == null) {
+                    instance = new SnackbarUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -36,7 +47,7 @@ public class SnackbarUtils {
      * @param textColor 文本颜色
      * @param bgColor   背景色
      */
-    public static void showShortSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor) {
+    public void showShortSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor) {
         showSnackbar(parent, text, Snackbar.LENGTH_SHORT, textColor, bgColor, null, -1, null);
     }
 
@@ -51,10 +62,8 @@ public class SnackbarUtils {
      * @param actionTextColor 事件文本颜色
      * @param listener        监听器
      */
-    public static void showShortSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor,
-                                         CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
-        showSnackbar(parent, text, Snackbar.LENGTH_SHORT, textColor, bgColor,
-                actionText, actionTextColor, listener);
+    public void showShortSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor, CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
+        showSnackbar(parent, text, Snackbar.LENGTH_SHORT, textColor, bgColor, actionText, actionTextColor, listener);
     }
 
     /**
@@ -65,7 +74,7 @@ public class SnackbarUtils {
      * @param textColor 文本颜色
      * @param bgColor   背景色
      */
-    public static void showLongSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor) {
+    public void showLongSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor) {
         showSnackbar(parent, text, Snackbar.LENGTH_LONG, textColor, bgColor, null, -1, null);
     }
 
@@ -80,10 +89,8 @@ public class SnackbarUtils {
      * @param actionTextColor 事件文本颜色
      * @param listener        监听器
      */
-    public static void showLongSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor,
-                                        CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
-        showSnackbar(parent, text, Snackbar.LENGTH_LONG, textColor, bgColor,
-                actionText, actionTextColor, listener);
+    public void showLongSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor, CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
+        showSnackbar(parent, text, Snackbar.LENGTH_LONG, textColor, bgColor, actionText, actionTextColor, listener);
     }
 
     /**
@@ -94,7 +101,7 @@ public class SnackbarUtils {
      * @param textColor 文本颜色
      * @param bgColor   背景色
      */
-    public static void showIndefiniteSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor) {
+    public void showIndefiniteSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor) {
         showSnackbar(parent, text, Snackbar.LENGTH_INDEFINITE, textColor, bgColor, null, -1, null);
     }
 
@@ -109,10 +116,8 @@ public class SnackbarUtils {
      * @param actionTextColor 事件文本颜色
      * @param listener        监听器
      */
-    public static void showIndefiniteSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor,
-                                              CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
-        showSnackbar(parent, text, Snackbar.LENGTH_INDEFINITE, textColor, bgColor,
-                actionText, actionTextColor, listener);
+    public void showIndefiniteSnackbar(View parent, CharSequence text, @ColorInt int textColor, @ColorInt int bgColor, CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
+        showSnackbar(parent, text, Snackbar.LENGTH_INDEFINITE, textColor, bgColor, actionText, actionTextColor, listener);
     }
 
     /**
@@ -127,11 +132,7 @@ public class SnackbarUtils {
      * @param actionTextColor 事件文本颜色
      * @param listener        监听器
      */
-    private static void showSnackbar(View parent, CharSequence text,
-                                     int duration,
-                                     @ColorInt int textColor, @ColorInt int bgColor,
-                                     CharSequence actionText, int actionTextColor,
-                                     View.OnClickListener listener) {
+    private void showSnackbar(View parent, CharSequence text, int duration, @ColorInt int textColor, @ColorInt int bgColor, CharSequence actionText, int actionTextColor, View.OnClickListener listener) {
         SpannableString spannableString = new SpannableString(text);
         ForegroundColorSpan colorSpan = new ForegroundColorSpan(textColor);
         spannableString.setSpan(colorSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -153,15 +154,13 @@ public class SnackbarUtils {
      * @param layoutId 布局文件
      * @param index    位置(the position at which to add the child or -1 to add last)
      */
-    public static void addView(int layoutId, int index) {
+    public void addView(int layoutId, int index) {
         Snackbar snackbar = snackbarWeakReference.get();
         if (snackbar != null) {
             View view = snackbar.getView();
             Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) view;
             View child = LayoutInflater.from(view.getContext()).inflate(layoutId, null);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER_VERTICAL;
             layout.addView(child, index, params);
         }
@@ -170,7 +169,7 @@ public class SnackbarUtils {
     /**
      * 取消snackbar显示
      */
-    public static void dismissSnackbar() {
+    public void dismissSnackbar() {
         if (snackbarWeakReference != null && snackbarWeakReference.get() != null) {
             snackbarWeakReference.get().dismiss();
             snackbarWeakReference = null;
