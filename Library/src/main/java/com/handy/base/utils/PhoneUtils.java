@@ -31,8 +31,20 @@ import java.util.List;
  */
 public class PhoneUtils {
 
-    private PhoneUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static PhoneUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static PhoneUtils getInstance() {
+        if (instance == null) {
+            synchronized (PhoneUtils.class) {
+                if (instance == null) {
+                    instance = new PhoneUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -40,8 +52,8 @@ public class PhoneUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isPhone() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public boolean isPhone() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
     }
 
@@ -52,8 +64,8 @@ public class PhoneUtils {
      * @return IMEI码
      */
     @SuppressLint("HardwareIds")
-    public static String getIMEI() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public String getIMEI() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getDeviceId() : null;
     }
 
@@ -64,8 +76,8 @@ public class PhoneUtils {
      * @return IMSI码
      */
     @SuppressLint("HardwareIds")
-    public static String getIMSI() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public String getIMSI() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getSubscriberId() : null;
     }
 
@@ -80,8 +92,8 @@ public class PhoneUtils {
      * <li>{@link TelephonyManager#PHONE_TYPE_SIP  } : 3</li>
      * </ul>
      */
-    public static int getPhoneType() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public int getPhoneType() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getPhoneType() : -1;
     }
 
@@ -90,8 +102,8 @@ public class PhoneUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isSimCardReady() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public boolean isSimCardReady() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null && tm.getSimState() == TelephonyManager.SIM_STATE_READY;
     }
 
@@ -101,8 +113,8 @@ public class PhoneUtils {
      *
      * @return sim卡运营商名称
      */
-    public static String getSimOperatorName() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public String getSimOperatorName() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getSimOperatorName() : null;
     }
 
@@ -112,8 +124,8 @@ public class PhoneUtils {
      *
      * @return 移动网络运营商名称
      */
-    public static String getSimOperatorByMnc() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+    public String getSimOperatorByMnc() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.TELEPHONY_SERVICE);
         String operator = tm != null ? tm.getSimOperator() : null;
         if (operator == null) return null;
         switch (operator) {
@@ -150,8 +162,8 @@ public class PhoneUtils {
      * SubscriberId(IMSI) = 460030419724900<br>
      * VoiceMailNumber = *86<br>
      */
-    public static String getPhoneStatus() {
-        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getContext()
+    public String getPhoneStatus() {
+        TelephonyManager tm = (TelephonyManager) HandyBaseUtils.getInstance().getContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
         String str = "";
         str += "DeviceId(IMEI) = " + tm.getDeviceId() + "\n";
@@ -177,8 +189,8 @@ public class PhoneUtils {
      *
      * @param phoneNumber 电话号码
      */
-    public static void dial(String phoneNumber) {
-        HandyBaseUtils.getContext().startActivity(IntentUtils.getDialIntent(phoneNumber));
+    public void dial(String phoneNumber) {
+        HandyBaseUtils.getInstance().getContext().startActivity(IntentUtils.getInstance().getDialIntent(phoneNumber));
     }
 
     /**
@@ -187,8 +199,8 @@ public class PhoneUtils {
      *
      * @param phoneNumber 电话号码
      */
-    public static void call(String phoneNumber) {
-        HandyBaseUtils.getContext().startActivity(IntentUtils.getCallIntent(phoneNumber));
+    public void call(String phoneNumber) {
+        HandyBaseUtils.getInstance().getContext().startActivity(IntentUtils.getInstance().getCallIntent(phoneNumber));
     }
 
     /**
@@ -197,8 +209,8 @@ public class PhoneUtils {
      * @param phoneNumber 接收号码
      * @param content     短信内容
      */
-    public static void sendSms(String phoneNumber, String content) {
-        HandyBaseUtils.getContext().startActivity(IntentUtils.getSendSmsIntent(phoneNumber, content));
+    public void sendSms(String phoneNumber, String content) {
+        HandyBaseUtils.getInstance().getContext().startActivity(IntentUtils.getInstance().getSendSmsIntent(phoneNumber, content));
     }
 
     /**
@@ -208,9 +220,9 @@ public class PhoneUtils {
      * @param phoneNumber 接收号码
      * @param content     短信内容
      */
-    public static void sendSmsSilent(String phoneNumber, String content) {
+    public void sendSmsSilent(String phoneNumber, String content) {
         if (StringUtils.isEmpty(content)) return;
-        PendingIntent sentIntent = PendingIntent.getBroadcast(HandyBaseUtils.getContext(), 0, new Intent(), 0);
+        PendingIntent sentIntent = PendingIntent.getBroadcast(HandyBaseUtils.getInstance().getContext(), 0, new Intent(), 0);
         SmsManager smsManager = SmsManager.getDefault();
         if (content.length() >= 70) {
             List<String> ms = smsManager.divideMessage(content);
@@ -229,11 +241,11 @@ public class PhoneUtils {
      *
      * @return 联系人链表
      */
-    public static List<HashMap<String, String>> getAllContactInfo() {
+    public List<HashMap<String, String>> getAllContactInfo() {
         SystemClock.sleep(3000);
         ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
         // 1.获取内容解析者
-        ContentResolver resolver = HandyBaseUtils.getContext().getContentResolver();
+        ContentResolver resolver = HandyBaseUtils.getInstance().getContext().getContentResolver();
         // 2.获取内容提供者的地址:com.android.contacts
         // raw_contacts表的地址 :raw_contacts
         // view_data表的地址 : data
@@ -292,7 +304,7 @@ public class PhoneUtils {
      * 打开手机联系人界面点击联系人后便获取该号码
      * <p>参照以下注释代码</p>
      */
-    public static void getContactNum() {
+    public void getContactNum() {
         Log.d("tips", "U should copy the following code.");
         /*
         Intent intent = new Intent();
@@ -325,10 +337,10 @@ public class PhoneUtils {
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>}</p>
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_SMS"/>}</p>
      */
-    public static void getAllSMS() {
+    public void getAllSMS() {
         // 1.获取短信
         // 1.1获取内容解析者
-        ContentResolver resolver = HandyBaseUtils.getContext().getContentResolver();
+        ContentResolver resolver = HandyBaseUtils.getInstance().getContext().getContentResolver();
         // 1.2获取内容提供者地址   sms,sms表的地址:null  不写
         // 1.3获取查询路径
         Uri uri = Uri.parse("content://sms");
