@@ -15,8 +15,20 @@ import java.lang.ref.WeakReference;
  */
 public class HandlerUtils {
 
-    private HandlerUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static HandlerUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static HandlerUtils getInstance() {
+        if (instance == null) {
+            synchronized (HandlerUtils.class) {
+                if (instance == null) {
+                    instance = new HandlerUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -26,7 +38,7 @@ public class HandlerUtils {
         void handlerMessage(Message msg);
     }
 
-    public static class HandlerHolder extends Handler {
+    public class HandlerHolder extends Handler {
         WeakReference<OnReceiveMessageListener> mListenerWeakReference;
 
         /**
