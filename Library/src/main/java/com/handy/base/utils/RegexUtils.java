@@ -18,8 +18,20 @@ import java.util.regex.Pattern;
  */
 public class RegexUtils {
 
-    private RegexUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static RegexUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static RegexUtils getInstance() {
+        if (instance == null) {
+            synchronized (RegexUtils.class) {
+                if (instance == null) {
+                    instance = new RegexUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -32,7 +44,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isMobileSimple(CharSequence input) {
+    public boolean isMobileSimple(CharSequence input) {
         return isMatch(RegexConstant.REGEX_MOBILE_SIMPLE, input);
     }
 
@@ -42,7 +54,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isMobileExact(CharSequence input) {
+    public boolean isMobileExact(CharSequence input) {
         return isMatch(RegexConstant.REGEX_MOBILE_EXACT, input);
     }
 
@@ -52,7 +64,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isTel(CharSequence input) {
+    public boolean isTel(CharSequence input) {
         return isMatch(RegexConstant.REGEX_TEL, input);
     }
 
@@ -62,7 +74,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isIDCard15(CharSequence input) {
+    public boolean isIDCard15(CharSequence input) {
         return isMatch(RegexConstant.REGEX_ID_CARD15, input);
     }
 
@@ -72,7 +84,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isIDCard18(CharSequence input) {
+    public boolean isIDCard18(CharSequence input) {
         return isMatch(RegexConstant.REGEX_ID_CARD18, input);
     }
 
@@ -82,7 +94,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isEmail(CharSequence input) {
+    public boolean isEmail(CharSequence input) {
         return isMatch(RegexConstant.REGEX_EMAIL, input);
     }
 
@@ -92,7 +104,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isURL(CharSequence input) {
+    public boolean isURL(CharSequence input) {
         return isMatch(RegexConstant.REGEX_URL, input);
     }
 
@@ -102,7 +114,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isZh(CharSequence input) {
+    public boolean isZh(CharSequence input) {
         return isMatch(RegexConstant.REGEX_ZH, input);
     }
 
@@ -113,7 +125,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isUsername(CharSequence input) {
+    public boolean isUsername(CharSequence input) {
         return isMatch(RegexConstant.REGEX_USERNAME, input);
     }
 
@@ -123,7 +135,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isDate(CharSequence input) {
+    public boolean isDate(CharSequence input) {
         return isMatch(RegexConstant.REGEX_DATE, input);
     }
 
@@ -133,7 +145,7 @@ public class RegexUtils {
      * @param input 待验证文本
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isIP(CharSequence input) {
+    public boolean isIP(CharSequence input) {
         return isMatch(RegexConstant.REGEX_IP, input);
     }
 
@@ -144,7 +156,7 @@ public class RegexUtils {
      * @param input 要匹配的字符串
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
-    public static boolean isMatch(String regex, CharSequence input) {
+    public boolean isMatch(String regex, CharSequence input) {
         return input != null && input.length() > 0 && Pattern.matches(regex, input);
     }
 
@@ -155,7 +167,7 @@ public class RegexUtils {
      * @param input 要匹配的字符串
      * @return 正则匹配的部分
      */
-    public static List<String> getMatches(String regex, CharSequence input) {
+    public List<String> getMatches(String regex, CharSequence input) {
         if (input == null) return null;
         List<String> matches = new ArrayList<>();
         Pattern pattern = Pattern.compile(regex);
@@ -173,7 +185,7 @@ public class RegexUtils {
      * @param regex 正则表达式
      * @return 正则匹配分组
      */
-    public static String[] getSplits(String input, String regex) {
+    public String[] getSplits(String input, String regex) {
         if (input == null) return null;
         return input.split(regex);
     }
@@ -186,7 +198,7 @@ public class RegexUtils {
      * @param replacement 代替者
      * @return 替换正则匹配的第一部分
      */
-    public static String getReplaceFirst(String input, String regex, String replacement) {
+    public String getReplaceFirst(String input, String regex, String replacement) {
         if (input == null) return null;
         return Pattern.compile(regex).matcher(input).replaceFirst(replacement);
     }
@@ -199,7 +211,7 @@ public class RegexUtils {
      * @param replacement 代替者
      * @return 替换所有正则匹配的部分
      */
-    public static String getReplaceAll(String input, String regex, String replacement) {
+    public String getReplaceAll(String input, String regex, String replacement) {
         if (input == null) return null;
         return Pattern.compile(regex).matcher(input).replaceAll(replacement);
     }
