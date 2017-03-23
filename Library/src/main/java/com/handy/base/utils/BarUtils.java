@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 public class BarUtils {
 
     private volatile static BarUtils instance;
-    public final int DEFAULT_STATUS_BAR_ALPHA = 112;
+    private final int DEFAULT_STATUS_BAR_ALPHA = 112;
 
     /**
      * 获取单例
