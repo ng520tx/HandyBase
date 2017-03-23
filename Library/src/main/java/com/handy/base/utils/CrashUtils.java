@@ -24,7 +24,6 @@ import java.util.Locale;
  */
 public class CrashUtils implements UncaughtExceptionHandler {
 
-
     private volatile static CrashUtils instance;
     private UncaughtExceptionHandler mHandler;
     private boolean mInitialized;
