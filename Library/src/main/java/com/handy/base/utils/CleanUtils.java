@@ -12,8 +12,20 @@ import java.io.File;
  */
 public class CleanUtils {
 
-    private CleanUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static CleanUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static CleanUtils getInstance() {
+        if (instance == null) {
+            synchronized (CleanUtils.class) {
+                if (instance == null) {
+                    instance = new CleanUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -22,7 +34,7 @@ public class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanInternalCache() {
+    public boolean cleanInternalCache() {
         return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getCacheDir());
     }
 
@@ -32,7 +44,7 @@ public class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanInternalFiles() {
+    public boolean cleanInternalFiles() {
         return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getFilesDir());
     }
 
@@ -42,7 +54,7 @@ public class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanInternalDbs() {
+    public boolean cleanInternalDbs() {
         return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getFilesDir().getParent() + File.separator + "databases");
     }
 
@@ -53,7 +65,7 @@ public class CleanUtils {
      * @param dbName 数据库名称
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanInternalDbByName(String dbName) {
+    public boolean cleanInternalDbByName(String dbName) {
         return HandyBaseUtils.getContext().deleteDatabase(dbName);
     }
 
@@ -63,7 +75,7 @@ public class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanInternalSP() {
+    public boolean cleanInternalSP() {
         return FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getFilesDir().getParent() + File.separator + "shared_prefs");
     }
 
@@ -73,7 +85,7 @@ public class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanExternalCache() {
+    public boolean cleanExternalCache() {
         return SDCardUtils.isSDCardEnable() && FileUtils.deleteFilesInDir(HandyBaseUtils.getContext().getExternalCacheDir());
     }
 
@@ -83,7 +95,7 @@ public class CleanUtils {
      * @param dirPath 目录路径
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanCustomCache(String dirPath) {
+    public boolean cleanCustomCache(String dirPath) {
         return FileUtils.deleteFilesInDir(dirPath);
     }
 
@@ -93,7 +105,7 @@ public class CleanUtils {
      * @param dir 目录
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public static boolean cleanCustomCache(File dir) {
+    public boolean cleanCustomCache(File dir) {
         return FileUtils.deleteFilesInDir(dir);
     }
 }
