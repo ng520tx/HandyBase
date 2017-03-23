@@ -22,20 +22,15 @@ import java.util.Locale;
  *     desc  : 崩溃相关工具类
  * </pre>
  */
-public class CrashUtils
-        implements UncaughtExceptionHandler {
+public class CrashUtils implements UncaughtExceptionHandler {
 
-    private volatile static CrashUtils mInstance;
 
+    private volatile static CrashUtils instance;
     private UncaughtExceptionHandler mHandler;
-
     private boolean mInitialized;
     private String crashDir;
     private String versionName;
     private int versionCode;
-
-    private CrashUtils() {
-    }
 
     /**
      * 获取单例
@@ -45,14 +40,14 @@ public class CrashUtils
      * @return 单例
      */
     public static CrashUtils getInstance() {
-        if (mInstance == null) {
+        if (instance == null) {
             synchronized (CrashUtils.class) {
-                if (mInstance == null) {
-                    mInstance = new CrashUtils();
+                if (instance == null) {
+                    instance = new CrashUtils();
                 }
             }
         }
-        return mInstance;
+        return instance;
     }
 
     /**
@@ -61,7 +56,7 @@ public class CrashUtils
      * @param filePath 文件路径
      * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
      */
-    private static boolean createOrExistsFile(String filePath) {
+    private boolean createOrExistsFile(String filePath) {
         File file = new File(filePath);
         // 如果存在，是文件则返回true，是目录则返回false
         if (file.exists()) return file.isFile();
@@ -80,7 +75,7 @@ public class CrashUtils
      * @param file 文件
      * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
      */
-    private static boolean createOrExistsDir(File file) {
+    private boolean createOrExistsDir(File file) {
         // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
         return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
     }
@@ -90,7 +85,7 @@ public class CrashUtils
      *
      * @return {@code true}: 成功<br>{@code false}: 失败
      */
-    public boolean init() {
+    public boolean initCrashUtils() {
         if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File baseCache = HandyBaseUtils.getContext().getExternalCacheDir();
