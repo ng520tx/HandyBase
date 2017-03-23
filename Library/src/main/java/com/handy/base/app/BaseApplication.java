@@ -14,7 +14,7 @@ public abstract class BaseApplication extends Application {
         super.onCreate();
 
         try {
-            HandyBaseUtils.registerContext(getApplicationContext());
+            HandyBaseUtils.getInstance().registerContext(getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }

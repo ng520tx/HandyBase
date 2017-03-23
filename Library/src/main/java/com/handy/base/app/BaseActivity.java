@@ -43,8 +43,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
         try {
             GetScreenSize();
-            HandyBaseUtils.registerContext(this);
-            ActivityStackUtils.addActivity(this);
+            HandyBaseUtils.getInstance().registerContext(this);
+            ActivityStackUtils.getInstance().addActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,7 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     protected void onDestroy() {
         super.onDestroy();
         canShowDialog = false;
-        ActivityStackUtils.finishActivity(this);
+        ActivityStackUtils.getInstance().finishActivity(this);
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     @Override
     public void checkActivityPermissions() {
-        if (!PermissionsUT.checkDeniedPermissions(activity, true)) {
+        if (!PermissionsUT.getInstance().checkDeniedPermissions(activity, true)) {
             onActivityPermissionSuccess();
         }
     }
@@ -159,7 +159,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (!PermissionsUT.checkDeniedPermissions(activity, true)) {
+            if (!PermissionsUT.getInstance().checkDeniedPermissions(activity, true)) {
                 onActivityPermissionSuccess();
             }
         } else {
