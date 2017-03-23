@@ -13,8 +13,20 @@ import java.io.IOException;
  */
 public class CloseUtils {
 
-    private CloseUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static CloseUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static CloseUtils getInstance() {
+        if (instance == null) {
+            synchronized (CloseUtils.class) {
+                if (instance == null) {
+                    instance = new CloseUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -22,7 +34,7 @@ public class CloseUtils {
      *
      * @param closeables closeables
      */
-    public static void closeIO(Closeable... closeables) {
+    public void closeIO(Closeable... closeables) {
         if (closeables == null) return;
         for (Closeable closeable : closeables) {
             if (closeable != null) {
@@ -40,7 +52,7 @@ public class CloseUtils {
      *
      * @param closeables closeables
      */
-    public static void closeIOQuietly(Closeable... closeables) {
+    public void closeIOQuietly(Closeable... closeables) {
         if (closeables == null) return;
         for (Closeable closeable : closeables) {
             if (closeable != null) {
