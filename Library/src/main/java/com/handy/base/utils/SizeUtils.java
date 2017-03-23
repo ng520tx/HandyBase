@@ -15,8 +15,20 @@ import android.view.ViewGroup;
  */
 public class SizeUtils {
 
-    private SizeUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    private volatile static SizeUtils instance;
+
+    /**
+     * 获取单例
+     */
+    public static SizeUtils getInstance() {
+        if (instance == null) {
+            synchronized (SizeUtils.class) {
+                if (instance == null) {
+                    instance = new SizeUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -25,8 +37,8 @@ public class SizeUtils {
      * @param dpValue dp值
      * @return px值
      */
-    public static int dp2px(float dpValue) {
-        final float scale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().density;
+    public int dp2px(float dpValue) {
+        final float scale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
@@ -36,8 +48,8 @@ public class SizeUtils {
      * @param pxValue px值
      * @return dp值
      */
-    public static int px2dp(float pxValue) {
-        final float scale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().density;
+    public int px2dp(float pxValue) {
+        final float scale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -47,8 +59,8 @@ public class SizeUtils {
      * @param spValue sp值
      * @return px值
      */
-    public static int sp2px(float spValue) {
-        final float fontScale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().scaledDensity;
+    public int sp2px(float spValue) {
+        final float fontScale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -58,8 +70,8 @@ public class SizeUtils {
      * @param pxValue px值
      * @return sp值
      */
-    public static int px2sp(float pxValue) {
-        final float fontScale = HandyBaseUtils.getContext().getResources().getDisplayMetrics().scaledDensity;
+    public int px2sp(float pxValue) {
+        final float fontScale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 
@@ -72,7 +84,7 @@ public class SizeUtils {
      * @param metrics DisplayMetrics
      * @return 转换结果
      */
-    public static float applyDimension(int unit, float value, DisplayMetrics metrics) {
+    public float applyDimension(int unit, float value, DisplayMetrics metrics) {
         switch (unit) {
             case TypedValue.COMPLEX_UNIT_PX:
                 return value;
@@ -106,7 +118,7 @@ public class SizeUtils {
      * @param view     视图
      * @param listener 监听器
      */
-    public static void forceGetViewSize(final View view, final onGetSizeListener listener) {
+    public void forceGetViewSize(final View view, final onGetSizeListener listener) {
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -123,7 +135,7 @@ public class SizeUtils {
      * @param view 视图
      * @return arr[0]: 视图宽度, arr[1]: 视图高度
      */
-    public static int[] measureView(View view) {
+    public int[] measureView(View view) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp == null) {
             lp = new ViewGroup.LayoutParams(
@@ -149,7 +161,7 @@ public class SizeUtils {
      * @param view 视图
      * @return 视图宽度
      */
-    public static int getMeasuredWidth(View view) {
+    public int getMeasuredWidth(View view) {
         return measureView(view)[0];
     }
 
@@ -159,7 +171,7 @@ public class SizeUtils {
      * @param view 视图
      * @return 视图高度
      */
-    public static int getMeasuredHeight(View view) {
+    public int getMeasuredHeight(View view) {
         return measureView(view)[1];
     }
 
