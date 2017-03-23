@@ -135,7 +135,7 @@ public class ShellUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.closeIO(os, successResult, errorResult);
+            CloseUtils.getInstance().closeIO(os, successResult, errorResult);
             if (process != null) {
                 process.destroy();
             }
