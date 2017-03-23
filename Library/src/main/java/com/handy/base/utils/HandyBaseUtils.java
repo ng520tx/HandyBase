@@ -13,7 +13,7 @@ import android.content.Context;
 public class HandyBaseUtils {
 
     private static Context context;
-    private static SPUtils spUtils;
+    private static ShareUtils shareUtils;
 
     private HandyBaseUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -26,7 +26,7 @@ public class HandyBaseUtils {
      */
     public static void init(Context context) {
         HandyBaseUtils.context = context.getApplicationContext();
-        spUtils = new SPUtils("utilcode");
+        shareUtils = new ShareUtils("utilcode");
     }
 
     /**
@@ -39,7 +39,7 @@ public class HandyBaseUtils {
         throw new NullPointerException("u should init first");
     }
 
-    public static SPUtils getSpUtils() {
-        return spUtils;
+    public static ShareUtils getShareUtils() {
+        return shareUtils;
     }
 }
