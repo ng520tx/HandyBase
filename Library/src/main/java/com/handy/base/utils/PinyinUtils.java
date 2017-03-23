@@ -12,17 +12,18 @@ import android.support.v4.util.SimpleArrayMap;
  */
 public class PinyinUtils {
 
+    private volatile static PinyinUtils instance;
     // 多音字姓氏映射表
-    private static final SimpleArrayMap<Character, String> surnames;
+    private final SimpleArrayMap<Character, String> surnames;
     /**
      * 获取拼音对照表，对比过pinyin4j和其他方式，这样查表设计的好处就是读取快
      * <p>当该类加载后会一直占有123KB的内存</p>
      * <p>如果你想存进文件，然后读取操作的话也是可以，但速度肯定没有这样空间换时间快，毕竟现在设备内存都很大</p>
      * <p>如需更多用法可以用pinyin4j开源库</p>
      */
-    private static final String pinyinTable;
+    private final String pinyinTable;
 
-    static {
+    {
         surnames = new SimpleArrayMap<>(35);
         surnames.put('乐', "yue");
         surnames.put('乘', "sheng");
@@ -94,8 +95,18 @@ public class PinyinUtils {
                 .append("xie   yue   ").toString();
     }
 
-    private PinyinUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static PinyinUtils getInstance() {
+        if (instance == null) {
+            synchronized (PinyinUtils.class) {
+                if (instance == null) {
+                    instance = new PinyinUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -104,7 +115,7 @@ public class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 拼音
      */
-    public static String ccs2Pinyin(CharSequence ccs) {
+    public String ccs2Pinyin(CharSequence ccs) {
         return ccs2Pinyin(ccs, "");
     }
 
@@ -115,7 +126,7 @@ public class PinyinUtils {
      * @param split 汉字拼音之间的分隔符
      * @return 拼音
      */
-    public static String ccs2Pinyin(CharSequence ccs, CharSequence split) {
+    public String ccs2Pinyin(CharSequence ccs, CharSequence split) {
         if (ccs == null || ccs.length() == 0) return null;
         StringBuilder sb = new StringBuilder();
         for (int i = 0, len = ccs.length(); i < len; i++) {
@@ -137,7 +148,7 @@ public class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 拼音
      */
-    public static String getPinyinFirstLetter(CharSequence ccs) {
+    public String getPinyinFirstLetter(CharSequence ccs) {
         if (ccs == null || ccs.length() == 0) return null;
         return ccs2Pinyin(String.valueOf(ccs.charAt(0))).substring(0, 1);
     }
@@ -148,7 +159,7 @@ public class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 所有汉字的首字母
      */
-    public static String getPinyinFirstLetters(CharSequence ccs) {
+    public String getPinyinFirstLetters(CharSequence ccs) {
         return getPinyinFirstLetters(ccs, "");
     }
 
@@ -159,7 +170,7 @@ public class PinyinUtils {
      * @param split 首字母之间的分隔符
      * @return 所有汉字的首字母
      */
-    public static String getPinyinFirstLetters(CharSequence ccs, CharSequence split) {
+    public String getPinyinFirstLetters(CharSequence ccs, CharSequence split) {
         if (ccs == null || ccs.length() == 0) return null;
         int len = ccs.length();
         StringBuilder sb = new StringBuilder(len);
@@ -175,7 +186,7 @@ public class PinyinUtils {
      * @param name 名字
      * @return 姓氏的拼音
      */
-    public static String getSurnamePinyin(CharSequence name) {
+    public String getSurnamePinyin(CharSequence name) {
         if (name == null || name.length() == 0) return null;
         if (name.length() >= 2) {
             CharSequence str = name.subSequence(0, 2);
@@ -202,7 +213,7 @@ public class PinyinUtils {
      * @param name 名字
      * @return 姓氏的首字母
      */
-    public static String getSurnameFirstLetter(CharSequence name) {
+    public String getSurnameFirstLetter(CharSequence name) {
         String surname = getSurnamePinyin(name);
         if (surname == null || surname.length() == 0) return null;
         return String.valueOf(surname.charAt(0));
