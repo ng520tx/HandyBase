@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class ShareUtils {
 
-    private SharedPreferences sp;
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     /**
@@ -27,8 +27,8 @@ public class ShareUtils {
      * @param spName spName
      */
     public ShareUtils(String spName) {
-        sp = HandyBaseUtils.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
-        editor = sp.edit();
+        sharedPreferences = HandyBaseUtils.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.apply();
     }
 
@@ -60,7 +60,7 @@ public class ShareUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public String getString(String key, String defaultValue) {
-        return sp.getString(key, defaultValue);
+        return sharedPreferences.getString(key, defaultValue);
     }
 
     /**
@@ -91,7 +91,7 @@ public class ShareUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public int getInt(String key, int defaultValue) {
-        return sp.getInt(key, defaultValue);
+        return sharedPreferences.getInt(key, defaultValue);
     }
 
     /**
@@ -122,7 +122,7 @@ public class ShareUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public long getLong(String key, long defaultValue) {
-        return sp.getLong(key, defaultValue);
+        return sharedPreferences.getLong(key, defaultValue);
     }
 
     /**
@@ -153,7 +153,7 @@ public class ShareUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public float getFloat(String key, float defaultValue) {
-        return sp.getFloat(key, defaultValue);
+        return sharedPreferences.getFloat(key, defaultValue);
     }
 
     /**
@@ -184,7 +184,7 @@ public class ShareUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public boolean getBoolean(String key, boolean defaultValue) {
-        return sp.getBoolean(key, defaultValue);
+        return sharedPreferences.getBoolean(key, defaultValue);
     }
 
     /**
@@ -215,7 +215,7 @@ public class ShareUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public Set<String> getStringSet(String key, @Nullable Set<String> defaultValue) {
-        return sp.getStringSet(key, defaultValue);
+        return sharedPreferences.getStringSet(key, defaultValue);
     }
 
     /**
@@ -224,7 +224,7 @@ public class ShareUtils {
      * @return Map对象
      */
     public Map<String, ?> getAll() {
-        return sp.getAll();
+        return sharedPreferences.getAll();
     }
 
     /**
@@ -243,7 +243,7 @@ public class ShareUtils {
      * @return {@code true}: 存在<br>{@code false}: 不存在
      */
     public boolean contains(String key) {
-        return sp.contains(key);
+        return sharedPreferences.contains(key);
     }
 
     /**
