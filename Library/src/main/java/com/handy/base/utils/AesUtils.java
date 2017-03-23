@@ -26,12 +26,22 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class AesUtils {
 
-    private static final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
+    private volatile static AesUtils instance;
+    private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
+    public String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
-    public static String DEFAULT_KEY = "HANDY_SECRET_KEY";
-
-    private AesUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+    /**
+     * 获取单例
+     */
+    public static AesUtils getInstance() {
+        if (instance == null) {
+            synchronized (AesUtils.class) {
+                if (instance == null) {
+                    instance = new AesUtils();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -40,7 +50,7 @@ public class AesUtils {
      * @param src 明文
      * @return 密文
      */
-    public static String encrypt(String src) {
+    public String encrypt(String src) {
         try {
             return encrypt(DEFAULT_KEY, src);
         } catch (Exception e) {
@@ -49,7 +59,7 @@ public class AesUtils {
         return null;
     }
 
-    private static String encrypt(String key, String src) {
+    private String encrypt(String key, String src) {
         try {
             byte[] keyByte = key.getBytes();
             SecretKeySpec keySpec = new SecretKeySpec(keyByte, "AES");
@@ -76,7 +86,7 @@ public class AesUtils {
      * @param src 密文
      * @return 明文
      */
-    public static String decrypt(String src) {
+    public String decrypt(String src) {
         try {
             return decrypt(DEFAULT_KEY, src);
         } catch (Exception e) {
@@ -85,7 +95,7 @@ public class AesUtils {
         return null;
     }
 
-    private static String decrypt(String key, String src) {
+    private String decrypt(String key, String src) {
         try {
             byte[] keyByte = key.getBytes();
             SecretKeySpec keySpec = new SecretKeySpec(keyByte, "AES");
