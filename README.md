@@ -49,6 +49,7 @@
     
     dependencies {
         compile 'com.github.liujie045:HandyBase:1.1.1'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     }
 ```
 ***Step 3.工具类已在BaseApplication中初始化***
