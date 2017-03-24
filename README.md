@@ -43,7 +43,7 @@
     }
     
     dependencies {
-        compile 'com.github.liujie045:HandyBase:1.2.2'
+        compile 'com.github.liujie045:HandyBase:1.3.1'
     }
 ```
 ```javascript
