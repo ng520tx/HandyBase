@@ -197,8 +197,11 @@
 ##  更新日志
 ***2017年3月24日 v1.3.1***
 
-* 更新了使用说明
 * 新增SQLiteUtils数据库工具类
+
+***2017年3月24日 v1.3***
+
+* 更新了使用说明
 * 优化了工具类代码，使用单例模式。
 * 移除了SPUtils工具类，替换为ShareUtils
 * 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
