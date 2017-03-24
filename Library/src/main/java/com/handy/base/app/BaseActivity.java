@@ -12,7 +12,7 @@ import android.util.DisplayMetrics;
 
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.HandyBaseUtils;
-import com.handy.base.utils.PermissionsUT;
+import com.handy.base.utils.PermissionsUtils;
 
 /**
  * Activity基本类
@@ -96,7 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     @Override
     public void checkActivityPermissions() {
-        if (!PermissionsUT.getInstance().checkDeniedPermissions(activity, true)) {
+        if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
             onActivityPermissionSuccess();
         }
     }
@@ -135,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 //        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //            super.onActivityResult(requestCode, resultCode, data);
 //            if (requestCode == 45) {
-//                PermissionsUT.checkDeniedPermissions(activity, true);
+//                PermissionsUtils.checkDeniedPermissions(activity, true);
 //            }
 //        }
     }
@@ -159,7 +159,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (!PermissionsUT.getInstance().checkDeniedPermissions(activity, true)) {
+            if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
                 onActivityPermissionSuccess();
             }
         } else {
