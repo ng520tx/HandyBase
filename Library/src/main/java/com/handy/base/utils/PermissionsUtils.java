@@ -37,6 +37,15 @@ public class PermissionsUtils {
         return Permissions;
     }
 
+    /**
+     * 设置应用敏感权限
+     * <pre>
+     * 设置后请通过public boolean checkDeniedPermissions(Activity activity, boolean isRequest)方法扫描权限。
+     * 请注意：配置的权限内容必须与AndroidManifest中使用的敏感权限保持一致！
+     * </pre>
+     *
+     * @param permissions
+     */
     public void setPermissions(List<String> permissions) {
         Permissions = permissions;
     }
