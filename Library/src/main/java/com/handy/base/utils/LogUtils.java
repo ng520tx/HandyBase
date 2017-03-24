@@ -241,6 +241,8 @@ public class LogUtils {
      */
     private void log(String tag, String msg, Throwable tr, char type) {
         if (msg == null || msg.isEmpty()) return;
+        if (EmptyUtils.getInstance().isEmpty(tag)) tag = this.tag;
+
         if (logSwitch) {
             if ('e' == type && ('e' == logFilter || 'v' == logFilter)) {
                 printLog(generateTag(tag), msg, tr, 'e');
@@ -299,7 +301,7 @@ public class LogUtils {
         final String fullPath = dir + date + ".txt";
         if (!FileUtils.getInstance().createOrExistsFile(fullPath)) return;
         String time = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(now);
-        final String dateLogContent = time + ":" + type + ":" + tag + ":" + msg + '\n';
+        final String dateLogContent = time + ":" + type + ":" + AesUtils.getInstance().encrypt(tag + ":" + msg) + '\n';
         new Thread(new Runnable() {
             @Override
             public void run() {
