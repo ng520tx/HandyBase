@@ -25,7 +25,7 @@ public class LogUtils {
     private boolean logSwitch = true;
     private boolean log2FileSwitch = false;
     private char logFilter = 'v';
-    private String tag = "HandyBase";
+    private String tag = "HandyBase_Log";
     private String dir = null;
     private int stackIndex = 0;
 
@@ -52,21 +52,23 @@ public class LogUtils {
      * @param logFilter      输入日志类型有{@code v, d, i, w, e}<br>v代表输出所有信息，w则只输出警告...
      * @param tag            标签
      */
-    public void init(boolean logSwitch, boolean log2FileSwitch, char logFilter, String tag) {
+    public void initLogUtils(boolean logSwitch, boolean log2FileSwitch, char logFilter, String tag) {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             dir = HandyBaseUtils.getInstance().getContext().getExternalCacheDir().getPath() + File.separator;
         } else {
             dir = HandyBaseUtils.getInstance().getContext().getCacheDir().getPath() + File.separator;
         }
-        LogUtils.getInstance().logSwitch = logSwitch;
-        LogUtils.getInstance().log2FileSwitch = log2FileSwitch;
-        LogUtils.getInstance().logFilter = logFilter;
-        LogUtils.getInstance().tag = tag;
+        instance.logSwitch = logSwitch;
+        instance.log2FileSwitch = log2FileSwitch;
+        if (EmptyUtils.getInstance().isNotEmpty(logFilter))
+            instance.logFilter = logFilter;
+        if (EmptyUtils.getInstance().isNotEmpty(tag))
+            instance.tag = tag;
     }
 
     /**
      * 获取LogUtils建造者
-     * <p>与{@link #init(boolean, boolean, char, String)}两者选其一</p>
+     * <p>与{@link #initLogUtils(boolean, boolean, char, String)} 两者选其一</p>
      *
      * @return Builder对象
      */
@@ -362,10 +364,10 @@ public class LogUtils {
         }
 
         public void create() {
-            LogUtils.getInstance().logSwitch = logSwitch;
-            LogUtils.getInstance().log2FileSwitch = log2FileSwitch;
-            LogUtils.getInstance().logFilter = logFilter;
-            LogUtils.getInstance().tag = tag;
+            instance.logSwitch = logSwitch;
+            instance.log2FileSwitch = log2FileSwitch;
+            instance.logFilter = logFilter;
+            instance.tag = tag;
         }
     }
 }
