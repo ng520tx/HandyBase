@@ -89,11 +89,11 @@ public class CrashUtils implements UncaughtExceptionHandler {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File baseCache = HandyBaseUtils.getInstance().getContext().getExternalCacheDir();
             if (baseCache == null) return false;
-            crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
+            crashDir = baseCache.getPath() + File.separator + "HandyCrash" + File.separator;
         } else {
             File baseCache = HandyBaseUtils.getInstance().getContext().getCacheDir();
             if (baseCache == null) return false;
-            crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
+            crashDir = baseCache.getPath() + File.separator + "HandyCrash" + File.separator;
         }
         try {
             PackageInfo pi = HandyBaseUtils.getInstance().getContext().getPackageManager().getPackageInfo(HandyBaseUtils.getInstance().getContext().getPackageName(), 0);
