@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:1.1.1'
+    compile 'com.github.liujie045:HandyBase:1.1.2'
 
 ## 项目引用
 ***Step 1.添加maven地址到Project的build.gradle配置文件中***
@@ -48,7 +48,7 @@
     }
     
     dependencies {
-        compile 'com.github.liujie045:HandyBase:1.1.1'
+        compile 'com.github.liujie045:HandyBase:1.1.2'
         annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     }
 ```
