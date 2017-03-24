@@ -128,7 +128,7 @@
         SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener()
         @Override
         public void onClick(SweetAlertDialog sweetAlertDialog) {
-            PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
+            ToastUtils.getInstance().showShortToast("请在手机设置权限管理中启用开启此应用系统权限");
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, 45);
@@ -138,7 +138,7 @@
         @Override
         public void onClick(SweetAlertDialog sweetAlertDialog) {
             sweetAlertDialog.dismiss();
-            ActivityStackUtils.AppExit(context);
+            ActivityStackUtils.getInstance().AppExit(context);
         }
     }).setCancelable(false);
     
@@ -147,7 +147,7 @@
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 45) {
-            PermissionsUtils.checkDeniedPermissions(activity, true);
+            PermissionsUtils.getInstance().checkDeniedPermissions(activity, true);
         }
     }
 ```
