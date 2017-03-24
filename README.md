@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:1.2.1'
+    compile 'com.github.liujie045:HandyBase:1.2.2'
 
 ## 项目引用
 ***Step 1.添加maven地址到Project的build.gradle配置文件中***
@@ -43,14 +43,121 @@
     }
     
     dependencies {
-        compile 'com.github.liujie045:HandyBase:1.2.1'
+        compile 'com.github.liujie045:HandyBase:1.2.2'
     }
 ```
-***Step 3.在项目的Application或BaseActivity中添加***
+```javascript
+若出现报错：Error:Jack is required to support java 8 language features. Either enable Jack or remove sourceCompatibility JavaVersion.VERSION_1_8。则需要添加：
+    defaultConfig {
+        ...
+        jackOptions {
+            enabled true
+        }
+    }
+```
+***Step 3.工具类已在BaseApplication中初始化***
 
-    Utils.init(context);
+```javascript
+    try {
+        if (isInitHandyBaseUtils) {
+            HandyBaseUtils.getInstance().registerUtils(getApplicationContext());
+            
+            /* 清空手机内部和外部缓存数据 */
+            CleanUtils.getInstance().cleanInternalCache();
+            
+            CleanUtils.getInstance().cleanExternalCache();
+            CrashUtils.getInstance().initCrashUtils(); //初始化崩溃捕获工具
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+```
+```javascript
+如果不需要初始化工具类，或手动初始化。则可以在BaseApplication的子类中添加代码：
+    public class MyBaseApplication extends BaseApplication {
+        {
+            isInitHandyBaseUtils = false;
+        }
+        
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            // TODO: 2017/3/24 手动初始化工具类 
+        }
+    }
+```
 
-***Step 4.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
+***Step 4.已在BaseActivity中内置Android6.0权限扫描功能，框架已默认添加了四种权限***
+
+```javascript
+已默认追加的权限：
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+```javascript
+在BaseApplication的子类中更多需扫描的权限（追加的权限必须在AndroidManifest中配置使用）：
+    public class MyBaseApplication extends BaseApplication {
+        {
+        ...
+        PermissionsUtils.getInstance().addPermissions( new ArrayList<String>() {{
+            add(Manifest.permission.CAMERA);
+            add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }});
+    }
+```
+```javascript
+配置好权限后再BaseActivity中onStart方法中会进行扫描操作
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (isCheckActivityPermissions) {
+            checkActivityPermissions();
+            isCheckActivityPermissions = false;
+        }
+        ...
+    }
+        
+如果扫描权限发现已全部允许，则调用onActivityPermissionSuccess()接口方法
+如果扫描权限发现有未启用的权限，则调用onActivityPermissionRejection()接口方法。在此方法中可以弹出对话框提示用户手动开启权限，从设置界面返回到应用时需再次扫描权限
+参考操作：
+    @Override
+    public void onActivityPermissionRejection() {
+        super.onActivityPermissionRejection();
+        SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener()
+        @Override
+        public void onClick(SweetAlertDialog sweetAlertDialog) {
+            PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, 45);
+            sweetAlertDialog.dismiss();
+        }
+    }, new SweetAlertDialog.OnSweetClickListener() {
+        @Override
+        public void onClick(SweetAlertDialog sweetAlertDialog) {
+            sweetAlertDialog.dismiss();
+            ActivityStackUtils.AppExit(context);
+        }
+    }).setCancelable(false);
+    
+若从设置界面返回，重新扫描权限（请将此方法放与onActivityPermissionRejection()同级）
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 45) {
+            PermissionsUtils.checkDeniedPermissions(activity, true);
+        }
+    }
+```
+```javascript
+* 若要动态扫描权限，可以使用：public boolean checkDeniedPermissions(Activity activity, List<String> permissions, boolean isRequest)方法。
+* 参数permissions为要扫描的权限，扫描后的处理同上。
+```
+
+***Step 5.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
 
 ```javascript
     <?xml version="1.0" encoding="utf-8"?>
@@ -78,7 +185,7 @@
         <storage value="internal"/>
     </litepal>
 ```
-***Step 5.若要在Library中使用Butterknife，正确配置后应使用R2标注资源***
+***Step 6.若要在Library中使用Butterknife，正确配置后应使用R2标注资源***
 
 ```javascript
     class ExampleActivity extends Activity {
@@ -89,10 +196,14 @@
 ```
 
 ##  更新日志
-***2017年3月23日 v1.2.2***
+***2017年3月24日 v1.2.2***
 
+* 更新了使用说明
+* 优化了工具类代码，使用单例模式。
 * 移除了SPUtils工具类，替换为ShareUtils
 * 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
+* LogUtils中对文件日志增加了AES内容加密
+* 配置框架默认权限，及6.0系统中对已配置权限的扫描功能。
 
 ***2017年3月22日 v1.2.1***
 
