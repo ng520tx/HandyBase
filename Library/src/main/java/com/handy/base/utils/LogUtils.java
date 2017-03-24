@@ -25,7 +25,7 @@ public class LogUtils {
     private boolean logSwitch = true;
     private boolean log2FileSwitch = false;
     private char logFilter = 'v';
-    private String tag = "HandyBase_Log";
+    private String tag = "HandyLog";
     private String dir = null;
     private int stackIndex = 0;
 
@@ -60,7 +60,7 @@ public class LogUtils {
         }
         instance.logSwitch = logSwitch;
         instance.log2FileSwitch = log2FileSwitch;
-        if (EmptyUtils.getInstance().isNotEmpty(logFilter))
+        if (EmptyUtils.getInstance().isNotEmpty(String.valueOf(logFilter)))
             instance.logFilter = logFilter;
         if (EmptyUtils.getInstance().isNotEmpty(tag))
             instance.tag = tag;
