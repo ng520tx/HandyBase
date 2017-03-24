@@ -198,11 +198,12 @@
 ***2017年3月24日 v1.2.2***
 
 * 更新了使用说明
+* 新增SQLiteUtils数据库工具类
 * 优化了工具类代码，使用单例模式。
 * 移除了SPUtils工具类，替换为ShareUtils
 * 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
 * LogUtils中对文件日志增加了AES内容加密
-* 配置框架默认权限，及6.0系统中对已配置权限的扫描功能。
+* 配置框架默认权限，及6.0系统中对已配置权限的扫描功能
 
 ***2017年3月22日 v1.2.1***
 
