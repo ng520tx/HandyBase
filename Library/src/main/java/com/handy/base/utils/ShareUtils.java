@@ -12,13 +12,13 @@ import java.util.Set;
  *     author: Blankj
  *     blog  : http://blankj.com
  *     time  : 2016/8/2
- *     desc  : SP相关工具类
+ *     desc  : Sharepreference相关工具类
  * </pre>
  */
 public class ShareUtils {
 
     private volatile static ShareUtils instance;
-    public String ShareName = "HandyBase_Share";
+    public String ShareName = "HandyShare";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
