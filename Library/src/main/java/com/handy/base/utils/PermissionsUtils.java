@@ -14,19 +14,19 @@ import java.util.List;
  * <p/>
  * Created by LiuJie on 2016/7/20.
  */
-public class PermissionsUT {
+public class PermissionsUtils {
 
-    private volatile static PermissionsUT instance;
+    private volatile static PermissionsUtils instance;
     public List<String> Permissions = new ArrayList<>();
 
     /**
      * 获取单例
      */
-    public static PermissionsUT getInstance() {
+    public static PermissionsUtils getInstance() {
         if (instance == null) {
-            synchronized (PermissionsUT.class) {
+            synchronized (PermissionsUtils.class) {
                 if (instance == null) {
-                    instance = new PermissionsUT();
+                    instance = new PermissionsUtils();
                 }
             }
         }
