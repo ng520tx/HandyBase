@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:1.2.2'
+    compile 'com.github.liujie045:HandyBase:1.3.1'
 
 ## 项目引用
 ***Step 1.添加maven地址到Project的build.gradle配置文件中***
@@ -195,7 +195,7 @@
 ```
 
 ##  更新日志
-***2017年3月24日 v1.2.2***
+***2017年3月24日 v1.3.1***
 
 * 更新了使用说明
 * 新增SQLiteUtils数据库工具类
