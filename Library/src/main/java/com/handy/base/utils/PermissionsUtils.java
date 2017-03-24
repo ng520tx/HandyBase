@@ -17,7 +17,7 @@ import java.util.List;
 public class PermissionsUtils {
 
     private volatile static PermissionsUtils instance;
-    public List<String> Permissions = new ArrayList<>();
+    private List<String> Permissions = new ArrayList<>();
 
     /**
      * 获取单例
@@ -31,6 +31,14 @@ public class PermissionsUtils {
             }
         }
         return instance;
+    }
+
+    public List<String> getPermissions() {
+        return Permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        Permissions = permissions;
     }
 
     /**
