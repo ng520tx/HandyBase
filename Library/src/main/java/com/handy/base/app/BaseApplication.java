@@ -30,10 +30,13 @@ public abstract class BaseApplication extends Application {
 
                 CrashUtils.getInstance().initCrashUtils(); //初始化崩溃捕获工具
                 LogUtils.getInstance().initLogUtils(true, true, 'v', "HandyLog"); //初始化日志输出工具
+
+                LogUtils.getInstance().d("工具类功能已注册");
             }
 
             if (isInitPgyCrashManager) {
                 PgyCrashManager.register(getApplicationContext());
+                LogUtils.getInstance().d("蒲公英内测功能已注册");
             }
         } catch (Exception e) {
             e.printStackTrace();
