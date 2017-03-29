@@ -14,7 +14,7 @@ import com.pgyersdk.crash.PgyCrashManager;
  */
 public abstract class BaseApplication extends Application {
     public boolean isInitHandyBaseUtils = true;
-    public boolean isInitPgyCrashManager = true;
+    public boolean isInitPgyCrashManager = false;
 
     @Override
     public void onCreate() {
