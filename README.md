@@ -239,7 +239,7 @@
 ##  更新日志
 ***2017年3月29日 v1.1.2***
 
-* 更新BaseAppApi[查看](#Library\src\main\java\com\handy\base\app\BaseAppApi.java)
+* 更新BaseAppApi
 * 更新Library的build.gradle配置文件
 * 更新了PermissionsUtils中默认的扫描权限
 * 在ImageUtils中新增了按质量压缩图片的方法
