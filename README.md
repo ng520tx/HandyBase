@@ -240,10 +240,10 @@
 ***2017年3月29日 v1.1.2***
 
 * 更新BaseAppApi
+* 新接入[蒲公英内测](https://www.pgyer.com/)2.5.6
 * 更新Library的build.gradle配置文件
 * 更新了PermissionsUtils中默认的扫描权限
 * 在ImageUtils中新增了按质量压缩图片的方法
-* 新接入[蒲公英内测](https://www.pgyer.com/)2.5.6
 
 ***2017年3月24日 v1.1.1***
 
