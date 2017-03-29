@@ -72,6 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     @Override
     protected void onResume() {
         super.onResume();
+        onActivityRefresh();
         if (isOnActivityRequest) { //对用户可见 已创建 重新读取
             onActivityRequest();
             isOnActivityRequest = false;
@@ -86,6 +87,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     }
 
     @Override
+    public void checkActivityPermissions() {
+        if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
+            onActivityPermissionSuccess();
+        }
+    }
+
+    @Override
     public void initActivityView(@Nullable Bundle savedInstanceState) {
     }
 
@@ -95,10 +103,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     }
 
     @Override
-    public void checkActivityPermissions() {
-        if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
-            onActivityPermissionSuccess();
-        }
+    public void onActivityRefresh() {
+
     }
 
     @Override
