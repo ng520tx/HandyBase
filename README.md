@@ -214,6 +214,16 @@
 ```
 #### Step 7.若要使用蒲公英内测功能，需要在module中配置
 ```javascript
+在Project的build.gradle配置文件中添加:
+    allprojects {
+        repositories {
+            ...
+            maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+        }
+    }
+```
+
+```javascript
 在BaseApplication中已添加注册方法，若需要使用此功能，可以在BaseApplication的子类中添加代码：
     public class MyBaseApplication extends BaseApplication {
         {
