@@ -5,8 +5,7 @@
     compile 'com.github.liujie045:HandyBase:1.1.1'
 
 ## 项目引用
-***Step 1.添加maven地址到Project的build.gradle配置文件中***
-
+#### Step 1.添加maven地址到Project的build.gradle配置文件中
 ```javascript
     buildscript {
         repositories {
@@ -26,12 +25,19 @@
         }
     }
 ```
-***Step 2.添加compile引用到Module的build.gradle配置文件中***
-
+#### Step 2.添加compile引用到Module的build.gradle配置文件中
 ```javascript
     apply plugin: 'com.android.application'（or：apply plugin: 'com.android.library'）
     apply plugin: 'com.jakewharton.butterknife'
+    
+    dependencies {
+        compile 'com.github.liujie045:HandyBase:1.1.1'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    }
+```
 
+```javascript
+若要使用Lambda则在Module的build.gradle配置文件中添加：
     android {
         ...
         defaultConfig {
@@ -46,14 +52,28 @@
             targetCompatibility JavaVersion.VERSION_1_8
         }
     }
-    
+```
+
+```javascript
+若要使用Evenbus的索引加速，则在Module的build.gradle配置文件中添加：
+    android {
+        ...
+        defaultConfig {
+            ...
+            javaCompileOptions {
+                annotationProcessorOptions {
+                    arguments = [ eventBusIndex : 'com.example.myapp.MyEventBusIndex' ]
+                }
+            }
+        }
+    }
+ 
     dependencies {
-        compile 'com.github.liujie045:HandyBase:1.1.1'
-        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+        ...
+        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     }
 ```
-***Step 3.工具类已在BaseApplication中初始化***
-
+#### Step 3.工具类已在BaseApplication中初始化
 ```javascript
     try {
         if (isInitHandyBaseUtils) {
@@ -86,8 +106,7 @@
     }
 ```
 
-***Step 4.已在BaseActivity中内置Android6.0权限扫描功能，框架已默认添加了四种权限***
-
+#### Step 4.已在BaseActivity中内置Android6.0权限扫描功能，框架已默认添加了四种权限
 ```javascript
 已默认追加的权限：
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -158,8 +177,7 @@
 * 参数permissions为要扫描的权限，扫描后的处理同上。
 ```
 
-***Step 5.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下***
-
+#### Step 5.若要使用LitePal数据库功能，需要在assets文件中创建litepal.xml配置文件，文件内容如下
 ```javascript
     <?xml version="1.0" encoding="utf-8"?>
     <litepal>
@@ -186,8 +204,7 @@
         <storage value="internal"/>
     </litepal>
 ```
-***Step 6.若要在Library中使用Butterknife，正确配置后应使用R2标注资源***
-
+#### Step 6.若要在Library中使用Butterknife，正确配置后应使用R2标注资源
 ```javascript
     class ExampleActivity extends Activity {
       @BindView(R2.id.user) EditText username;
@@ -195,8 +212,38 @@
     ...
     }
 ```
+#### Step 7.若要使用蒲公英内测功能，需要在module中配置
+```javascript
+在AndroidManifest配置文件中添加：
+<application
+    ...>
+    ...
+    <meta-data
+        android:name="PGYER_APPID"
+        android:value="此处填写蒲公英平台上传应用后获得的AppId" >
+    </meta-data>
+</application>
+```
+
+```javascript
+在BaseApplication中已默认注册功能，若不需要使用此功能，可以在BaseApplication的子类中添加代码：
+    public class MyBaseApplication extends BaseApplication {
+        {
+            ...
+            isInitPgyCrashManager = false;
+        }
+        ...
+    }
+```
 
 ##  更新日志
+***2017年3月29日 v1.1.2***
+
+* 更新BaseAppApi[查看](Library\src\main\java\com\handy\base\app\BaseAppApi.java)
+* 更新Library的build.gradle配置文件
+* 更新了PermissionsUtils中默认的扫描权限
+* 在ImageUtils中新增了按质量压缩图片的方法
+* 新接入[蒲公英内测](https://www.pgyer.com/)2.5.6
 
 ***2017年3月24日 v1.1.1***
 
@@ -224,7 +271,7 @@
 
 * 更新BaseAppApi注释
 * 新接入[Glide](https://github.com/bumptech/glide):3.7.0
-* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0
+* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 * 新接入[Retrofit](https://github.com/square/retrofit):2.2.0
 
 ***2017年3月20日 v1.0.0***
