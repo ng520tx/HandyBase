@@ -6,6 +6,7 @@ import com.handy.base.utils.CleanUtils;
 import com.handy.base.utils.CrashUtils;
 import com.handy.base.utils.HandyBaseUtils;
 import com.handy.base.utils.LogUtils;
+import com.pgyersdk.crash.PgyCrashManager;
 
 /**
  * Application基本类
@@ -13,6 +14,7 @@ import com.handy.base.utils.LogUtils;
  */
 public abstract class BaseApplication extends Application {
     public boolean isInitHandyBaseUtils = true;
+    public boolean isInitPgyCrashManager = true;
 
     @Override
     public void onCreate() {
@@ -28,6 +30,10 @@ public abstract class BaseApplication extends Application {
 
                 CrashUtils.getInstance().initCrashUtils(); //初始化崩溃捕获工具
                 LogUtils.getInstance().initLogUtils(true, true, 'v', "HandyLog"); //初始化日志输出工具
+            }
+
+            if (isInitPgyCrashManager) {
+                PgyCrashManager.register(getApplicationContext());
             }
         } catch (Exception e) {
             e.printStackTrace();
