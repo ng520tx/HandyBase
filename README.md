@@ -22,6 +22,7 @@
             jcenter()
             mavenCentral()
             maven { url 'https://jitpack.io' }
+            maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
         }
     }
 ```
@@ -33,6 +34,7 @@
     dependencies {
         compile 'com.github.liujie045:HandyBase:1.1.2'
         annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     }
 ```
 
@@ -45,32 +47,18 @@
             jackOptions {
                 enabled true
             }
-        }
             
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
-    }
-```
-
-```javascript
-若要使用Evenbus的索引加速，则在Module的build.gradle配置文件中添加：
-    android {
-        ...
-        defaultConfig {
-            ...
             javaCompileOptions {
                 annotationProcessorOptions {
                     arguments = [ eventBusIndex : 'com.example.myapp.MyEventBusIndex' ]
                 }
             }
         }
-    }
- 
-    dependencies {
-        ...
-        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+            
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
 ```
 #### Step 3.工具类已在BaseApplication中初始化
@@ -109,10 +97,12 @@
 #### Step 4.已在BaseActivity中内置Android6.0权限扫描功能，框架已默认添加了四种权限
 ```javascript
 已默认追加的权限：
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 获取网络状态 -->
+    <uses-permission android:name="android.permission.INTERNET"/> <!-- 网络通信-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>  <!-- 获取设备信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 获取MAC地址-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 读写sdcard，storage等等 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/> <!-- 允许程序录制音频 -->
 ```
 
 ```javascript
@@ -128,18 +118,8 @@
 ```
 
 ```javascript
-配置好权限后再BaseActivity中onStart方法中会进行扫描操作
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (isCheckActivityPermissions) {
-            checkActivityPermissions();
-            isCheckActivityPermissions = false;
-        }
-        ...
-    }
-        
-如果扫描权限发现已全部允许，则调用onActivityPermissionSuccess()接口方法
+配置好权限后在BaseActivity中onStart方法中会默认进行扫描操作。
+如果扫描权限发现已全部允许，则调用onActivityPermissionSuccess()接口方法。
 如果扫描权限发现有未启用的权限，则调用onActivityPermissionRejection()接口方法。在此方法中可以弹出对话框提示用户手动开启权限，从设置界面返回到应用时需再次扫描权限
 参考操作：
     @Override
@@ -213,16 +193,6 @@
     }
 ```
 #### Step 7.若要使用蒲公英内测功能，需要在module中配置
-```javascript
-在Project的build.gradle配置文件中添加:
-    allprojects {
-        repositories {
-            ...
-            maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
-        }
-    }
-```
-
 ```javascript
 在BaseApplication中已添加注册方法，若需要使用此功能，可以在BaseApplication的子类中添加代码：
     public class MyBaseApplication extends BaseApplication {
