@@ -240,10 +240,10 @@
 ***2017年3月29日 v1.1.2***
 
 * 更新BaseAppApi
-* 新接入[蒲公英内测](https://www.pgyer.com/)2.5.6
 * 更新Library的build.gradle配置文件
 * 更新了PermissionsUtils中默认的扫描权限
 * 在ImageUtils中新增了按质量压缩图片的方法
+* 新接入[蒲公英内测](https://www.pgyer.com/)2.5.6
 
 ***2017年3月24日 v1.1.1***
 
@@ -254,10 +254,10 @@
 
 * 更新了使用说明
 * 优化了工具类代码，使用单例模式。
-* 移除了SPUtils工具类，替换为ShareUtils
-* 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
 * LogUtils中对文件日志增加了AES内容加密
+* 移除了SPUtils工具类，替换为ShareUtils
 * 配置框架默认权限，及6.0系统中对已配置权限的扫描功能
+* 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
 
 ***2017年3月22日 v1.0.2***
 
@@ -271,16 +271,16 @@
 
 * 更新BaseAppApi注释
 * 新接入[Glide](https://github.com/bumptech/glide):3.7.0
-* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 * 新接入[Retrofit](https://github.com/square/retrofit):2.2.0
+* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 
 ***2017年3月20日 v1.0.0***
 
 * 初始化敏捷开发框架项目
-* 新增base包，含有Activity、Fragment、Application的基类
-* 新增simplemvp和strongmvp包，含有Mvp模式的基类
 * 新增mycolor、myvalue颜色及尺寸的资源值
 * 新增drawable-hdpi中图标资源（选中、未选中）
+* 新增simplemvp和strongmvp包，含有Mvp模式的基类
+* 新增base包，含有Activity、Fragment、Application的基类
 * 新增utils包，引用自[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 的工具类开源项目
 * 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.0.7
 * 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
