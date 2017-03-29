@@ -1468,6 +1468,43 @@ public class ImageUtils {
     }
 
     /**
+     * 按质量压缩
+     *
+     * @param path        图片存储路径
+     * @param maxByteSize 压缩后的图片大小(100kb=1000)，压缩后的图片大小会有上下浮动
+     * @return
+     */
+    public Bitmap compressByQuality(String path, long maxByteSize) {
+        try {
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, options);
+            in.close();
+            int i = 0;
+            Bitmap bitmap = null;
+            // options.inJustDecodeBounds=true那么将不返回实际的bitmap对象，不给其分配内存空间但是可以得到一些解码边界信息即图片大小等信息
+            // outHeight(图片原始高度)和 outWidth(图片的原始宽度)
+            // inSampleSize表示缩略图大小为原始图片大小的几分之一
+            // options.outWidth >> i(右移运算符)表示：outWidth/(2^i)
+            while (true) {
+                if ((options.outWidth >> i <= maxByteSize) && (options.outHeight >> i <= maxByteSize)) {
+                    in = new BufferedInputStream(new FileInputStream(new File(path)));
+                    options.inSampleSize = (int) Math.pow(2.0D, i); // 幂运算 i为几次方
+                    options.inJustDecodeBounds = false;
+                    bitmap = BitmapFactory.decodeStream(in, null, options);
+                    break;
+                }
+                i += 1;
+            }
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 按采样大小压缩
      *
      * @param src        源图片
