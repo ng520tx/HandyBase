@@ -27,6 +27,11 @@ class BaseAppApi {
         void initActivityData();
 
         /**
+         * 在onResume方法中被调用，当Activity调用onResume方法时被调用
+         */
+        void onActivityRefresh();
+
+        /**
          * 在onResume方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
          */
         void onActivityRequest();
@@ -70,7 +75,7 @@ class BaseAppApi {
          * @param view               当前Fragment布局View
          * @param savedInstanceState 缓存数据
          */
-        void completeFragmentView(View view, @Nullable Bundle savedInstanceState);
+        void onFragmentComplete(View view, @Nullable Bundle savedInstanceState);
 
         /**
          * 在onCreate方法中且initView执行完后被调用，用于初始化界面有关数据。
@@ -78,9 +83,14 @@ class BaseAppApi {
         void initFragmentData();
 
         /**
-         * 在onResume方法中被调用，当界面对用户可见时被调用
+         * 在onResume方法中被调用，当Fragment调用onResume方法时被调用
          */
         void onFragmentRefresh();
+
+        /**
+         * 在setUserVisibleHint方法中被调用，当界面对用户可见时被调用
+         */
+        void onFragmentVisiable();
 
         /**
          * 在onResume方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
