@@ -65,7 +65,7 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
         super.onViewCreated(view, savedInstanceState);
         if (fragmentView == null)
             fragmentView = view;
-        completeFragmentView(view, savedInstanceState);
+        onFragmentComplete(view, savedInstanceState);
     }
 
     @Override
@@ -100,7 +100,7 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isFragmentCreated) {
-            onFragmentRefresh();
+            onFragmentVisiable();
             if (isOnFragmentRequest) {
                 onFragmentRequest();
                 isOnFragmentRequest = false;
@@ -124,7 +124,7 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     }
 
     @Override
-    public void completeFragmentView(View view, @Nullable Bundle savedInstanceState) {
+    public void onFragmentComplete(View view, @Nullable Bundle savedInstanceState) {
         GetScreenSize();
         this.application = getActivity().getApplication();
     }
@@ -141,6 +141,11 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
 
     @Override
     public void onFragmentRequest() {
+
+    }
+
+    @Override
+    public void onFragmentVisiable() {
 
     }
 }
