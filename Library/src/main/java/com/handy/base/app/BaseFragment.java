@@ -49,6 +49,9 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         canShowDialog = true;
+
+        if (context == null) context = getContext();
+        if (activity == null) activity = getActivity();
     }
 
     @Nullable
