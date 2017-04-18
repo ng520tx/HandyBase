@@ -1,5 +1,9 @@
 package com.handy.base.utils;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -14,14 +18,17 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/25
- *     desc  : 线程池相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 线程池相关工具类
  * </pre>
  */
-public class ThreadPoolUtils {
+public final class ThreadPoolUtils {
 
+    public static final int FixedThread = 0;
+    public static final int CachedThread = 1;
+    public static final int SingleThread = 2;
     private volatile static ThreadPoolUtils instance;
     private ExecutorService exec;
     private ScheduledExecutorService scheduleExec;
@@ -32,7 +39,7 @@ public class ThreadPoolUtils {
      * @param type         线程池类型
      * @param corePoolSize 只对Fixed和Scheduled线程池起效
      */
-    public ThreadPoolUtils(Type type, int corePoolSize) {
+    private ThreadPoolUtils(@Type int type, int corePoolSize) {
         // 构造有定时功能的线程池
         // ThreadPoolExecutor(corePoolSize, Integer.MAX_VALUE, 10L, TimeUnit.MILLISECONDS, new BlockingQueue<Runnable>)
         scheduleExec = Executors.newScheduledThreadPool(corePoolSize);
@@ -52,16 +59,10 @@ public class ThreadPoolUtils {
                 // ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
                 exec = Executors.newCachedThreadPool();
                 break;
-            default:
-                exec = scheduleExec;
-                break;
         }
     }
 
-    /**
-     * 获取单例
-     */
-    public static ThreadPoolUtils getInstance(Type type, int corePoolSize) {
+    public static ThreadPoolUtils getInstance(@Type int type, int corePoolSize) {
         if (instance == null) {
             synchronized (ThreadPoolUtils.class) {
                 if (instance == null) {
@@ -69,12 +70,6 @@ public class ThreadPoolUtils {
                 }
             }
         }
-        return instance;
-    }
-
-    public static ThreadPoolUtils rebuildInstance(Type type, int corePoolSize) {
-        instance = null;
-        instance = new ThreadPoolUtils(type, corePoolSize);
         return instance;
     }
 
@@ -309,9 +304,8 @@ public class ThreadPoolUtils {
         return scheduleExec.scheduleWithFixedDelay(command, initialDelay, delay, unit);
     }
 
-    public enum Type {
-        FixedThread,
-        CachedThread,
-        SingleThread,
+    @IntDef({FixedThread, CachedThread, SingleThread})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Type {
     }
 }
