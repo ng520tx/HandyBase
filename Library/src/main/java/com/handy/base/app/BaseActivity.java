@@ -8,11 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 
 import com.handy.base.utils.ActivityStackUtils;
-import com.handy.base.utils.HandyBaseUtils;
 import com.handy.base.utils.PermissionsUtils;
+import com.handy.base.utils.ScreenUtils;
 
 /**
  * Activity基本类
@@ -35,15 +34,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.context = this;
-        this.activity = this;
-        this.canShowDialog = true;
-        this.application = getApplication();
-        this.savedInstanceState = savedInstanceState;
-
         try {
-            GetScreenSize();
-            HandyBaseUtils.getInstance().registerUtils(this);
+            this.context = this;
+            this.activity = this;
+            this.canShowDialog = true;
+            this.application = getApplication();
+            this.savedInstanceState = savedInstanceState;
+            this.screenWidth = ScreenUtils.getInstance().getScreenWidth(context);
+            this.screenHeight = ScreenUtils.getInstance().getScreenHeight(context);
+
             ActivityStackUtils.getInstance().addActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,17 +143,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 //                PermissionsUtils.checkDeniedPermissions(activity, true);
 //            }
 //        }
-    }
-
-    /**
-     * ===================================================================
-     * 获取当前手机屏幕宽高参数
-     */
-    public void GetScreenSize() {
-        //获取屏幕大小
-        DisplayMetrics localDisplayMetrics = getResources().getDisplayMetrics();
-        screenWidth = localDisplayMetrics.widthPixels;
-        screenHeight = localDisplayMetrics.heightPixels;
     }
 
     /**
