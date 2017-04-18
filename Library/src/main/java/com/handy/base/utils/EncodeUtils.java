@@ -10,19 +10,16 @@ import java.net.URLEncoder;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/7
- *     desc  : 编码解码相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 编码解码相关工具类
  * </pre>
  */
-public class EncodeUtils {
+public final class EncodeUtils {
 
     private volatile static EncodeUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static EncodeUtils getInstance() {
         if (instance == null) {
             synchronized (EncodeUtils.class) {
