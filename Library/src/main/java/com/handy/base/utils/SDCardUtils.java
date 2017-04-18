@@ -12,19 +12,16 @@ import java.io.InputStreamReader;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/11
- *     desc  : SD卡相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : SD卡相关工具类
  * </pre>
  */
-public class SDCardUtils {
+public final class SDCardUtils {
 
     private volatile static SDCardUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static SDCardUtils getInstance() {
         if (instance == null) {
             synchronized (SDCardUtils.class) {
