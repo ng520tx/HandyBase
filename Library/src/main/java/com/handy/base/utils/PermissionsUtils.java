@@ -11,18 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Android6.0权限处理工具类
- * <p/>
- * Created by LiuJie on 2016/7/20.
+ * <pre>
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 权限处理工具类，检查是否有未启用权限
+ * </pre>
  */
 public class PermissionsUtils {
 
     private volatile static PermissionsUtils instance;
-    private List<String> Permissions = new ArrayList<>();
+    private ArrayList<String> Permissions = new ArrayList<>();
 
-    /**
-     * 获取单例
-     */
     public static PermissionsUtils getInstance() {
         if (instance == null) {
             synchronized (PermissionsUtils.class) {
@@ -105,29 +105,31 @@ public class PermissionsUtils {
 
     /**
      * 扫描权限集合 如果发现未启用权限，停止扫描并启动权限动态请求。
-     * 使用时请注意判断SDK版本：if (Build.VERSION.SDK_INT >= 23)
      *
      * @param activity  发起请求的Activity
      * @param isRequest 是否发起系统权限请求
      * @return 如果有未启用的权限返回true
      */
     public boolean checkDeniedPermissions(Activity activity, boolean isRequest) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkDeniedPermissionsBase(activity, isRequest)) {
-                LogUtils.getInstance().w("发现未启用权限");
-                return true;
+        if (Permissions != null && Permissions.size() != 0) {
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                if (checkDeniedPermissionsBase(activity, isRequest)) {
+                    LogUtils.getInstance().d("发现未启用权限");
+                    return true;
+                } else {
+                    LogUtils.getInstance().d("应用权限已全部开启");
+                }
             } else {
-                LogUtils.getInstance().d("应用权限已全部开启");
+                LogUtils.getInstance().d("系统版本小于23，无需扫描权限");
             }
         } else {
-            LogUtils.getInstance().d("系统版本小于23，无需扫描权限");
+            LogUtils.getInstance().e("未发现需扫描的权限内容");
         }
         return false;
     }
 
     /**
      * 扫描权限集合 如果发现未启用权限，停止扫描并启动权限动态请求。
-     * 使用时请注意判断SDK版本：if (Build.VERSION.SDK_INT >= 23)
      *
      * @param activity    发起请求的Activity
      * @param isRequest   是否发起系统权限请求
@@ -135,10 +137,10 @@ public class PermissionsUtils {
      * @return 如果有未启用的权限返回true
      */
     public boolean checkDeniedPermissions(Activity activity, List<String> permissions, boolean isRequest) {
-        if (permissions.size() != 0) {
-            if (Build.VERSION.SDK_INT >= 23) {
+        if (permissions != null && permissions.size() != 0) {
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest, permissions)) {
-                    LogUtils.getInstance().w("发现未启用权限");
+                    LogUtils.getInstance().d("发现未启用权限");
                     return true;
                 } else {
                     LogUtils.getInstance().d("应用权限已全部开启");
@@ -162,19 +164,23 @@ public class PermissionsUtils {
      * @return 如果有未启用的权限返回true
      */
     public boolean checkDeniedPermissions(Activity activity, Class intentClass, boolean isRequest, boolean isFinish) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkDeniedPermissionsBase(activity, isRequest)) {
-                LogUtils.getInstance().w("发现未启用权限");
-                return true;
+        if (Permissions != null && Permissions.size() != 0) {
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                if (checkDeniedPermissionsBase(activity, isRequest)) {
+                    LogUtils.getInstance().d("发现未启用权限");
+                    return true;
+                } else {
+                    LogUtils.getInstance().d("应用权限已全部开启");
+                    IntentUtils.getInstance().openActivity(activity, intentClass, isFinish);
+                    if (isFinish) activity.finish();
+                }
             } else {
-                if (isFinish) activity.finish();
-                LogUtils.getInstance().d("应用权限已全部开启");
+                LogUtils.getInstance().d("系统版本小于23，无需扫描权限");
                 IntentUtils.getInstance().openActivity(activity, intentClass, isFinish);
+                if (isFinish) activity.finish();
             }
         } else {
-            if (isFinish) activity.finish();
-            LogUtils.getInstance().d("系统版本小于23，无需扫描权限");
-            IntentUtils.getInstance().openActivity(activity, intentClass, isFinish);
+            LogUtils.getInstance().e("未发现需扫描的权限内容");
         }
         return false;
     }
@@ -191,19 +197,19 @@ public class PermissionsUtils {
      */
     public boolean checkDeniedPermissions(Activity activity, Class intentClass, List<String> permissions, boolean isRequest, boolean isFinish) {
         if (permissions != null && permissions.size() != 0) {
-            if (Build.VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest, permissions)) {
-                    LogUtils.getInstance().w("发现未启用权限");
+                    LogUtils.getInstance().d("发现未启用权限");
                     return true;
                 } else {
-                    if (isFinish) activity.finish();
                     LogUtils.getInstance().d("应用权限已全部开启");
                     IntentUtils.getInstance().openActivity(activity, intentClass, isFinish);
+                    if (isFinish) activity.finish();
                 }
             } else {
-                if (isFinish) activity.finish();
                 LogUtils.getInstance().d("系统版本小于23，无需扫描权限");
                 IntentUtils.getInstance().openActivity(activity, intentClass, isFinish);
+                if (isFinish) activity.finish();
             }
         } else {
             LogUtils.getInstance().e("未发现需扫描的权限内容");
