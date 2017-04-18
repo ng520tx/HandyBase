@@ -18,20 +18,17 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/27
- *     desc  : 压缩相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 压缩相关工具类
  * </pre>
  */
-public class ZipUtils {
+public final class ZipUtils {
 
     private volatile static ZipUtils instance;
     private final int KB = 1024;
 
-    /**
-     * 获取单例
-     */
     public static ZipUtils getInstance() {
         if (instance == null) {
             synchronized (ZipUtils.class) {
@@ -176,7 +173,7 @@ public class ZipUtils {
      * @throws IOException IO错误时抛出
      */
     private boolean zipFile(File resFile, String rootPath, ZipOutputStream zos, String comment) throws IOException {
-        rootPath = rootPath + (StringUtils.getInstance().isSpace(rootPath) ? "" : File.separator) + resFile.getName();
+        rootPath = rootPath + (isSpace(rootPath) ? "" : File.separator) + resFile.getName();
         if (resFile.isDirectory()) {
             File[] fileList = resFile.listFiles();
             // 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
@@ -398,5 +395,15 @@ public class ZipUtils {
     public Enumeration<?> getEntries(File zipFile) throws IOException {
         if (zipFile == null) return null;
         return new ZipFile(zipFile).entries();
+    }
+
+    private boolean isSpace(String s) {
+        if (s == null) return true;
+        for (int i = 0, len = s.length(); i < len; ++i) {
+            if (!Character.isWhitespace(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
