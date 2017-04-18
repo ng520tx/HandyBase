@@ -8,19 +8,16 @@ import android.net.Uri;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/9/25
- *     desc  : 剪贴板相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 剪贴板相关工具类
  * </pre>
  */
-public class ClipboardUtils {
+public final class ClipboardUtils {
 
     private volatile static ClipboardUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ClipboardUtils getInstance() {
         if (instance == null) {
             synchronized (ClipboardUtils.class) {
@@ -37,8 +34,8 @@ public class ClipboardUtils {
      *
      * @param text 文本
      */
-    public void copyText(CharSequence text) {
-        ClipboardManager clipboard = (ClipboardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+    public void copyText(Context context, CharSequence text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText("text", text));
     }
 
@@ -47,11 +44,11 @@ public class ClipboardUtils {
      *
      * @return 剪贴板的文本
      */
-    public CharSequence getText() {
-        ClipboardManager clipboard = (ClipboardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+    public CharSequence getText(Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
-            return clip.getItemAt(0).coerceToText(HandyBaseUtils.getInstance().getContext());
+            return clip.getItemAt(0).coerceToText(context);
         }
         return null;
     }
@@ -61,9 +58,9 @@ public class ClipboardUtils {
      *
      * @param uri uri
      */
-    public void copyUri(Uri uri) {
-        ClipboardManager clipboard = (ClipboardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setPrimaryClip(ClipData.newUri(HandyBaseUtils.getInstance().getContext().getContentResolver(), "uri", uri));
+    public void copyUri(Context context, Uri uri) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newUri(context.getContentResolver(), "uri", uri));
     }
 
     /**
@@ -71,8 +68,8 @@ public class ClipboardUtils {
      *
      * @return 剪贴板的uri
      */
-    public Uri getUri() {
-        ClipboardManager clipboard = (ClipboardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+    public Uri getUri(Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
             return clip.getItemAt(0).getUri();
@@ -85,8 +82,8 @@ public class ClipboardUtils {
      *
      * @param intent 意图
      */
-    public void copyIntent(Intent intent) {
-        ClipboardManager clipboard = (ClipboardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+    public void copyIntent(Context context, Intent intent) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newIntent("intent", intent));
     }
 
@@ -95,8 +92,8 @@ public class ClipboardUtils {
      *
      * @return 剪贴板的意图
      */
-    public Intent getIntent() {
-        ClipboardManager clipboard = (ClipboardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+    public Intent getIntent(Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
             return clip.getItemAt(0).getIntent();
