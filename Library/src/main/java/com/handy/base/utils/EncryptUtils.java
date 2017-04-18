@@ -17,16 +17,17 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : 加密解密相关的工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 加密解密相关的工具类
  * </pre>
  */
-public class EncryptUtils {
+public final class EncryptUtils {
 
     private volatile static EncryptUtils instance;
     private final String DES_Algorithm = "DES";
+
     /*********************** 哈希加密相关 ***********************/
     private final String TripleDES_Algorithm = "DESede";
     private final String AES_Algorithm = "AES";
@@ -37,25 +38,22 @@ public class EncryptUtils {
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    private String DES_Transformation = "DES/ECB/NoPadding";
+    public String DES_Transformation = "DES/ECB/NoPadding";
     /**
      * 3DES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    private String TripleDES_Transformation = "DESede/ECB/NoPadding";
+    public String TripleDES_Transformation = "DESede/ECB/NoPadding";
     /**
      * AES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    private String AES_Transformation = "AES/ECB/NoPadding";
+    public String AES_Transformation = "AES/ECB/NoPadding";
 
-    /**
-     * 获取单例
-     */
     public static EncryptUtils getInstance() {
         if (instance == null) {
             synchronized (EncryptUtils.class) {
@@ -160,7 +158,7 @@ public class EncryptUtils {
      * @return 文件的16进制密文
      */
     public String encryptMD5File2String(String filePath) {
-        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
+        File file = isSpace(filePath) ? null : new File(filePath);
         return encryptMD5File2String(file);
     }
 
@@ -171,7 +169,7 @@ public class EncryptUtils {
      * @return 文件的MD5校验码
      */
     public byte[] encryptMD5File(String filePath) {
-        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
+        File file = isSpace(filePath) ? null : new File(filePath);
         return encryptMD5File(file);
     }
 
@@ -857,7 +855,7 @@ public class EncryptUtils {
      * @return 字节数组
      */
     private byte[] hexString2Bytes(String hexString) {
-        if (StringUtils.getInstance().isSpace(hexString)) return null;
+        if (isSpace(hexString)) return null;
         int len = hexString.length();
         if (len % 2 != 0) {
             hexString = "0" + hexString;
@@ -905,5 +903,15 @@ public class EncryptUtils {
      */
     private byte[] base64Decode(byte[] input) {
         return Base64.decode(input, Base64.NO_WRAP);
+    }
+
+    private boolean isSpace(String s) {
+        if (s == null) return true;
+        for (int i = 0, len = s.length(); i < len; ++i) {
+            if (!Character.isWhitespace(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

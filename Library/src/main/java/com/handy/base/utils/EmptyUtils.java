@@ -20,13 +20,13 @@ import java.util.Map;
  */
 public final class EmptyUtils {
 
-    private volatile static ActivityUtils instance;
+    private volatile static EmptyUtils instance;
 
-    public static ActivityUtils getInstance() {
+    public static EmptyUtils getInstance() {
         if (instance == null) {
-            synchronized (ActivityUtils.class) {
+            synchronized (EmptyUtils.class) {
                 if (instance == null) {
-                    instance = new ActivityUtils();
+                    instance = new EmptyUtils();
                 }
             }
         }
