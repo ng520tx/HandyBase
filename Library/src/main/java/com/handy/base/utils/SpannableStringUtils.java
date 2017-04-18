@@ -1,5 +1,6 @@
 package com.handy.base.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Typeface;
@@ -34,19 +35,16 @@ import android.text.style.UnderlineSpan;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/12/13
- *     desc  : SpannableString相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : SpannableString相关工具类
  * </pre>
  */
-public class SpannableStringUtils {
+public final class SpannableStringUtils {
 
     private volatile static SpannableStringUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static SpannableStringUtils getInstance() {
         if (instance == null) {
             synchronized (SpannableStringUtils.class) {
@@ -108,7 +106,6 @@ public class SpannableStringUtils {
         private boolean imageIsUri;
         private Uri uri;
         private boolean imageIsResourceId;
-
         @DrawableRes
         private int resourceId;
 
@@ -120,7 +117,6 @@ public class SpannableStringUtils {
         private BlurMaskFilter.Blur style;
 
         private SpannableStringBuilder mBuilder;
-
 
         private Builder(@NonNull CharSequence text) {
             this.text = text;
@@ -428,13 +424,25 @@ public class SpannableStringUtils {
         }
 
         /**
+         * 追加样式一行字符串
+         *
+         * @param text 样式字符串文本
+         * @return {@link Builder}
+         */
+        public Builder appendLine(Context context, @NonNull CharSequence text) {
+            setSpan(context);
+            this.text = text + System.getProperty("line.separator");
+            return this;
+        }
+
+        /**
          * 追加样式字符串
          *
          * @param text 样式字符串文本
          * @return {@link Builder}
          */
-        public Builder append(@NonNull CharSequence text) {
-            setSpan();
+        public Builder append(Context context, @NonNull CharSequence text) {
+            setSpan(context);
             this.text = text;
             return this;
         }
@@ -444,15 +452,15 @@ public class SpannableStringUtils {
          *
          * @return 样式字符串
          */
-        public SpannableStringBuilder create() {
-            setSpan();
+        public SpannableStringBuilder create(Context context) {
+            setSpan(context);
             return mBuilder;
         }
 
         /**
          * 设置样式
          */
-        private void setSpan() {
+        private void setSpan(Context context) {
             int start = mBuilder.length();
             mBuilder.append(this.text);
             int end = mBuilder.length();
@@ -522,7 +530,7 @@ public class SpannableStringUtils {
             }
             if (imageIsBitmap || imageIsDrawable || imageIsUri || imageIsResourceId) {
                 if (imageIsBitmap) {
-                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getInstance().getContext(), bitmap), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(context, bitmap), start, end, flag);
                     bitmap = null;
                     imageIsBitmap = false;
                 } else if (imageIsDrawable) {
@@ -530,11 +538,11 @@ public class SpannableStringUtils {
                     drawable = null;
                     imageIsDrawable = false;
                 } else if (imageIsUri) {
-                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getInstance().getContext(), uri), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(context, uri), start, end, flag);
                     uri = null;
                     imageIsUri = false;
                 } else {
-                    mBuilder.setSpan(new ImageSpan(HandyBaseUtils.getInstance().getContext(), resourceId), start, end, flag);
+                    mBuilder.setSpan(new ImageSpan(context, resourceId), start, end, flag);
                     resourceId = 0;
                     imageIsResourceId = false;
                 }
