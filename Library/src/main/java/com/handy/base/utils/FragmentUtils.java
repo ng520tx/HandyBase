@@ -18,31 +18,29 @@ import java.util.List;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2017/1/17
- *     desc  : Fragment相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Fragment相关工具类
  * </pre>
  */
-public class FragmentUtils {
+public final class FragmentUtils {
 
     private volatile static FragmentUtils instance;
-    private final int TYPE_ADD_FRAGMENT = 0x01;
-    private final int TYPE_CHECK_ADD_FRAGMENT = 0x01 << 1;
-    private final int TYPE_REMOVE_FRAGMENT = 0x01 << 2;
-    private final int TYPE_REMOVE_TO_FRAGMENT = 0x01 << 3;
-    private final int TYPE_REPLACE_FRAGMENT = 0x01 << 4;
-    private final int TYPE_POP_ADD_FRAGMENT = 0x01 << 5;
-    private final int TYPE_HIDE_FRAGMENT = 0x01 << 6;
-    private final int TYPE_SHOW_FRAGMENT = 0x01 << 7;
-    private final int TYPE_HIDE_SHOW_FRAGMENT = 0x01 << 8;
+
+    private final int TYPE_ADD_FRAGMENT = 0x01 << 0;
+    private final int TYPE_REMOVE_FRAGMENT = 0x01 << 1;
+    private final int TYPE_REMOVE_TO_FRAGMENT = 0x01 << 2;
+    private final int TYPE_REPLACE_FRAGMENT = 0x01 << 3;
+    private final int TYPE_POP_ADD_FRAGMENT = 0x01 << 4;
+    private final int TYPE_HIDE_FRAGMENT = 0x01 << 5;
+    private final int TYPE_SHOW_FRAGMENT = 0x01 << 6;
+    private final int TYPE_HIDE_SHOW_FRAGMENT = 0x01 << 7;
+
     private final String ARGS_ID = "args_id";
     private final String ARGS_IS_HIDE = "args_is_hide";
     private final String ARGS_IS_ADD_STACK = "args_is_add_stack";
 
-    /**
-     * 获取单例
-     */
     public static FragmentUtils getInstance() {
         if (instance == null) {
             synchronized (FragmentUtils.class) {
@@ -110,22 +108,7 @@ public class FragmentUtils {
     }
 
     /**
-     * 新增fragment
-     *
-     * @param fragmentManager fragment管理器
-     * @param containerId     布局Id
-     * @param fragment        fragment
-     * @param isHide          是否隐藏
-     * @param isAddStack      是否入回退栈
-     * @return fragment
-     */
-    public Fragment checkAddFragment(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment, @IdRes int containerId, boolean isHide, boolean isAddStack) {
-        putArgs(fragment, new Args(containerId, isHide, isAddStack));
-        return operateFragment(fragmentManager, null, fragment, TYPE_CHECK_ADD_FRAGMENT);
-    }
-
-    /**
-     * 新增fragment
+     * 先隐藏后新增fragment
      *
      * @param fragmentManager fragment管理器
      * @param containerId     布局Id
@@ -479,7 +462,7 @@ public class FragmentUtils {
     private Fragment operateFragment(@NonNull FragmentManager fragmentManager, Fragment srcFragment, @NonNull Fragment destFragment, int type, SharedElement... sharedElements) {
         if (srcFragment == destFragment) return null;
         if (srcFragment != null && srcFragment.isRemoving()) {
-            LogUtils.getInstance().e(srcFragment.getClass().getName() + " is isRemoving");
+            LogUtils.e(srcFragment.getClass().getName() + " is isRemoving");
             return null;
         }
         String name = destFragment.getClass().getName();
@@ -496,19 +479,6 @@ public class FragmentUtils {
         switch (type) {
             case TYPE_ADD_FRAGMENT:
                 if (srcFragment != null) ft.hide(srcFragment);
-                ft.add(args.getInt(ARGS_ID), destFragment, name);
-                if (args.getBoolean(ARGS_IS_HIDE)) ft.hide(destFragment);
-                if (args.getBoolean(ARGS_IS_ADD_STACK)) ft.addToBackStack(name);
-                break;
-            case TYPE_CHECK_ADD_FRAGMENT:
-                List<Fragment> fragmentList = getFragments(fragmentManager);
-                for (int i = fragmentList.size() - 1; i >= 0; --i) {
-                    Fragment fragment = fragmentList.get(i);
-                    if (fragment == destFragment) {
-                        if (srcFragment != null) ft.remove(fragment);
-                        break;
-                    }
-                }
                 ft.add(args.getInt(ARGS_ID), destFragment, name);
                 if (args.getBoolean(ARGS_IS_HIDE)) ft.hide(destFragment);
                 if (args.getBoolean(ARGS_IS_ADD_STACK)) ft.addToBackStack(name);
