@@ -47,19 +47,16 @@ import java.io.OutputStream;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/12
- *     desc  : 图片相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 图片相关工具类
  * </pre>
  */
-public class ImageUtils {
+public final class ImageUtils {
 
     private volatile static ImageUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ImageUtils getInstance() {
         if (instance == null) {
             synchronized (ImageUtils.class) {
@@ -241,7 +238,7 @@ public class ImageUtils {
      * @return bitmap
      */
     public Bitmap getBitmap(String filePath) {
-        if (StringUtils.getInstance().isSpace(filePath)) return null;
+        if (isSpace(filePath)) return null;
         return BitmapFactory.decodeFile(filePath);
     }
 
@@ -254,7 +251,7 @@ public class ImageUtils {
      * @return bitmap
      */
     public Bitmap getBitmap(String filePath, int maxWidth, int maxHeight) {
-        if (StringUtils.getInstance().isSpace(filePath)) return null;
+        if (isSpace(filePath)) return null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);
@@ -575,9 +572,7 @@ public class ImageUtils {
         int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(filePath);
-            int orientation = exifInterface.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             switch (orientation) {
                 default:
                 case ExifInterface.ORIENTATION_ROTATE_90:
@@ -675,10 +670,8 @@ public class ImageUtils {
      * @param radius 模糊半径
      * @return 模糊后的图片
      */
-    public Bitmap fastBlur(Bitmap src,
-                           @FloatRange(from = 0, to = 1, fromInclusive = false) float scale,
-                           @FloatRange(from = 0, to = 25, fromInclusive = false) float radius) {
-        return fastBlur(src, scale, radius, false);
+    public Bitmap fastBlur(Context context, Bitmap src, @FloatRange(from = 0, to = 1, fromInclusive = false) float scale, @FloatRange(from = 0, to = 25, fromInclusive = false) float radius) {
+        return fastBlur(context, src, scale, radius, false);
     }
 
     /**
@@ -691,10 +684,7 @@ public class ImageUtils {
      * @param recycle 是否回收
      * @return 模糊后的图片
      */
-    public Bitmap fastBlur(Bitmap src,
-                           @FloatRange(from = 0, to = 1, fromInclusive = false) float scale,
-                           @FloatRange(from = 0, to = 25, fromInclusive = false) float radius,
-                           boolean recycle) {
+    public Bitmap fastBlur(Context context, Bitmap src, @FloatRange(from = 0, to = 1, fromInclusive = false) float scale, @FloatRange(from = 0, to = 25, fromInclusive = false) float radius, boolean recycle) {
         if (isEmptyBitmap(src)) return null;
         int width = src.getWidth();
         int height = src.getHeight();
@@ -704,13 +694,12 @@ public class ImageUtils {
         Bitmap scaleBitmap = Bitmap.createScaledBitmap(src, scaleWidth, scaleHeight, true);
         Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
         Canvas canvas = new Canvas();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(
-                Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
+        PorterDuffColorFilter filter = new PorterDuffColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
         paint.setColorFilter(filter);
         canvas.scale(scale, scale);
         canvas.drawBitmap(scaleBitmap, 0, 0, paint);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            scaleBitmap = renderScriptBlur(HandyBaseUtils.getInstance().getContext(), scaleBitmap, radius);
+            scaleBitmap = renderScriptBlur(context, scaleBitmap, radius);
         } else {
             scaleBitmap = stackBlur(scaleBitmap, (int) radius, recycle);
         }
@@ -737,8 +726,7 @@ public class ImageUtils {
         try {
             rs = RenderScript.create(context);
             rs.setMessageHandler(new RenderScript.RSMessageHandler());
-            Allocation input = Allocation.createFromBitmap(rs, src, Allocation.MipmapControl.MIPMAP_NONE, Allocation
-                    .USAGE_SCRIPT);
+            Allocation input = Allocation.createFromBitmap(rs, src, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
             Allocation output = Allocation.createTyped(rs, input.getType());
             ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
             blurScript.setInput(input);
@@ -768,37 +756,29 @@ public class ImageUtils {
         } else {
             ret = src.copy(src.getConfig(), true);
         }
-
         if (radius < 1) {
             return null;
         }
-
         int w = ret.getWidth();
         int h = ret.getHeight();
-
         int[] pix = new int[w * h];
         ret.getPixels(pix, 0, w, 0, 0, w, h);
-
         int wm = w - 1;
         int hm = h - 1;
         int wh = w * h;
         int div = radius + radius + 1;
-
         int r[] = new int[wh];
         int g[] = new int[wh];
         int b[] = new int[wh];
         int rsum, gsum, bsum, x, y, i, p, yp, yi, yw;
         int vmin[] = new int[Math.max(w, h)];
-
         int divsum = (div + 1) >> 1;
         divsum *= divsum;
         int dv[] = new int[256 * divsum];
         for (i = 0; i < 256 * divsum; i++) {
             dv[i] = (i / divsum);
         }
-
         yw = yi = 0;
-
         int[][] stack = new int[div][3];
         int stackpointer;
         int stackstart;
@@ -807,7 +787,6 @@ public class ImageUtils {
         int r1 = radius + 1;
         int routsum, goutsum, boutsum;
         int rinsum, ginsum, binsum;
-
         for (y = 0; y < h; y++) {
             rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
             for (i = -radius; i <= radius; i++) {
@@ -831,52 +810,39 @@ public class ImageUtils {
                 }
             }
             stackpointer = radius;
-
             for (x = 0; x < w; x++) {
-
                 r[yi] = dv[rsum];
                 g[yi] = dv[gsum];
                 b[yi] = dv[bsum];
-
                 rsum -= routsum;
                 gsum -= goutsum;
                 bsum -= boutsum;
-
                 stackstart = stackpointer - radius + div;
                 sir = stack[stackstart % div];
-
                 routsum -= sir[0];
                 goutsum -= sir[1];
                 boutsum -= sir[2];
-
                 if (y == 0) {
                     vmin[x] = Math.min(x + radius + 1, wm);
                 }
                 p = pix[yw + vmin[x]];
-
                 sir[0] = (p & 0xff0000) >> 16;
                 sir[1] = (p & 0x00ff00) >> 8;
                 sir[2] = (p & 0x0000ff);
-
                 rinsum += sir[0];
                 ginsum += sir[1];
                 binsum += sir[2];
-
                 rsum += rinsum;
                 gsum += ginsum;
                 bsum += binsum;
-
                 stackpointer = (stackpointer + 1) % div;
                 sir = stack[(stackpointer) % div];
-
                 routsum += sir[0];
                 goutsum += sir[1];
                 boutsum += sir[2];
-
                 rinsum -= sir[0];
                 ginsum -= sir[1];
                 binsum -= sir[2];
-
                 yi++;
             }
             yw += w;
@@ -886,19 +852,14 @@ public class ImageUtils {
             yp = -radius * w;
             for (i = -radius; i <= radius; i++) {
                 yi = Math.max(0, yp) + x;
-
                 sir = stack[i + radius];
-
                 sir[0] = r[yi];
                 sir[1] = g[yi];
                 sir[2] = b[yi];
-
                 rbs = r1 - Math.abs(i);
-
                 rsum += r[yi] * rbs;
                 gsum += g[yi] * rbs;
                 bsum += b[yi] * rbs;
-
                 if (i > 0) {
                     rinsum += sir[0];
                     ginsum += sir[1];
@@ -908,7 +869,6 @@ public class ImageUtils {
                     goutsum += sir[1];
                     boutsum += sir[2];
                 }
-
                 if (i < hm) {
                     yp += w;
                 }
@@ -918,46 +878,35 @@ public class ImageUtils {
             for (y = 0; y < h; y++) {
                 // Preserve alpha channel: ( 0xff000000 & pix[yi] )
                 pix[yi] = (0xff000000 & pix[yi]) | (dv[rsum] << 16) | (dv[gsum] << 8) | dv[bsum];
-
                 rsum -= routsum;
                 gsum -= goutsum;
                 bsum -= boutsum;
-
                 stackstart = stackpointer - radius + div;
                 sir = stack[stackstart % div];
-
                 routsum -= sir[0];
                 goutsum -= sir[1];
                 boutsum -= sir[2];
-
                 if (x == 0) {
                     vmin[y] = Math.min(y + r1, hm) * w;
                 }
                 p = x + vmin[y];
-
                 sir[0] = r[p];
                 sir[1] = g[p];
                 sir[2] = b[p];
-
                 rinsum += sir[0];
                 ginsum += sir[1];
                 binsum += sir[2];
-
                 rsum += rinsum;
                 gsum += ginsum;
                 bsum += binsum;
-
                 stackpointer = (stackpointer + 1) % div;
                 sir = stack[stackpointer];
-
                 routsum += sir[0];
                 goutsum += sir[1];
                 boutsum += sir[2];
-
                 rinsum -= sir[0];
                 ginsum -= sir[1];
                 binsum -= sir[2];
-
                 yi += w;
             }
         }
@@ -1354,7 +1303,6 @@ public class ImageUtils {
     }
 
     /******************************~~~~~~~~~ 下方和压缩有关 ~~~~~~~~~******************************/
-
     /**
      * 按缩放压缩
      *
@@ -1532,5 +1480,15 @@ public class ImageUtils {
         byte[] bytes = baos.toByteArray();
         if (recycle && !src.isRecycled()) src.recycle();
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+    }
+
+    private boolean isSpace(String s) {
+        if (s == null) return true;
+        for (int i = 0, len = s.length(); i < len; ++i) {
+            if (!Character.isWhitespace(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
