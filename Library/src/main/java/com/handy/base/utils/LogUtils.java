@@ -59,6 +59,7 @@ public final class LogUtils {
     private final String NULL_TIPS = "Log with null object.";
     private final String NULL = "null";
     private final String ARGS = "args";
+    public Builder builder = null;
     private String dir;// log存储目录
     private ExecutorService executor;
     private boolean sLogSwitch = true; // log总开关，默认开
@@ -385,6 +386,13 @@ public final class LogUtils {
             }
         }
         return true;
+    }
+
+    public Builder initBuilder(Context context) {
+        if (this.builder == null) {
+            builder = new Builder(context);
+        }
+        return this.builder;
     }
 
     @IntDef({V, D, I, W, E, A})
