@@ -7,19 +7,16 @@ import java.lang.ref.WeakReference;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/11/01
- *     desc  : Handler相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Handler相关工具类
  * </pre>
  */
-public class HandlerUtils {
+public final class HandlerUtils {
 
     private volatile static HandlerUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static HandlerUtils getInstance() {
         if (instance == null) {
             synchronized (HandlerUtils.class) {
