@@ -18,25 +18,22 @@ import java.lang.reflect.Method;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/9/23
- *     desc  : 栏相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 栏相关工具类
  * </pre>
  */
-public class BarUtils {
+public final class StatusBarUtils {
 
-    private volatile static BarUtils instance;
-    private final int DEFAULT_STATUS_BAR_ALPHA = 112;
+    private volatile static StatusBarUtils instance;
+    public final int DEFAULT_STATUS_BAR_ALPHA = 112;
 
-    /**
-     * 获取单例
-     */
-    public static BarUtils getInstance() {
+    public static StatusBarUtils getInstance() {
         if (instance == null) {
-            synchronized (BarUtils.class) {
+            synchronized (StatusBarUtils.class) {
                 if (instance == null) {
-                    instance = new BarUtils();
+                    instance = new StatusBarUtils();
                 }
             }
         }
@@ -242,8 +239,7 @@ public class BarUtils {
      * @param color          状态栏颜色值
      * @param statusBarAlpha 状态栏透明度
      */
-    public void setColorForDrawerLayout(Activity activity, DrawerLayout drawerLayout, int color,
-                                        int statusBarAlpha) {
+    public void setColorForDrawerLayout(Activity activity, DrawerLayout drawerLayout, int color, int statusBarAlpha) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return;
         }
@@ -265,9 +261,7 @@ public class BarUtils {
         }
         // 内容布局不是 LinearLayout 时,设置padding top
         if (!(contentLayout instanceof LinearLayout) && contentLayout.getChildAt(1) != null) {
-            contentLayout.getChildAt(1)
-                    .setPadding(contentLayout.getPaddingLeft(), getStatusBarHeight(activity) + contentLayout.getPaddingTop(),
-                            contentLayout.getPaddingRight(), contentLayout.getPaddingBottom());
+            contentLayout.getChildAt(1).setPadding(contentLayout.getPaddingLeft(), getStatusBarHeight(activity) + contentLayout.getPaddingTop(), contentLayout.getPaddingRight(), contentLayout.getPaddingBottom());
         }
         // 设置属性
         ViewGroup drawer = (ViewGroup) drawerLayout.getChildAt(1);
@@ -354,13 +348,11 @@ public class BarUtils {
         } else {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
         ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
         // 内容布局不是 LinearLayout 时,设置padding top
         if (!(contentLayout instanceof LinearLayout) && contentLayout.getChildAt(1) != null) {
             contentLayout.getChildAt(1).setPadding(0, getStatusBarHeight(activity), 0, 0);
         }
-
         // 设置属性
         ViewGroup drawer = (ViewGroup) drawerLayout.getChildAt(1);
         drawerLayout.setFitsSystemWindows(false);
@@ -476,8 +468,6 @@ public class BarUtils {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////
-
     /**
      * 添加半透明矩形条
      *
@@ -503,8 +493,7 @@ public class BarUtils {
     private StatusBarView createStatusBarView(Activity activity, int color) {
         // 绘制一个和状态栏一样高的矩形
         StatusBarView statusBarView = new StatusBarView(activity);
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
         statusBarView.setLayoutParams(params);
         statusBarView.setBackgroundColor(color);
         return statusBarView;
@@ -521,8 +510,7 @@ public class BarUtils {
     private StatusBarView createStatusBarView(Activity activity, int color, int alpha) {
         // 绘制一个和状态栏一样高的矩形
         StatusBarView statusBarView = new StatusBarView(activity);
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
         statusBarView.setLayoutParams(params);
         statusBarView.setBackgroundColor(calculateStatusColor(color, alpha));
         return statusBarView;
@@ -544,12 +532,9 @@ public class BarUtils {
     private void setTransparentForWindow(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-            activity.getWindow()
-                    .getDecorView()
-                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            activity.getWindow()
-                    .setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 
@@ -577,8 +562,7 @@ public class BarUtils {
     private StatusBarView createTranslucentStatusBarView(Activity activity, int alpha) {
         // 绘制一个和状态栏一样高的矩形
         StatusBarView statusBarView = new StatusBarView(activity);
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity));
         statusBarView.setLayoutParams(params);
         statusBarView.setBackgroundColor(Color.argb(alpha, 0, 0, 0));
         return statusBarView;
@@ -649,8 +633,7 @@ public class BarUtils {
      */
     public void hideStatusBar(Activity activity) {
         activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     /**
@@ -686,8 +669,7 @@ public class BarUtils {
      * @param isSettingPanel {@code true}: 打开设置<br>{@code false}: 打开通知
      */
     public void showNotificationBar(Context context, boolean isSettingPanel) {
-        String methodName = (Build.VERSION.SDK_INT <= 16) ? "expand"
-                : (isSettingPanel ? "expandSettingsPanel" : "expandNotificationsPanel");
+        String methodName = (Build.VERSION.SDK_INT <= 16) ? "expand" : (isSettingPanel ? "expandSettingsPanel" : "expandNotificationsPanel");
         invokePanels(context, methodName);
     }
 
