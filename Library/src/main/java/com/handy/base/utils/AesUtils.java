@@ -20,15 +20,18 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * AES加密解密工具类
- * <p>
- * Created by LiuJie on 2016/1/19.
+ * <pre>
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : AES加密解密工具类
+ * </pre>
  */
 public class AesUtils {
 
     private volatile static AesUtils instance;
     private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
-    public String DEFAULT_KEY = "HANDY_SECRET_KEY";
+    private String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
     /**
      * 获取单例
@@ -42,6 +45,23 @@ public class AesUtils {
             }
         }
         return instance;
+    }
+
+    public static AesUtils getInstance(String DEFAULT_KEY) throws Exception {
+        if (instance == null) {
+            synchronized (AesUtils.class) {
+                if (instance == null) {
+                    instance = new AesUtils();
+                }
+            }
+        }
+        if (EmptyUtils.isEmpty(DEFAULT_KEY)) {
+            throw new Exception("密钥为空");
+        } else if (DEFAULT_KEY.length() != 16) {
+            throw new Exception("密钥长度必须为16位");
+        } else {
+            return instance;
+        }
     }
 
     /**
