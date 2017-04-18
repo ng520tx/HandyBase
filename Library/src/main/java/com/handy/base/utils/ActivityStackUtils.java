@@ -7,9 +7,12 @@ import android.content.Context;
 import java.util.Stack;
 
 /**
- * Activity栈管理
- * <p>
- * Created by LiuJie on 2016/1/19.
+ * <pre>
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Activity栈管理
+ * </pre>
  */
 public class ActivityStackUtils {
 
