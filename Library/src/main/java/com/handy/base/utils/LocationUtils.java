@@ -18,22 +18,20 @@ import java.util.Locale;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/11/13
- *     desc  : 定位相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 定位相关工具类
  * </pre>
  */
-public class LocationUtils {
+public final class LocationUtils {
 
     private volatile static LocationUtils instance;
+
+    private LocationManager mLocationManager;
     private OnLocationChangeListener mListener;
     private MyLocationListener myLocationListener;
-    private LocationManager mLocationManager;
 
-    /**
-     * 获取单例
-     */
     public static LocationUtils getInstance() {
         if (instance == null) {
             synchronized (LocationUtils.class) {
@@ -50,8 +48,8 @@ public class LocationUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isGpsEnabled() {
-        LocationManager lm = (LocationManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.LOCATION_SERVICE);
+    public boolean isGpsEnabled(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -60,18 +58,18 @@ public class LocationUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isLocationEnabled() {
-        LocationManager lm = (LocationManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.LOCATION_SERVICE);
+    public boolean isLocationEnabled(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
      * 打开Gps设置界面
      */
-    public void openGpsSettings() {
+    public void openGpsSettings(Context context) {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        HandyBaseUtils.getInstance().getContext().startActivity(intent);
+        context.startActivity(intent);
     }
 
     /**
@@ -89,12 +87,12 @@ public class LocationUtils {
      * @param listener    位置刷新的回调接口
      * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    public boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
+    public boolean register(Context context, long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         mListener = listener;
-        if (!isLocationEnabled()) {
-            ToastUtils.getInstance().showShortToastSafe("无法定位，请打开定位服务");
+        if (!isLocationEnabled(context)) {
+            ToastUtils.showShortToastSafe("无法定位，请打开定位服务");
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
@@ -148,8 +146,8 @@ public class LocationUtils {
      * @param longitude 经度
      * @return {@link Address}
      */
-    public Address getAddress(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(HandyBaseUtils.getInstance().getContext(), Locale.getDefault());
+    public Address getAddress(Context context, double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);
@@ -166,8 +164,8 @@ public class LocationUtils {
      * @param longitude 经度
      * @return 所在国家
      */
-    public String getCountryName(double latitude, double longitude) {
-        Address address = getAddress(latitude, longitude);
+    public String getCountryName(Context context, double latitude, double longitude) {
+        Address address = getAddress(context, latitude, longitude);
         return address == null ? "unknown" : address.getCountryName();
     }
 
@@ -178,8 +176,8 @@ public class LocationUtils {
      * @param longitude 经度
      * @return 所在地
      */
-    public String getLocality(double latitude, double longitude) {
-        Address address = getAddress(latitude, longitude);
+    public String getLocality(Context context, double latitude, double longitude) {
+        Address address = getAddress(context, latitude, longitude);
         return address == null ? "unknown" : address.getLocality();
     }
 
@@ -190,8 +188,8 @@ public class LocationUtils {
      * @param longitude 经度
      * @return 所在街道
      */
-    public String getStreet(double latitude, double longitude) {
-        Address address = getAddress(latitude, longitude);
+    public String getStreet(Context context, double latitude, double longitude) {
+        Address address = getAddress(context, latitude, longitude);
         return address == null ? "unknown" : address.getAddressLine(0);
     }
 
@@ -221,8 +219,7 @@ public class LocationUtils {
         void onStatusChanged(String provider, int status, Bundle extras);//位置状态发生改变
     }
 
-    private class MyLocationListener
-            implements LocationListener {
+    private class MyLocationListener implements LocationListener {
         /**
          * 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
          *
@@ -249,13 +246,13 @@ public class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为可见状态");
+                    LogUtils.d("onStatusChanged", "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为服务区外状态");
+                    LogUtils.d("onStatusChanged", "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为暂停服务状态");
+                    LogUtils.d("onStatusChanged", "当前GPS状态为暂停服务状态");
                     break;
             }
         }
