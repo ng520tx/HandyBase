@@ -12,24 +12,21 @@ import java.util.Map;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/9/28
- *     desc  : 判空相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 判空相关工具类
  * </pre>
  */
-public class EmptyUtils {
+public final class EmptyUtils {
 
-    private volatile static EmptyUtils instance;
+    private volatile static ActivityUtils instance;
 
-    /**
-     * 获取单例
-     */
-    public static EmptyUtils getInstance() {
+    public static ActivityUtils getInstance() {
         if (instance == null) {
-            synchronized (EmptyUtils.class) {
+            synchronized (ActivityUtils.class) {
                 if (instance == null) {
-                    instance = new EmptyUtils();
+                    instance = new ActivityUtils();
                 }
             }
         }
@@ -83,5 +80,25 @@ public class EmptyUtils {
      */
     public boolean isNotEmpty(Object obj) {
         return !isEmpty(obj);
+    }
+
+    /**
+     * ===================================================================
+     * 判断给定字符串是否空白串。
+     * 空白串是指由空格、制表符、回车符、换行符组成的字符串
+     *
+     * @param input 判断的字符串内容
+     * @return boolean 若输入字符串为null或空字符串，返回true
+     */
+    public boolean isEmptyString(String input) {
+        if (input == null || "".equals(input) || input.length() == 0)
+            return true;
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c != ' ' && c != '\t' && c != '\r' && c != '\n') {
+                return false;
+            }
+        }
+        return true;
     }
 }
