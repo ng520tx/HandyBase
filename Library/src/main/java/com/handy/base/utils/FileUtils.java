@@ -2,7 +2,7 @@ package com.handy.base.utils;
 
 import android.annotation.SuppressLint;
 
-import com.handy.base.utils.constants.MemoryConstants;
+import com.handy.base.utils.constant.MemoryConstants;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,20 +29,16 @@ import java.util.List;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/11
- *     desc  : 文件相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 文件相关工具类
  * </pre>
  */
-public class FileUtils {
+public final class FileUtils {
 
     private volatile static FileUtils instance;
-    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    /**
-     * 获取单例
-     */
     public static FileUtils getInstance() {
         if (instance == null) {
             synchronized (FileUtils.class) {
@@ -61,7 +57,7 @@ public class FileUtils {
      * @return 文件
      */
     public File getFileByPath(String filePath) {
-        return StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
+        return isSpace(filePath) ? null : new File(filePath);
     }
 
     /**
@@ -108,13 +104,12 @@ public class FileUtils {
         // 文件不存在返回false
         if (!file.exists()) return false;
         // 新的文件名为空返回false
-        if (StringUtils.getInstance().isSpace(newName)) return false;
+        if (isSpace(newName)) return false;
         // 如果文件名没有改变返回true
         if (newName.equals(file.getName())) return true;
         File newFile = new File(file.getParent() + File.separator + newName);
         // 如果重命名的文件已存在返回false
-        return !newFile.exists()
-                && file.renameTo(newFile);
+        return !newFile.exists() && file.renameTo(newFile);
     }
 
     /**
@@ -313,8 +308,7 @@ public class FileUtils {
         // 目标目录不存在返回false
         if (!createOrExistsDir(destFile.getParentFile())) return false;
         try {
-            return writeFileFromIS(destFile, new FileInputStream(srcFile), false)
-                    && !(isMove && !deleteFile(srcFile));
+            return writeFileFromIS(destFile, new FileInputStream(srcFile), false) && !(isMove && !deleteFile(srcFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -849,8 +843,7 @@ public class FileUtils {
      * @param charsetName 编码格式
      * @return 包含制定行的list
      */
-    public List<String> readFile2List(String filePath, int st, int end, String
-            charsetName) {
+    public List<String> readFile2List(String filePath, int st, int end, String charsetName) {
         return readFile2List(getFileByPath(filePath), st, end, charsetName);
     }
 
@@ -871,7 +864,7 @@ public class FileUtils {
             String line;
             int curLine = 1;
             List<String> list = new ArrayList<>();
-            if (StringUtils.getInstance().isSpace(charsetName)) {
+            if (isSpace(charsetName)) {
                 reader = new BufferedReader(new FileReader(file));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -913,7 +906,7 @@ public class FileUtils {
         BufferedReader reader = null;
         try {
             StringBuilder sb = new StringBuilder();
-            if (StringUtils.getInstance().isSpace(charsetName)) {
+            if (isSpace(charsetName)) {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -966,6 +959,17 @@ public class FileUtils {
      */
     public long getFileLastModified(String filePath) {
         return getFileLastModified(getFileByPath(filePath));
+    }
+
+    /**
+     * 获取文件最后修改的毫秒时间戳
+     *
+     * @param file 文件
+     * @return 文件最后修改的毫秒时间戳
+     */
+    public long getFileLastModified(File file) {
+        if (file == null) return -1;
+        return file.lastModified();
     }
 
     /**
@@ -1156,7 +1160,7 @@ public class FileUtils {
      * @return 文件的MD5校验码
      */
     public String getFileMD5ToString(String filePath) {
-        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
+        File file = isSpace(filePath) ? null : new File(filePath);
         return getFileMD5ToString(file);
     }
 
@@ -1167,7 +1171,7 @@ public class FileUtils {
      * @return 文件的MD5校验码
      */
     public byte[] getFileMD5(String filePath) {
-        File file = StringUtils.getInstance().isSpace(filePath) ? null : new File(filePath);
+        File file = isSpace(filePath) ? null : new File(filePath);
         return getFileMD5(file);
     }
 
@@ -1224,7 +1228,7 @@ public class FileUtils {
      * @return filePath最长目录
      */
     public String getDirName(String filePath) {
-        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
+        if (isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? "" : filePath.substring(0, lastSep + 1);
     }
@@ -1247,7 +1251,7 @@ public class FileUtils {
      * @return 文件名
      */
     public String getFileName(String filePath) {
-        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
+        if (isSpace(filePath)) return filePath;
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? filePath : filePath.substring(lastSep + 1);
     }
@@ -1270,7 +1274,7 @@ public class FileUtils {
      * @return 不带拓展名的文件名
      */
     public String getFileNameNoExtension(String filePath) {
-        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
+        if (isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastSep == -1) {
@@ -1293,8 +1297,6 @@ public class FileUtils {
         return getFileExtension(file.getPath());
     }
 
-    /** copy from ConvertUtils **/
-
     /**
      * 获取全路径中的文件拓展名
      *
@@ -1302,7 +1304,7 @@ public class FileUtils {
      * @return 文件拓展名
      */
     public String getFileExtension(String filePath) {
-        if (StringUtils.getInstance().isSpace(filePath)) return filePath;
+        if (isSpace(filePath)) return filePath;
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastPoi == -1 || lastSep >= lastPoi) return "";
@@ -1344,6 +1346,8 @@ public class FileUtils {
         }
     }
 
+    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
     /**
      * byteArr转hexString
      * <p>例如：</p>
@@ -1384,5 +1388,15 @@ public class FileUtils {
         } else {
             return String.format("%.3fGB", (double) byteNum / MemoryConstants.GB + 0.0005);
         }
+    }
+
+    private boolean isSpace(String s) {
+        if (s == null) return true;
+        for (int i = 0, len = s.length(); i < len; ++i) {
+            if (!Character.isWhitespace(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
