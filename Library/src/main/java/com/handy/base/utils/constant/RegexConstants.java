@@ -1,4 +1,4 @@
-package com.handy.base.utils.constants;
+package com.handy.base.utils.constant;
 
 /**
  * <pre>
@@ -8,7 +8,7 @@ package com.handy.base.utils.constants;
  *     desc  : 正则相关常量
  * </pre>
  */
-public class RegexConstant {
+public final class RegexConstants {
 
     /**
      * 正则：手机号（简单）

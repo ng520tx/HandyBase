@@ -1,4 +1,4 @@
-package com.handy.base.utils.constants;
+package com.handy.base.utils.constant;
 
 import android.support.annotation.IntDef;
 
@@ -13,13 +13,12 @@ import java.lang.annotation.RetentionPolicy;
  *     desc  : 时间相关常量
  * </pre>
  */
-public class TimeConstant {
+public final class TimeConstants {
 
     /**
      * 秒与毫秒的倍数
      */
     public static final int MSEC = 1;
-
     /**
      * 秒与毫秒的倍数
      */
