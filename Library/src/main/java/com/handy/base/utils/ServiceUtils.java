@@ -12,19 +12,16 @@ import java.util.Set;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : 服务相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 服务相关工具类
  * </pre>
  */
-public class ServiceUtils {
+public final class ServiceUtils {
 
     private volatile static ServiceUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ServiceUtils getInstance() {
         if (instance == null) {
             synchronized (ServiceUtils.class) {
