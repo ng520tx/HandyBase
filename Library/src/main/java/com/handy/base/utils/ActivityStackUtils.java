@@ -14,7 +14,7 @@ import java.util.Stack;
  *  desc  : Activity栈管理
  * </pre>
  */
-public class ActivityStackUtils {
+public final class ActivityStackUtils {
 
     private volatile static ActivityStackUtils instance;
     private static Stack<Activity> activityStack; //Activity栈

@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
  *  desc  : AES加密解密工具类
  * </pre>
  */
-public class AesUtils {
+public final class AesUtils {
 
     private volatile static AesUtils instance;
     private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
