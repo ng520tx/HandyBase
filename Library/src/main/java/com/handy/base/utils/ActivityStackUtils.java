@@ -14,7 +14,7 @@ import java.util.Stack;
 public class ActivityStackUtils {
 
     private volatile static ActivityStackUtils instance;
-    public Stack<Activity> activityStack; //Activity栈
+    private static Stack<Activity> activityStack; //Activity栈
 
     /**
      * 获取单例
@@ -105,7 +105,7 @@ public class ActivityStackUtils {
     public void finishToFirstActivity() {
         if (activityStack != null) {
             for (Activity activity : activityStack) {
-                LogUtils.getInstance().d(activity.getPackageName() + activity.getLocalClassName());
+                LogUtils.d(activity.getPackageName() + activity.getLocalClassName());
             }
             for (int i = 1; i < activityStack.size(); i++) {
                 if (null != activityStack.get(i)) {
@@ -127,5 +127,13 @@ public class ActivityStackUtils {
             System.exit(0);
         } catch (Exception e) {
         }
+    }
+
+    public Stack<Activity> getActivityStack() {
+        return activityStack;
+    }
+
+    public void setActivityStack(Stack<Activity> activityStack) {
+        ActivityStackUtils.activityStack = activityStack;
     }
 }
