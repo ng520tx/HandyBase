@@ -7,19 +7,16 @@ import java.util.List;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/7
- *     desc  : Shell相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Shell相关工具类
  * </pre>
  */
-public class ShellUtils {
+public final class ShellUtils {
 
     private volatile static ShellUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ShellUtils getInstance() {
         if (instance == null) {
             synchronized (ShellUtils.class) {
@@ -140,29 +137,16 @@ public class ShellUtils {
                 process.destroy();
             }
         }
-        return new CommandResult(
-                result,
-                successMsg == null ? null : successMsg.toString(),
-                errorMsg == null ? null : errorMsg.toString()
-        );
+        return new CommandResult(result, successMsg == null ? null : successMsg.toString(), errorMsg == null ? null : errorMsg.toString());
     }
 
     /**
      * 返回的命令结果
      */
     public class CommandResult {
-        /**
-         * 结果码
-         **/
-        public int result;
-        /**
-         * 成功信息
-         **/
-        public String successMsg;
-        /**
-         * 错误信息
-         **/
-        public String errorMsg;
+        public int result; //结果码
+        public String successMsg; //成功信息
+        public String errorMsg; //错误信息
 
         public CommandResult(int result, String successMsg, String errorMsg) {
             this.result = result;
