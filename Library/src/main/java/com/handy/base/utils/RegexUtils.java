@@ -1,7 +1,7 @@
 package com.handy.base.utils;
 
 
-import com.handy.base.utils.constants.RegexConstant;
+import com.handy.base.utils.constant.RegexConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +10,16 @@ import java.util.regex.Pattern;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : 正则相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 正则相关工具类
  * </pre>
  */
-public class RegexUtils {
+public final class RegexUtils {
 
     private volatile static RegexUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static RegexUtils getInstance() {
         if (instance == null) {
             synchronized (RegexUtils.class) {
@@ -45,7 +42,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isMobileSimple(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_MOBILE_SIMPLE, input);
+        return isMatch(RegexConstants.REGEX_MOBILE_SIMPLE, input);
     }
 
     /**
@@ -55,7 +52,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isMobileExact(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_MOBILE_EXACT, input);
+        return isMatch(RegexConstants.REGEX_MOBILE_EXACT, input);
     }
 
     /**
@@ -65,7 +62,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isTel(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_TEL, input);
+        return isMatch(RegexConstants.REGEX_TEL, input);
     }
 
     /**
@@ -75,7 +72,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isIDCard15(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_ID_CARD15, input);
+        return isMatch(RegexConstants.REGEX_ID_CARD15, input);
     }
 
     /**
@@ -85,7 +82,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isIDCard18(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_ID_CARD18, input);
+        return isMatch(RegexConstants.REGEX_ID_CARD18, input);
     }
 
     /**
@@ -95,7 +92,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isEmail(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_EMAIL, input);
+        return isMatch(RegexConstants.REGEX_EMAIL, input);
     }
 
     /**
@@ -105,7 +102,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isURL(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_URL, input);
+        return isMatch(RegexConstants.REGEX_URL, input);
     }
 
     /**
@@ -115,7 +112,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isZh(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_ZH, input);
+        return isMatch(RegexConstants.REGEX_ZH, input);
     }
 
     /**
@@ -126,7 +123,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isUsername(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_USERNAME, input);
+        return isMatch(RegexConstants.REGEX_USERNAME, input);
     }
 
     /**
@@ -136,7 +133,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isDate(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_DATE, input);
+        return isMatch(RegexConstants.REGEX_DATE, input);
     }
 
     /**
@@ -146,7 +143,7 @@ public class RegexUtils {
      * @return {@code true}: 匹配<br>{@code false}: 不匹配
      */
     public boolean isIP(CharSequence input) {
-        return isMatch(RegexConstant.REGEX_IP, input);
+        return isMatch(RegexConstants.REGEX_IP, input);
     }
 
     /**
