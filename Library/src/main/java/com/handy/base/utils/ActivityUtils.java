@@ -1,6 +1,8 @@
 package com.handy.base.utils;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,13 +17,13 @@ import java.util.Map;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/9/23
- *     desc  : Activity相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Activity相关工具类
  * </pre>
  */
-public class ActivityUtils {
+public final class ActivityUtils {
 
     private volatile static ActivityUtils instance;
 
@@ -46,10 +48,10 @@ public class ActivityUtils {
      * @param className   activity全路径类名
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isActivityExists(String packageName, String className) {
+    public boolean isActivityExists(Context context, String packageName, String className) {
         Intent intent = new Intent();
         intent.setClassName(packageName, className);
-        return !(HandyBaseUtils.getInstance().getContext().getPackageManager().resolveActivity(intent, 0) == null || intent.resolveActivity(HandyBaseUtils.getInstance().getContext().getPackageManager()) == null || HandyBaseUtils.getInstance().getContext().getPackageManager().queryIntentActivities(intent, 0).size() == 0);
+        return !(context.getPackageManager().resolveActivity(intent, 0) == null || intent.resolveActivity(context.getPackageManager()) == null || context.getPackageManager().queryIntentActivities(intent, 0).size() == 0);
     }
 
     /**
@@ -58,8 +60,8 @@ public class ActivityUtils {
      * @param packageName 包名
      * @param className   全类名
      */
-    public void launchActivity(String packageName, String className) {
-        launchActivity(packageName, className, null);
+    public void launchActivity(Context context, String packageName, String className) {
+        launchActivity(context, packageName, className, null);
     }
 
     /**
@@ -69,8 +71,8 @@ public class ActivityUtils {
      * @param className   全类名
      * @param bundle      bundle
      */
-    public void launchActivity(String packageName, String className, Bundle bundle) {
-        HandyBaseUtils.getInstance().getContext().startActivity(IntentUtils.getInstance().getComponentIntent(packageName, className, bundle));
+    public void launchActivity(Context context, String packageName, String className, Bundle bundle) {
+        context.startActivity(getComponentIntent(packageName, className, bundle));
     }
 
     /**
@@ -79,11 +81,11 @@ public class ActivityUtils {
      * @param packageName 包名
      * @return launcher activity
      */
-    public String getLauncherActivity(String packageName) {
+    public String getLauncherActivity(Context context, String packageName) {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PackageManager pm = HandyBaseUtils.getInstance().getContext().getPackageManager();
+        PackageManager pm = context.getPackageManager();
         List<ResolveInfo> infos = pm.queryIntentActivities(intent, 0);
         for (ResolveInfo info : infos) {
             if (info.activityInfo.packageName.equals(packageName)) {
@@ -125,5 +127,13 @@ public class ActivityUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Intent getComponentIntent(String packageName, String className, Bundle bundle) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        if (bundle != null) intent.putExtras(bundle);
+        ComponentName cn = new ComponentName(packageName, className);
+        intent.setComponent(cn);
+        return intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 }
