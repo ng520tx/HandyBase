@@ -2,6 +2,7 @@ package com.handy.base.utils;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -14,19 +15,16 @@ import java.io.File;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/9/23
- *     desc  : 意图相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 意图相关工具类
  * </pre>
  */
-public class IntentUtils {
+public final class IntentUtils {
 
     private volatile static IntentUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static IntentUtils getInstance() {
         if (instance == null) {
             synchronized (IntentUtils.class) {
@@ -38,10 +36,6 @@ public class IntentUtils {
         return instance;
     }
 
-    /**
-     * ===================================================================
-     * 普通Intent跳转方法
-     */
     public void openActivity(Activity activity, Class<?> clss, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         activity.startActivity(intent);
@@ -49,10 +43,6 @@ public class IntentUtils {
             activity.finish();
     }
 
-    /**
-     * ===================================================================
-     * 普通Intent跳转方法
-     */
     public void openActivity(Activity activity, Class<?> clss, Bundle bundle, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         intent.putExtras(bundle);
@@ -61,10 +51,6 @@ public class IntentUtils {
             activity.finish();
     }
 
-    /**
-     * ===================================================================
-     * 带参数的Intent跳转方法
-     */
     public void openActivityForResult(Activity activity, Class<?> clss, int requestCode, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         activity.startActivityForResult(intent, requestCode);
@@ -72,11 +58,7 @@ public class IntentUtils {
             activity.finish();
     }
 
-    /**
-     * ===================================================================
-     * 带参数的Intent跳转方法
-     */
-    public void openActivityForResult(Activity activity, Class<?> clss, int requestCode, Bundle bundle, boolean isFinish) {
+    public void openActivityForResult(Activity activity, Class<?> clss, Bundle bundle, int requestCode, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, requestCode);
@@ -90,8 +72,8 @@ public class IntentUtils {
      * @param filePath 文件路径
      * @return intent
      */
-    public Intent getInstallAppIntent(String filePath) {
-        return getInstallAppIntent(FileUtils.getInstance().getFileByPath(filePath));
+    public Intent getInstallAppIntent(Context context, String filePath) {
+        return getInstallAppIntent(context, FileUtils.getInstance().getFileByPath(filePath));
     }
 
     /**
@@ -100,7 +82,7 @@ public class IntentUtils {
      * @param file 文件
      * @return intent
      */
-    public Intent getInstallAppIntent(File file) {
+    public Intent getInstallAppIntent(Context context, File file) {
         if (file == null) return null;
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String type;
@@ -112,7 +94,7 @@ public class IntentUtils {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(HandyBaseUtils.getInstance().getContext(), "com.your.package.fileProvider", file);
+            Uri contentUri = FileProvider.getUriForFile(context, "com.your.package.fileProvider", file);
             intent.setDataAndType(contentUri, type);
         }
         intent.setDataAndType(Uri.fromFile(file), type);
@@ -137,8 +119,8 @@ public class IntentUtils {
      * @param packageName 包名
      * @return intent
      */
-    public Intent getLaunchAppIntent(String packageName) {
-        return HandyBaseUtils.getInstance().getContext().getPackageManager().getLaunchIntentForPackage(packageName);
+    public Intent getLaunchAppIntent(Context context, String packageName) {
+        return context.getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
     /**
@@ -294,7 +276,7 @@ public class IntentUtils {
      *
      * @return
      *//*
-    public  Intent getPickIntentWithGallery() {
+    public Intent getPickIntentWithGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         return intent.setType("image*//*");
     }
@@ -304,17 +286,17 @@ public class IntentUtils {
      *
      * @return
      *//*
-    public  Intent getPickIntentWithDocuments() {
+    public Intent getPickIntentWithDocuments() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         return intent.setType("image*//*");
     }
 
 
-    public  Intent buildImageGetIntent(Uri saveTo, int outputX, int outputY, boolean returnData) {
+    public Intent buildImageGetIntent(Uri saveTo, int outputX, int outputY, boolean returnData) {
         return buildImageGetIntent(saveTo, 1, 1, outputX, outputY, returnData);
     }
 
-    public  Intent buildImageGetIntent(Uri saveTo, int aspectX, int aspectY,
+    public Intent buildImageGetIntent(Uri saveTo, int aspectX, int aspectY,
                                              int outputX, int outputY, boolean returnData) {
         Intent intent = new Intent();
         if (Build.VERSION.SDK_INT < 19) {
@@ -335,11 +317,11 @@ public class IntentUtils {
         return intent;
     }
 
-    public  Intent buildImageCropIntent(Uri uriFrom, Uri uriTo, int outputX, int outputY, boolean returnData) {
+    public Intent buildImageCropIntent(Uri uriFrom, Uri uriTo, int outputX, int outputY, boolean returnData) {
         return buildImageCropIntent(uriFrom, uriTo, 1, 1, outputX, outputY, returnData);
     }
 
-    public  Intent buildImageCropIntent(Uri uriFrom, Uri uriTo, int aspectX, int aspectY,
+    public Intent buildImageCropIntent(Uri uriFrom, Uri uriTo, int aspectX, int aspectY,
                                               int outputX, int outputY, boolean returnData) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uriFrom, "image*//*");
@@ -355,7 +337,7 @@ public class IntentUtils {
         return intent;
     }
 
-    public  Intent buildImageCaptureIntent(Uri uri) {
+    public Intent buildImageCaptureIntent(Uri uri) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         return intent;
