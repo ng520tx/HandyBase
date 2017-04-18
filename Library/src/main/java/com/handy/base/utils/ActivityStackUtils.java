@@ -19,9 +19,6 @@ public final class ActivityStackUtils {
     private volatile static ActivityStackUtils instance;
     private static Stack<Activity> activityStack; //Activity栈
 
-    /**
-     * 获取单例
-     */
     public static ActivityStackUtils getInstance() {
         if (instance == null) {
             synchronized (ActivityStackUtils.class) {

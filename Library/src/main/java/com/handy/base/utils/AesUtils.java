@@ -33,9 +33,6 @@ public final class AesUtils {
     private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
     private String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
-    /**
-     * 获取单例
-     */
     public static AesUtils getInstance() {
         if (instance == null) {
             synchronized (AesUtils.class) {

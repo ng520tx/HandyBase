@@ -27,9 +27,6 @@ public final class ActivityUtils {
 
     private volatile static ActivityUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ActivityUtils getInstance() {
         if (instance == null) {
             synchronized (ActivityUtils.class) {

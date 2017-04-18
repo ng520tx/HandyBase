@@ -26,9 +26,6 @@ public final class AppUtils {
 
     private volatile static AppUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static AppUtils getInstance() {
         if (instance == null) {
             synchronized (AppUtils.class) {
