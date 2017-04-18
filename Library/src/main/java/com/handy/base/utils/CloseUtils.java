@@ -5,19 +5,16 @@ import java.io.IOException;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/10/9
- *     desc  : 关闭相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 关闭相关工具类
  * </pre>
  */
-public class CloseUtils {
+public final class CloseUtils {
 
     private volatile static CloseUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static CloseUtils getInstance() {
         if (instance == null) {
             synchronized (CloseUtils.class) {
