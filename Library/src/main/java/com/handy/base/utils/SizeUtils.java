@@ -7,19 +7,16 @@ import android.view.ViewGroup;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : 尺寸相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 尺寸相关工具类
  * </pre>
  */
-public class SizeUtils {
+public final class SizeUtils {
 
     private volatile static SizeUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static SizeUtils getInstance() {
         if (instance == null) {
             synchronized (SizeUtils.class) {
@@ -29,50 +26,6 @@ public class SizeUtils {
             }
         }
         return instance;
-    }
-
-    /**
-     * dp转px
-     *
-     * @param dpValue dp值
-     * @return px值
-     */
-    public int dp2px(float dpValue) {
-        final float scale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
-    /**
-     * px转dp
-     *
-     * @param pxValue px值
-     * @return dp值
-     */
-    public int px2dp(float pxValue) {
-        final float scale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
-    }
-
-    /**
-     * sp转px
-     *
-     * @param spValue sp值
-     * @return px值
-     */
-    public int sp2px(float spValue) {
-        final float fontScale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
-
-    /**
-     * px转sp
-     *
-     * @param pxValue px值
-     * @return sp值
-     */
-    public int px2sp(float pxValue) {
-        final float fontScale = HandyBaseUtils.getInstance().getContext().getResources().getDisplayMetrics().scaledDensity;
-        return (int) (pxValue / fontScale + 0.5f);
     }
 
     /**
@@ -138,10 +91,7 @@ public class SizeUtils {
     public int[] measureView(View view) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp == null) {
-            lp = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
+            lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         int widthSpec = ViewGroup.getChildMeasureSpec(0, 0, lp.width);
         int lpHeight = lp.height;
