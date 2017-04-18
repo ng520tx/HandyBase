@@ -10,6 +10,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,19 +20,16 @@ import java.util.Set;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/10/18
- *     desc  : 进程相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 进程相关工具类
  * </pre>
  */
-public class ProcessUtils {
+public final class ProcessUtils {
 
     private volatile static ProcessUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ProcessUtils getInstance() {
         if (instance == null) {
             synchronized (ProcessUtils.class) {
@@ -50,8 +48,8 @@ public class ProcessUtils {
      *
      * @return 前台应用包名
      */
-    public String getForegroundProcessName() {
-        ActivityManager manager = (ActivityManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.ACTIVITY_SERVICE);
+    public String getForegroundProcessName(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = manager.getRunningAppProcesses();
         if (infos != null && infos.size() != 0) {
             for (ActivityManager.RunningAppProcessInfo info : infos) {
@@ -61,22 +59,22 @@ public class ProcessUtils {
             }
         }
         if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.LOLLIPOP) {
-            PackageManager packageManager = HandyBaseUtils.getInstance().getContext().getPackageManager();
+            PackageManager packageManager = context.getPackageManager();
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             System.out.println(list);
             if (list.size() > 0) {// 有"有权查看使用权限的应用"选项
                 try {
-                    ApplicationInfo info = packageManager.getApplicationInfo(HandyBaseUtils.getInstance().getContext().getPackageName(), 0);
-                    AppOpsManager aom = (AppOpsManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.APP_OPS_SERVICE);
+                    ApplicationInfo info = packageManager.getApplicationInfo(context.getPackageName(), 0);
+                    AppOpsManager aom = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
-                        HandyBaseUtils.getInstance().getContext().startActivity(intent);
+                        context.startActivity(intent);
                     }
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
-                        LogUtils.getInstance().d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
+                        LogUtils.d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
                         return null;
                     }
-                    UsageStatsManager usageStatsManager = (UsageStatsManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.USAGE_STATS_SERVICE);
+                    UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
                     long endTime = System.currentTimeMillis();
                     long beginTime = endTime - 86400000 * 7;
                     List<UsageStats> usageStatses = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, beginTime, endTime);
@@ -104,8 +102,8 @@ public class ProcessUtils {
      *
      * @return 后台服务进程
      */
-    public Set<String> getAllBackgroundProcesses() {
-        ActivityManager am = (ActivityManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.ACTIVITY_SERVICE);
+    public Set<String> getAllBackgroundProcesses(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         Set<String> set = new HashSet<>();
         for (ActivityManager.RunningAppProcessInfo info : infos) {
@@ -120,8 +118,8 @@ public class ProcessUtils {
      *
      * @return 被暂时杀死的服务集合
      */
-    public Set<String> killAllBackgroundProcesses() {
-        ActivityManager am = (ActivityManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.ACTIVITY_SERVICE);
+    public Set<String> killAllBackgroundProcesses(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         Set<String> set = new HashSet<>();
         for (ActivityManager.RunningAppProcessInfo info : infos) {
@@ -146,9 +144,8 @@ public class ProcessUtils {
      * @param packageName 包名
      * @return {@code true}: 杀死成功<br>{@code false}: 杀死失败
      */
-    public boolean killBackgroundProcesses(String packageName) {
-        if (StringUtils.getInstance().isSpace(packageName)) return false;
-        ActivityManager am = (ActivityManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.ACTIVITY_SERVICE);
+    public boolean killBackgroundProcesses(Context context, @NonNull String packageName) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         if (infos == null || infos.size() == 0) return true;
         for (ActivityManager.RunningAppProcessInfo info : infos) {
