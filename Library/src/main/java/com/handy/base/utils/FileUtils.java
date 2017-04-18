@@ -38,6 +38,7 @@ import java.util.List;
 public final class FileUtils {
 
     private volatile static FileUtils instance;
+    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     public static FileUtils getInstance() {
         if (instance == null) {
@@ -973,17 +974,6 @@ public final class FileUtils {
     }
 
     /**
-     * 获取文件最后修改的毫秒时间戳
-     *
-     * @param file 文件
-     * @return 文件最后修改的毫秒时间戳
-     */
-    public long getFileLastModified(File file) {
-        if (file == null) return -1;
-        return file.lastModified();
-    }
-
-    /**
      * 简单获取文件编码格式
      *
      * @param filePath 文件路径
@@ -1345,8 +1335,6 @@ public final class FileUtils {
             CloseUtils.getInstance().closeIO(is);
         }
     }
-
-    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     /**
      * byteArr转hexString
