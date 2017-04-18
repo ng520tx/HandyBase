@@ -389,7 +389,7 @@ public final class LogUtils {
     }
 
     public Builder initBuilder(Context context) {
-        if (this.builder == null) {
+        if (builder == null) {
             builder = new Builder(context);
         }
         return this.builder;
