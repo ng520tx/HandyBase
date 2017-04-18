@@ -14,19 +14,16 @@ import android.view.WindowManager;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : 屏幕相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 屏幕相关工具类
  * </pre>
  */
-public class ScreenUtils {
+public final class ScreenUtils {
 
     private volatile static ScreenUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static ScreenUtils getInstance() {
         if (instance == null) {
             synchronized (ScreenUtils.class) {
@@ -43,8 +40,8 @@ public class ScreenUtils {
      *
      * @return 屏幕宽px
      */
-    public int getScreenWidth() {
-        WindowManager windowManager = (WindowManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.WINDOW_SERVICE);
+    public int getScreenWidth(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(dm);// 给白纸设置宽高
         return dm.widthPixels;
@@ -55,20 +52,11 @@ public class ScreenUtils {
      *
      * @return 屏幕高px
      */
-    public int getScreenHeight() {
-        WindowManager windowManager = (WindowManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.WINDOW_SERVICE);
+    public int getScreenHeight(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(dm);// 给白纸设置宽高
         return dm.heightPixels;
-    }
-
-    /**
-     * 判断是否横屏
-     *
-     * @return {@code true}: 是<br>{@code false}: 否
-     */
-    public boolean isLandscape() {
-        return HandyBaseUtils.getInstance().getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -86,21 +74,30 @@ public class ScreenUtils {
     }
 
     /**
-     * 判断是否竖屏
-     *
-     * @return {@code true}: 是<br>{@code false}: 否
-     */
-    public boolean isPortrait() {
-        return HandyBaseUtils.getInstance().getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-    }
-
-    /**
      * 设置屏幕为竖屏
      *
      * @param activity activity
      */
     public void setPortrait(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    /**
+     * 判断是否横屏
+     *
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public boolean isLandscape(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    /**
+     * 判断是否竖屏
+     *
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public boolean isPortrait(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     /**
@@ -152,7 +149,7 @@ public class ScreenUtils {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
         Bitmap bmp = view.getDrawingCache();
-        int statusBarHeight = BarUtils.getInstance().getStatusBarHeight(activity);
+        int statusBarHeight = StatusBarUtils.getInstance().getStatusBarHeight(activity);
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         Bitmap ret = Bitmap.createBitmap(bmp, 0, statusBarHeight, dm.widthPixels, dm.heightPixels - statusBarHeight);
@@ -165,23 +162,9 @@ public class ScreenUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isScreenLock() {
-        KeyguardManager km = (KeyguardManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.KEYGUARD_SERVICE);
+    public boolean isScreenLock(Context context) {
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
-    }
-
-    /**
-     * 获取进入休眠时长
-     *
-     * @return 进入休眠时长，报错返回-123
-     */
-    public int getSleepDuration() {
-        try {
-            return Settings.System.getInt(HandyBaseUtils.getInstance().getContext().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-            return -123;
-        }
     }
 
     /**
@@ -190,7 +173,21 @@ public class ScreenUtils {
      *
      * @param duration 时长
      */
-    public void setSleepDuration(int duration) {
-        Settings.System.putInt(HandyBaseUtils.getInstance().getContext().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, duration);
+    public void setSleepDuration(Context context, int duration) {
+        Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, duration);
+    }
+
+    /**
+     * 获取进入休眠时长
+     *
+     * @return 进入休眠时长，报错返回-123
+     */
+    public int getSleepDuration(Context context) {
+        try {
+            return Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+            return -123;
+        }
     }
 }
