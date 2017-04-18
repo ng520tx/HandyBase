@@ -18,7 +18,7 @@ import java.util.List;
  *  desc  : 权限处理工具类，检查是否有未启用权限
  * </pre>
  */
-public class PermissionsUtils {
+public final class PermissionsUtils {
 
     private volatile static PermissionsUtils instance;
     private ArrayList<String> Permissions = new ArrayList<>();
