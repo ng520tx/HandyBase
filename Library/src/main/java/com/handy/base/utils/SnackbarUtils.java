@@ -14,20 +14,17 @@ import java.lang.ref.WeakReference;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/10/16
- *     desc  : Snackbar相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Snackbar相关工具类
  * </pre>
  */
-public class SnackbarUtils {
+public final class SnackbarUtils {
 
     private volatile static SnackbarUtils instance;
     private WeakReference<Snackbar> snackbarWeakReference;
 
-    /**
-     * 获取单例
-     */
     public static SnackbarUtils getInstance() {
         if (instance == null) {
             synchronized (SnackbarUtils.class) {
