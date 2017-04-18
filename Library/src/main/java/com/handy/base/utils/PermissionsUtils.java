@@ -59,10 +59,12 @@ public final class PermissionsUtils {
      * 请注意：配置的权限内容必须与AndroidManifest中使用的敏感权限保持一致！
      *
      * 框架默认已配置的权限有：
-     *  add(Manifest.permission.INTERNET);
-     *  add(Manifest.permission.READ_PHONE_STATE);
-     *  add(Manifest.permission.ACCESS_NETWORK_STATE);
-     *  add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+     * add(Manifest.permission.INTERNET);
+     * add(Manifest.permission.RECORD_AUDIO);
+     * add(Manifest.permission.READ_PHONE_STATE);
+     * add(Manifest.permission.ACCESS_WIFI_STATE);
+     * add(Manifest.permission.ACCESS_NETWORK_STATE);
+     * add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
      * </pre>
      *
      * @param permissions
