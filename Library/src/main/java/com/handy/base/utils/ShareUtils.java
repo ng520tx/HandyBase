@@ -9,27 +9,49 @@ import java.util.Set;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : Sharepreference相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Share相关工具类
  * </pre>
  */
-public class ShareUtils {
+public final class ShareUtils {
 
     private volatile static ShareUtils instance;
-    public String ShareName = "HandyShare";
-    private SharedPreferences sharedPreferences;
+    private String shareName = "";
+    private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
     /**
-     * 获取单例
+     * ShareUtils构造函数
+     * <p>在Application中初始化</p>
      */
-    public static ShareUtils getInstance() {
-        if (instance == null) {
-            synchronized (ShareUtils.class) {
-                if (instance == null) {
-                    instance = new ShareUtils();
+    private ShareUtils(Context context, String spName) {
+        sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        editor.apply();
+    }
+
+    public static ShareUtils getInstance(Context context, String shareName) {
+        if (EmptyUtils.getInstance().isEmpty(shareName)) {
+            if (instance == null) {
+                synchronized (ShareUtils.class) {
+                    if (instance == null) {
+                        instance = new ShareUtils(context, "HandyBaseShare");
+                    }
+                }
+            }
+        } else {
+            if (instance == null) {
+                synchronized (ShareUtils.class) {
+                    if (instance == null) {
+                        instance = new ShareUtils(context, shareName);
+                    }
+                }
+            } else {
+                if (EmptyUtils.getInstance().isNotEmpty(instance.shareName) && !instance.shareName.equals(shareName)) {
+                    instance = null;
+                    instance = new ShareUtils(context, shareName);
                 }
             }
         }
@@ -37,27 +59,17 @@ public class ShareUtils {
     }
 
     /**
-     * ShareUtils初始化
-     */
-    private void initShareUtils() {
-        sharedPreferences = HandyBaseUtils.getInstance().getContext().getSharedPreferences(ShareName, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.apply();
-    }
-
-    /**
-     * sharedPreferences中写入String类型value
+     * Share中写入String类型value
      *
      * @param key   键
      * @param value 值
      */
     public void put(String key, @Nullable String value) {
-        initShareUtils();
         editor.putString(key, value).apply();
     }
 
     /**
-     * sharedPreferences中读取String
+     * Share中读取String
      *
      * @param key 键
      * @return 存在返回对应值，不存在返回默认值{@code null}
@@ -67,30 +79,28 @@ public class ShareUtils {
     }
 
     /**
-     * sharedPreferences中读取String
+     * Share中读取String
      *
      * @param key          键
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public String getString(String key, String defaultValue) {
-        initShareUtils();
-        return sharedPreferences.getString(key, defaultValue);
+        return sp.getString(key, defaultValue);
     }
 
     /**
-     * sharedPreferences中写入int类型value
+     * Share中写入int类型value
      *
      * @param key   键
      * @param value 值
      */
     public void put(String key, int value) {
-        initShareUtils();
         editor.putInt(key, value).apply();
     }
 
     /**
-     * sharedPreferences中读取int
+     * Share中读取int
      *
      * @param key 键
      * @return 存在返回对应值，不存在返回默认值-1
@@ -100,30 +110,28 @@ public class ShareUtils {
     }
 
     /**
-     * sharedPreferences中读取int
+     * Share中读取int
      *
      * @param key          键
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public int getInt(String key, int defaultValue) {
-        initShareUtils();
-        return sharedPreferences.getInt(key, defaultValue);
+        return sp.getInt(key, defaultValue);
     }
 
     /**
-     * sharedPreferences中写入long类型value
+     * Share中写入long类型value
      *
      * @param key   键
      * @param value 值
      */
     public void put(String key, long value) {
-        initShareUtils();
         editor.putLong(key, value).apply();
     }
 
     /**
-     * sharedPreferences中读取long
+     * Share中读取long
      *
      * @param key 键
      * @return 存在返回对应值，不存在返回默认值-1
@@ -133,30 +141,28 @@ public class ShareUtils {
     }
 
     /**
-     * sharedPreferences中读取long
+     * Share中读取long
      *
      * @param key          键
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public long getLong(String key, long defaultValue) {
-        initShareUtils();
-        return sharedPreferences.getLong(key, defaultValue);
+        return sp.getLong(key, defaultValue);
     }
 
     /**
-     * sharedPreferences中写入float类型value
+     * Share中写入float类型value
      *
      * @param key   键
      * @param value 值
      */
     public void put(String key, float value) {
-        initShareUtils();
         editor.putFloat(key, value).apply();
     }
 
     /**
-     * sharedPreferences中读取float
+     * Share中读取float
      *
      * @param key 键
      * @return 存在返回对应值，不存在返回默认值-1
@@ -166,30 +172,28 @@ public class ShareUtils {
     }
 
     /**
-     * sharedPreferences中读取float
+     * Share中读取float
      *
      * @param key          键
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public float getFloat(String key, float defaultValue) {
-        initShareUtils();
-        return sharedPreferences.getFloat(key, defaultValue);
+        return sp.getFloat(key, defaultValue);
     }
 
     /**
-     * sharedPreferences中写入boolean类型value
+     * Share中写入boolean类型value
      *
      * @param key   键
      * @param value 值
      */
     public void put(String key, boolean value) {
-        initShareUtils();
         editor.putBoolean(key, value).apply();
     }
 
     /**
-     * sharedPreferences中读取boolean
+     * Share中读取boolean
      *
      * @param key 键
      * @return 存在返回对应值，不存在返回默认值{@code false}
@@ -199,30 +203,28 @@ public class ShareUtils {
     }
 
     /**
-     * sharedPreferences中读取boolean
+     * Share中读取boolean
      *
      * @param key          键
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public boolean getBoolean(String key, boolean defaultValue) {
-        initShareUtils();
-        return sharedPreferences.getBoolean(key, defaultValue);
+        return sp.getBoolean(key, defaultValue);
     }
 
     /**
-     * sharedPreferences中写入String集合类型value
+     * Share中写入String集合类型value
      *
      * @param key    键
      * @param values 值
      */
     public void put(String key, @Nullable Set<String> values) {
-        initShareUtils();
         editor.putStringSet(key, values).apply();
     }
 
     /**
-     * sharedPreferences中读取StringSet
+     * Share中读取StringSet
      *
      * @param key 键
      * @return 存在返回对应值，不存在返回默认值{@code null}
@@ -232,53 +234,48 @@ public class ShareUtils {
     }
 
     /**
-     * sharedPreferences中读取StringSet
+     * Share中读取StringSet
      *
      * @param key          键
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public Set<String> getStringSet(String key, @Nullable Set<String> defaultValue) {
-        initShareUtils();
-        return sharedPreferences.getStringSet(key, defaultValue);
+        return sp.getStringSet(key, defaultValue);
     }
 
     /**
-     * sharedPreferences中获取所有键值对
+     * Share中获取所有键值对
      *
      * @return Map对象
      */
     public Map<String, ?> getAll() {
-        initShareUtils();
-        return sharedPreferences.getAll();
+        return sp.getAll();
     }
 
     /**
-     * sharedPreferences中移除该key
+     * Share中移除该key
      *
      * @param key 键
      */
     public void remove(String key) {
-        initShareUtils();
         editor.remove(key).apply();
     }
 
     /**
-     * sharedPreferences中是否存在该key
+     * Share中是否存在该key
      *
      * @param key 键
      * @return {@code true}: 存在<br>{@code false}: 不存在
      */
     public boolean contains(String key) {
-        initShareUtils();
-        return sharedPreferences.contains(key);
+        return sp.contains(key);
     }
 
     /**
-     * sharedPreferences中清除所有数据
+     * Share中清除所有数据
      */
     public void clear() {
-        initShareUtils();
         editor.clear().apply();
     }
 }
