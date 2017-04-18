@@ -1,5 +1,6 @@
 package com.handy.base.utils;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -16,20 +17,24 @@ import java.util.Locale;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/9/27
- *     desc  : 崩溃相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 崩溃相关工具类
  * </pre>
  */
-public class CrashUtils implements UncaughtExceptionHandler {
+public final class CrashUtils implements UncaughtExceptionHandler {
 
     private volatile static CrashUtils instance;
-    private UncaughtExceptionHandler mHandler;
-    private boolean mInitialized;
+
+    private int versionCode;
     private String crashDir;
     private String versionName;
-    private int versionCode;
+    private boolean mInitialized;
+    private UncaughtExceptionHandler mHandler;
+
+    private CrashUtils() {
+    }
 
     /**
      * 获取单例
@@ -50,53 +55,23 @@ public class CrashUtils implements UncaughtExceptionHandler {
     }
 
     /**
-     * 判断文件是否存在，不存在则判断是否创建成功
-     *
-     * @param filePath 文件路径
-     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
-     */
-    private boolean createOrExistsFile(String filePath) {
-        File file = new File(filePath);
-        // 如果存在，是文件则返回true，是目录则返回false
-        if (file.exists()) return file.isFile();
-        if (!createOrExistsDir(file.getParentFile())) return false;
-        try {
-            return file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 判断目录是否存在，不存在则判断是否创建成功
-     *
-     * @param file 文件
-     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
-     */
-    private boolean createOrExistsDir(File file) {
-        // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
-        return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
-    }
-
-    /**
      * 初始化
      *
      * @return {@code true}: 成功<br>{@code false}: 失败
      */
-    public boolean initCrashUtils() {
+    public boolean init(Context context) {
         if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            File baseCache = HandyBaseUtils.getInstance().getContext().getExternalCacheDir();
+            File baseCache = context.getExternalCacheDir();
             if (baseCache == null) return false;
-            crashDir = baseCache.getPath() + File.separator + "HandyCrash" + File.separator;
+            crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         } else {
-            File baseCache = HandyBaseUtils.getInstance().getContext().getCacheDir();
+            File baseCache = context.getCacheDir();
             if (baseCache == null) return false;
-            crashDir = baseCache.getPath() + File.separator + "HandyCrash" + File.separator;
+            crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         }
         try {
-            PackageInfo pi = HandyBaseUtils.getInstance().getContext().getPackageManager().getPackageInfo(HandyBaseUtils.getInstance().getContext().getPackageName(), 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -110,7 +85,7 @@ public class CrashUtils implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, final Throwable throwable) {
-        String now = new SimpleDateFormat("yy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        String now = new SimpleDateFormat("yyMMdd HH-mm-ss", Locale.getDefault()).format(new Date());
         final String fullPath = crashDir + now + ".txt";
         if (!createOrExistsFile(fullPath)) return;
         new Thread(new Runnable() {
@@ -149,8 +124,39 @@ public class CrashUtils implements UncaughtExceptionHandler {
                 "\nDevice Model       : " + Build.MODEL +// 设备型号
                 "\nAndroid Version    : " + Build.VERSION.RELEASE +// 系统版本
                 "\nAndroid SDK        : " + Build.VERSION.SDK_INT +// SDK版本
-                "\nApp VersionCode    : " + versionCode +
                 "\nApp VersionName    : " + versionName +
+                "\nApp VersionCode    : " + versionCode +
                 "\n************* Crash Log Head ****************\n\n";
+    }
+
+    /**
+     * 判断文件是否存在，不存在则判断是否创建成功
+     *
+     * @param filePath 文件路径
+     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
+     */
+    private boolean createOrExistsFile(String filePath) {
+        File file = new File(filePath);
+        // 如果存在，是文件则返回true，是目录则返回false
+        if (file.exists()) return file.isFile();
+        if (!createOrExistsDir(file.getParentFile())) return false;
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    /**
+     * 判断目录是否存在，不存在则判断是否创建成功
+     *
+     * @param file 文件
+     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
+     */
+    private boolean createOrExistsDir(File file) {
+        // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
+        return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
     }
 }
