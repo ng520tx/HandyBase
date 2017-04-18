@@ -9,19 +9,16 @@ import android.widget.EditText;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/8/2
- *     desc  : 键盘相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 键盘相关工具类
  * </pre>
  */
-public class KeyboardUtils {
+public final class KeyboardUtils {
 
     private volatile static KeyboardUtils instance;
 
-    /**
-     * 获取单例
-     */
     public static KeyboardUtils getInstance() {
         if (instance == null) {
             synchronized (KeyboardUtils.class) {
@@ -107,11 +104,11 @@ public class KeyboardUtils {
      *
      * @param edit 输入框
      */
-    public void showSoftInput(EditText edit) {
+    public void showSoftInput(Context context, EditText edit) {
         edit.setFocusable(true);
         edit.setFocusableInTouchMode(true);
         edit.requestFocus();
-        InputMethodManager imm = (InputMethodManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         imm.showSoftInput(edit, 0);
     }
@@ -119,8 +116,8 @@ public class KeyboardUtils {
     /**
      * 切换键盘显示与否状态
      */
-    public void toggleSoftInput() {
-        InputMethodManager imm = (InputMethodManager) HandyBaseUtils.getInstance().getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    public void toggleSoftInput(Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm == null) return;
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
