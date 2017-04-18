@@ -71,7 +71,7 @@ public final class ProcessUtils {
                         context.startActivity(intent);
                     }
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
-                        LogUtils.d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
+                        LogUtils.getInstance().d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
                         return null;
                     }
                     UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
