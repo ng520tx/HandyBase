@@ -107,7 +107,7 @@ class BaseAppApi {
          *  在onActivityCreated方法中被调用。
          * </pre>
          */
-        void initDataHDB();
+        void initDataHDB(@Nullable Bundle savedInstanceState);
 
         /**
          * <pre>
