@@ -217,7 +217,7 @@ public final class PhoneUtils {
      * @param content     短信内容
      */
     public void sendSmsSilent(Context context, String phoneNumber, String content) {
-        if (StringUtils.isEmpty(content)) return;
+        if (StringUtils.getInstance().isEmpty(content)) return;
         PendingIntent sentIntent = PendingIntent.getBroadcast(context, 0, new Intent(), 0);
         SmsManager smsManager = SmsManager.getDefault();
         if (content.length() >= 70) {
@@ -259,7 +259,7 @@ public final class PhoneUtils {
                 // cursor.getString(cursor.getColumnIndex("contact_id"));//getColumnIndex
                 // : 查询字段在cursor中索引值,一般都是用在查询字段比较多的时候
                 // 判断contact_id是否为空
-                if (!StringUtils.isEmpty(contact_id)) {//null   ""
+                if (!StringUtils.getInstance().isEmpty(contact_id)) {//null   ""
                     // 7.根据contact_id查询view_data表中的数据
                     // selection : 查询条件
                     // selectionArgs :查询条件的参数

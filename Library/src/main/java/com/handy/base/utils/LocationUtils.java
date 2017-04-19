@@ -92,7 +92,7 @@ public final class LocationUtils {
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled(context)) {
-            ToastUtils.showShortToastSafe("无法定位，请打开定位服务");
+            ToastUtils.getInstance().showShortToastSafe(context, "无法定位，请打开定位服务");
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
@@ -246,13 +246,13 @@ public final class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    LogUtils.d("onStatusChanged", "当前GPS状态为可见状态");
+                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    LogUtils.d("onStatusChanged", "当前GPS状态为服务区外状态");
+                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    LogUtils.d("onStatusChanged", "当前GPS状态为暂停服务状态");
+                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为暂停服务状态");
                     break;
             }
         }

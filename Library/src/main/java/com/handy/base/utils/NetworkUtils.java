@@ -85,7 +85,7 @@ public final class NetworkUtils {
      * @return {@code true}: 可用<br>{@code false}: 不可用
      */
     public boolean isAvailableByPing() {
-        ShellUtils.CommandResult result = ShellUtils.execCmd("ping -c 1 -w 1 223.5.5.5", false);
+        ShellUtils.CommandResult result = ShellUtils.getInstance().execCmd("ping -c 1 -w 1 223.5.5.5", false);
         boolean ret = result.result == 0;
         if (result.errorMsg != null) {
             LogUtils.getInstance().d("isAvailableByPing errorMsg", result.errorMsg);
