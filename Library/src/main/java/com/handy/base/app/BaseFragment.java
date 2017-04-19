@@ -6,32 +6,36 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.handy.base.utils.ScreenUtils;
+
 import java.io.Serializable;
 
 /**
- * Fragment基类
- * <p/>
- * Created by LiuJie on 2016/4/14.
+ * <pre>
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Fragment基类
+ * </pre>
  */
 public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFgmApi, Serializable {
     public View fragmentView;
 
-    public Activity activity;
     public Context context;
+    public Activity activity;
     public Application application;
 
     public int screenWidth; //手机屏幕宽度参数
     public int screenHeight; //手机屏幕高度参数
 
-    public boolean canShowDialog = false; //用于控制在activity销毁后，取消对Dialog的操作
-    public boolean isFragmentCreated = false; //用于控制每个Fragment时候完成被Activity的创建操作，若完成在onResume和setUserVisibleHint方法中可以执行onRefresh()或onRequest()方法。
-    public boolean isInitFragmentData = true; //用于控制onActivityCreated中isFrgmData方法的执行。
-    public boolean isOnFragmentRequest = true; //用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
+    public boolean isAlive = false; //Fragment的活跃状态
+    public boolean isInitViewHDB = true; //onViewCreated中初始化界面视图
+    public boolean isInitDataHDB = true; //onActivityCreated中初始化界面视图
+    public boolean isOnRequestHDB = true; //用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
 
     @Override
     public void onAttach(Activity activity) {
@@ -48,17 +52,20 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        canShowDialog = true;
+        if (context == null) this.context = getContext();
+        if (activity == null) this.activity = getActivity();
 
-        if (context == null) context = getContext();
-        if (activity == null) activity = getActivity();
+        this.isAlive = true;
+        this.application = activity.getApplication();
+        this.screenWidth = ScreenUtils.getInstance().getScreenWidth(context);
+        this.screenHeight = ScreenUtils.getInstance().getScreenHeight(context);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (fragmentView == null) {
-            this.fragmentView = initFragmentView(inflater, container, savedInstanceState);
+            this.fragmentView = createViewHDB(inflater, container, savedInstanceState);
         }
         return this.fragmentView != null ? this.fragmentView : super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -68,27 +75,30 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
         super.onViewCreated(view, savedInstanceState);
         if (fragmentView == null)
             fragmentView = view;
-        onFragmentComplete(view, savedInstanceState);
+
+        if (isInitViewHDB) {
+            initViewHDB(view, savedInstanceState);
+            isInitViewHDB = false;
+        }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        isFragmentCreated = true;
-        if (isInitFragmentData) {
-            initFragmentData();
-            isInitFragmentData = false;
+        if (isInitDataHDB) {
+            initDataHDB(savedInstanceState);
+            isInitDataHDB = false;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint() && isFragmentCreated) {
-            onFragmentRefresh();
-            if (isOnFragmentRequest) {
-                onFragmentRequest();
-                isOnFragmentRequest = false;
+        if (getUserVisibleHint()) {
+            onRefreshHDB();
+            if (isOnRequestHDB) {
+                onRequestHDB();
+                isOnRequestHDB = false;
             }
         }
     }
@@ -96,59 +106,47 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void onDestroy() {
         super.onDestroy();
-        canShowDialog = false;
+        this.isAlive = false;
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isFragmentCreated) {
-            onFragmentVisiable();
-            if (isOnFragmentRequest) {
-                onFragmentRequest();
-                isOnFragmentRequest = false;
+        if (isVisibleToUser) {
+            onVisiableHDB();
+            if (isOnRequestHDB) {
+                onRequestHDB();
+                isOnRequestHDB = false;
             }
         }
     }
 
-    /**
-     * ===================================================================
-     * 获取当前手机屏幕宽高参数
-     */
-    public void GetScreenSize() {
-        DisplayMetrics localDisplayMetrics = getResources().getDisplayMetrics();
-        this.screenWidth = localDisplayMetrics.widthPixels;
-        this.screenHeight = localDisplayMetrics.heightPixels;
-    }
-
     @Override
-    public View initFragmentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View createViewHDB(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return null;
     }
 
     @Override
-    public void onFragmentComplete(View view, @Nullable Bundle savedInstanceState) {
-        GetScreenSize();
-        this.application = getActivity().getApplication();
+    public void initViewHDB(View view, @Nullable Bundle savedInstanceState) {
     }
 
     @Override
-    public void initFragmentData() {
-
-    }
-
-    @Override
-    public void onFragmentRefresh() {
+    public void initDataHDB(@Nullable Bundle savedInstanceState) {
 
     }
 
     @Override
-    public void onFragmentRequest() {
+    public void onRefreshHDB() {
 
     }
 
     @Override
-    public void onFragmentVisiable() {
+    public void onRequestHDB() {
+
+    }
+
+    @Override
+    public void onVisiableHDB() {
 
     }
 }
