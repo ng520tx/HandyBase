@@ -34,7 +34,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalCache(Context context) {
-        return FileUtils.deleteFilesInDir(context.getCacheDir());
+        return FileUtils.getInstance().deleteFilesInDir(context.getCacheDir());
     }
 
     /**
@@ -44,7 +44,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalFiles(Context context) {
-        return FileUtils.deleteFilesInDir(context.getFilesDir());
+        return FileUtils.getInstance().deleteFilesInDir(context.getFilesDir());
     }
 
     /**
@@ -54,7 +54,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalDbs(Context context) {
-        return FileUtils.deleteFilesInDir(context.getFilesDir().getParent() + File.separator + "databases");
+        return FileUtils.getInstance().deleteFilesInDir(context.getFilesDir().getParent() + File.separator + "databases");
     }
 
     /**
@@ -75,7 +75,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanInternalSP(Context context) {
-        return FileUtils.deleteFilesInDir(context.getFilesDir().getParent() + File.separator + "shared_prefs");
+        return FileUtils.getInstance().deleteFilesInDir(context.getFilesDir().getParent() + File.separator + "shared_prefs");
     }
 
     /**
@@ -85,7 +85,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanExternalCache(Context context) {
-        return SDCardUtils.isSDCardEnable() && FileUtils.deleteFilesInDir(context.getExternalCacheDir());
+        return SDCardUtils.getInstance().isSDCardEnable() && FileUtils.getInstance().deleteFilesInDir(context.getExternalCacheDir());
     }
 
     /**
@@ -95,7 +95,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanCustomCache(String dirPath) {
-        return FileUtils.deleteFilesInDir(dirPath);
+        return FileUtils.getInstance().deleteFilesInDir(dirPath);
     }
 
     /**
@@ -105,6 +105,6 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public boolean cleanCustomCache(File dir) {
-        return FileUtils.deleteFilesInDir(dir);
+        return FileUtils.getInstance().deleteFilesInDir(dir);
     }
 }

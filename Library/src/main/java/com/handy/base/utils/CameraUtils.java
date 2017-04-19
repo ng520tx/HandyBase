@@ -194,7 +194,7 @@ public final class CameraUtils {
                 }
             }
         }
-        return StringUtils.isEmpty(path) ? originalUri.getPath() : null;
+        return StringUtils.getInstance().isEmpty(path) ? originalUri.getPath() : null;
     }
 
     /**
@@ -210,7 +210,7 @@ public final class CameraUtils {
         if (extras == null) return null;
         Bitmap photo = extras.getParcelable("data");
         File file = new File(filePath);
-        if (ImageUtils.save(photo, file, Bitmap.CompressFormat.JPEG)) return file;
+        if (ImageUtils.getInstance().save(photo, file, Bitmap.CompressFormat.JPEG)) return file;
         return null;
     }
 }
