@@ -181,4 +181,18 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
             onPermissionRejectionHDB();
         }
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+//        super.onSaveInstanceState(outState, outPersistentState);
+//        outState.putSerializable("ActivityStack", ActivityStackUtils.getInstance().getActivityStack());
+//    }
+//
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+//        super.onRestoreInstanceState(savedInstanceState, persistentState);
+//        if (savedInstanceState != null && savedInstanceState.size() > 0) {
+//            ActivityStackUtils.getInstance().setActivityStack((Stack<Activity>) savedInstanceState.getSerializable("ActivityStack"));
+//        }
+//    }
 }
