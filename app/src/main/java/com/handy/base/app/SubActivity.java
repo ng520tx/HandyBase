@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.handy.base.utils.IntentUtils;
+import java.util.List;
 
-public class MainActivity extends BaseActivity {
+/**
+ * Created by LiuJie on 2017/4/19.
+ */
+
+public class SubActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +24,9 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.crashTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.getInstance().openActivity(activity, SubActivity.class, false);
+                List<String> strings = null;
+                String str = strings.get(0);
             }
         });
     }
-
 }
