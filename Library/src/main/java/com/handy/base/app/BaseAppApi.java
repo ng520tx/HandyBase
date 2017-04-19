@@ -86,37 +86,51 @@ class BaseAppApi {
 
     interface BaseFgmApi {
         /**
-         * ===================================================================
-         * 在onCreate方法中被调用，用于初始化界面布局控件
+         * <pre>
+         *  初始化界面视图
+         *  在onCreateView方法中被调用。
+         * </pre>
          */
-        View initHDBView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
+        View createViewHDB(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
         /**
-         * 当initView执行完后被调用，用户初始化界面控件UI
-         *
-         * @param view               当前布局View
-         * @param savedInstanceState 缓存数据
+         * <pre>
+         *  初始化界面控件
+         *  在onViewCreated方法中被调用。
+         * </pre>
          */
-        void onHDBComplete(View view, @Nullable Bundle savedInstanceState);
+        void initViewHDB(View view, @Nullable Bundle savedInstanceState);
 
         /**
-         * 在onCreate方法中且initView执行完后被调用，用于初始化界面有关数据。
+         * <pre>
+         *  初始化界面数据
+         *  在onActivityCreated方法中被调用。
+         * </pre>
          */
-        void initHDBData();
+        void initDataHDB();
 
         /**
-         * 在onResume方法中被调用，当调用onResume方法时被调用
+         * <pre>
+         *  刷新界面视图或数据
+         *  在onResume方法中被调用。
+         * </pre>
          */
-        void onHDBRefresh();
+        void onRefreshHDB();
 
         /**
-         * 在setUserVisibleHint方法中被调用，当界面对用户可见时被调用
+         * <pre>
+         *  界面可见时相关处理
+         *  在setUserVisibleHint方法中，当界面对用户可见时被调用。
+         * </pre>
          */
-        void onHDBVisiable();
+        void onVisiableHDB();
 
         /**
-         * 在onResume方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
+         * <pre>
+         *  请求界面相关处理
+         *  在setUserVisibleHint方法中，当界面对用户可见且isRequesting==true时被调用。
+         * </pre>
          */
-        void onHDBRequest();
+        void onRequestHDB();
     }
 }
