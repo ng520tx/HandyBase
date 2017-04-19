@@ -14,8 +14,12 @@ import com.handy.base.utils.PermissionsUtils;
 import com.handy.base.utils.ScreenUtils;
 
 /**
- * Activity基本类
- * Created by LiuJie on 2016/4/22.
+ * <pre>
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : Activity基本类
+ * </pre>
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseAppApi.BaseAtyApi {
     public Context context;
@@ -24,20 +28,24 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     public int screenWidth = 0; //屏幕宽度
     public int screenHeight = 0; //屏幕高度
-    public boolean canShowDialog = false; //用于控制在activity创建销或毁时，对Dialog的显隐控制
-    public boolean isInitActivityView = true; //用于控制onStart中initView方法的执行。
-    public boolean isInitActivityData = true; //用于控制onStart中initData方法的执行。
-    public boolean isOnActivityRequest = true; //用于被其他activity改变后，退回到当前界面是否重新执行onRequest()方法
-    public boolean isCheckActivityPermissions = true; //用于控制activity进入onStart时，是否扫描权限
-    private Bundle savedInstanceState = null;
+
+    public boolean isAlive = false; //Activity的活跃状态
+    public boolean isInitViewHDB = true; //onStart中初始化界面视图
+    public boolean isInitDataHDB = true; //onStart中初始化界面数据
+    public boolean isOnRequestHDB = true; //onResume中界面请求处理
+    public boolean isInitIntentBundle = true; //onStart中初始化意图内容
+    public boolean isCheckPermissionsHDB = true; //onStart中权限扫描
+
+    public Bundle intentBundle = null;
+    public Bundle savedInstanceState = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+            this.isAlive = true;
             this.context = this;
             this.activity = this;
-            this.canShowDialog = true;
             this.application = getApplication();
             this.savedInstanceState = savedInstanceState;
             this.screenWidth = ScreenUtils.getInstance().getScreenWidth(context);
@@ -52,97 +60,110 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     @Override
     protected void onStart() {
         super.onStart();
-        if (isCheckActivityPermissions) {
-            checkActivityPermissions();
-            isCheckActivityPermissions = false;
+        /* 初始化Activity接收意图的内容 */
+        if (isInitIntentBundle) {
+            if (getIntent().getExtras() != null && getIntent().getExtras().size() > 0) {
+                this.intentBundle = getIntent().getExtras();
+                initIntentBundle(this.intentBundle);
+            }
+            isInitIntentBundle = false;
         }
-
-        if (isInitActivityView) {
-            initActivityView(savedInstanceState);
-            isInitActivityView = false;
+        /* 安卓权限扫描 */
+        if (isCheckPermissionsHDB) {
+            checkPermissionsHDB();
+            isCheckPermissionsHDB = false;
         }
-
-        if (isInitActivityData) {
-            initActivityData();
-            isInitActivityData = false;
+        /* 初始化界面视图 */
+        if (isInitViewHDB) {
+            initViewHDB(savedInstanceState);
+            isInitViewHDB = false;
+        }
+        /* 初始化界面数据 */
+        if (isInitDataHDB) {
+            initDataHDB();
+            isInitDataHDB = false;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        onActivityRefresh();
-        if (isOnActivityRequest) { //对用户可见 已创建 重新读取
-            onActivityRequest();
-            isOnActivityRequest = false;
+        /* Activity刷新时调用 */
+        onRefreshHDB();
+        /* Activity请求时调用（可被重复调用） */
+        if (isOnRequestHDB) {
+            onRequestHDB();
+            isOnRequestHDB = false;
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        canShowDialog = false;
+        isAlive = false;
         ActivityStackUtils.getInstance().finishActivity(this);
     }
 
     @Override
-    public void checkActivityPermissions() {
+    public void initIntentBundle(Bundle intentBundle) {
+    }
+
+    @Override
+    public void checkPermissionsHDB() {
         if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
-            onActivityPermissionSuccess();
+            onPermissionSuccessHDB();
         }
     }
 
     @Override
-    public void initActivityView(@Nullable Bundle savedInstanceState) {
+    public void initViewHDB(@Nullable Bundle savedInstanceState) {
     }
 
     @Override
-    public void initActivityData() {
-
+    public void initDataHDB() {
     }
 
     @Override
-    public void onActivityRefresh() {
-
+    public void onRefreshHDB() {
     }
 
     @Override
-    public void onActivityRequest() {
-
+    public void onRequestHDB() {
     }
 
     @Override
-    public void onActivityPermissionSuccess() {
-
+    public void onPermissionSuccessHDB() {
     }
 
     @Override
-    public void onActivityPermissionRejection() {
-//            SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
-//                @Override
-//                public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                    PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
-//                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                    intent.setData(Uri.parse("package:" + getPackageName()));
-//                    startActivityForResult(intent, 45);
-//                    sweetAlertDialog.dismiss();
-//                }
-//            }, new SweetAlertDialog.OnSweetClickListener() {
-//                @Override
-//                public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                    sweetAlertDialog.dismiss();
-//                    ActivityStackUtils.AppExit(context);
-//                }
-//            }).setCancelable(false);
-
-//        //若从设置界面返回，重新扫描权限（请将此方法放与onActivityPermissionRejection()同级）
-//        @Override
-//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//            super.onActivityResult(requestCode, resultCode, data);
-//            if (requestCode == 45) {
-//                PermissionsUtils.checkDeniedPermissions(activity, true);
-//            }
-//        }
+    public void onPermissionRejectionHDB() {
+        /*
+         * 发现未启用的权限时，可以参考一下进行处理。
+         * SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
+         *     @Override
+         *     public void onClick(SweetAlertDialog sweetAlertDialog) {
+         *         PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
+         *         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+         *         intent.setData(Uri.parse("package:" + getPackageName()));
+         *         startActivityForResult(intent, 45);
+         *         sweetAlertDialog.dismiss();
+         *     }
+         * }, new SweetAlertDialog.OnSweetClickListener() {
+         *     @Override
+         *     public void onClick(SweetAlertDialog sweetAlertDialog) {
+         *         sweetAlertDialog.dismiss();
+         *         ActivityStackUtils.AppExit(context);
+         *     }
+         * }).setCancelable(false);
+         * //若从设置界面返回，重新扫描权限（请将此方法放与onActivityPermissionRejection()同级）
+         * @Override
+         * protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         *     super.onActivityResult(requestCode, resultCode, data);
+         *     if (requestCode == 45) {
+         *         PermissionsUtils.checkDeniedPermissions(activity, true);
+         *     }
+         * }
+         */
     }
 
     /**
@@ -154,10 +175,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
-                onActivityPermissionSuccess();
+                onPermissionSuccessHDB();
             }
         } else {
-            onActivityPermissionRejection();
+            onPermissionRejectionHDB();
         }
     }
 }
