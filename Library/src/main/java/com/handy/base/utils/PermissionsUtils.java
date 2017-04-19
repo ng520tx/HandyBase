@@ -23,6 +23,12 @@ public final class PermissionsUtils {
     private volatile static PermissionsUtils instance;
     private ArrayList<String> Permissions = new ArrayList<>();
 
+    private PermissionsUtils() {
+        if (Permissions == null || Permissions.size() == 0) {
+            initPermissions();
+        }
+    }
+
     public static PermissionsUtils getInstance() {
         if (instance == null) {
             synchronized (PermissionsUtils.class) {
