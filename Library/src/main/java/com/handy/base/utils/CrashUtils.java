@@ -27,6 +27,7 @@ public final class CrashUtils implements UncaughtExceptionHandler {
 
     private volatile static CrashUtils instance;
 
+    private Context context;
     private int versionCode;
     private String crashDir;
     private String versionName;
@@ -60,6 +61,7 @@ public final class CrashUtils implements UncaughtExceptionHandler {
      * @return {@code true}: 成功<br>{@code false}: 失败
      */
     public boolean init(Context context) {
+        this.context = context;
         if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File baseCache = context.getExternalCacheDir();
@@ -85,7 +87,7 @@ public final class CrashUtils implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, final Throwable throwable) {
-        String now = new SimpleDateFormat("yyMMdd HH-mm-ss", Locale.getDefault()).format(new Date());
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         final String fullPath = crashDir + now + ".txt";
         if (!createOrExistsFile(fullPath)) return;
         new Thread(new Runnable() {
@@ -108,8 +110,18 @@ public final class CrashUtils implements UncaughtExceptionHandler {
                 }
             }
         }).start();
+
+        ToastUtils.getInstance().showShortToastSafe(context, "很抱歉，程序出现异常即将退出。");
         if (mHandler != null) {
             mHandler.uncaughtException(thread, throwable);
+        } else {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+            }
+            //退出程序
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
         }
     }
 
