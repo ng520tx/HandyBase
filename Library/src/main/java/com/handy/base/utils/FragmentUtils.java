@@ -462,7 +462,7 @@ public final class FragmentUtils {
     private Fragment operateFragment(@NonNull FragmentManager fragmentManager, Fragment srcFragment, @NonNull Fragment destFragment, int type, SharedElement... sharedElements) {
         if (srcFragment == destFragment) return null;
         if (srcFragment != null && srcFragment.isRemoving()) {
-            LogUtils.e(srcFragment.getClass().getName() + " is isRemoving");
+            LogUtils.getInstance().e(srcFragment.getClass().getName() + " is isRemoving");
             return null;
         }
         String name = destFragment.getClass().getName();
