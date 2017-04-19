@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Looper;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -87,6 +89,15 @@ public final class CrashUtils implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, final Throwable throwable) {
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                Toast.makeText(context, "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
+                Looper.loop();
+            }
+        }.start();
+
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         final String fullPath = crashDir + now + ".txt";
         if (!createOrExistsFile(fullPath)) return;
@@ -111,17 +122,13 @@ public final class CrashUtils implements UncaughtExceptionHandler {
             }
         }).start();
 
-        ToastUtils.getInstance().showShortToastSafe(context, "很抱歉，程序出现异常即将退出。");
-        if (mHandler != null) {
-            mHandler.uncaughtException(thread, throwable);
-        } else {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ignored) {
-            }
+        try {
+            Thread.sleep(2000);
             //退出程序
+            ActivityStackUtils.getInstance().finishAllActivity();
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
+        } catch (InterruptedException ignored) {
         }
     }
 
