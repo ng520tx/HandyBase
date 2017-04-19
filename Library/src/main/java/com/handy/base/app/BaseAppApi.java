@@ -16,47 +16,47 @@ class BaseAppApi {
          * 在onStart方法中被调用，用于初始化界面布局控件
          *
          */
-        void initHDBView(@Nullable Bundle savedInstanceState);
+        void initViewHDB(@Nullable Bundle savedInstanceState);
 
         /**
          * 在onStart方法中且initView执行完后被调用，用于初始化界面有关数据。
          */
-        void initHDBData();
+        void initDataHDB();
 
         /**
          * 在onResume方法中被调用，当调用onResume方法时被调用
          */
-        void onHDBRefresh();
+        void onRefreshHDB();
 
         /**
          * 在onResume方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
          */
-        void onHDBRequest();
+        void onRequestHDB();
 
 
         /**
          * 在onStart方法中被调用，用户检查权限
          */
-        void checkHDBPermissions();
+        void checkPermissionsHDB();
 
         /**
          * 当权限扫描通过时（全部权限均已开启），执行此方法。若不许执行权限扫描或避免此方法。
          * <pre>
          * 注意：此方法的执行顺序是:
-         * 子类 initHDBData()      super  前
-         * 父类 initHDBData()      方法
+         * 子类 initDataHDB()      super  前
+         * 父类 initDataHDB()      方法
          * 子类 onPermission()  super  前
          * 父类 onPermission()  方法
          * 子类 onPermission()  super  后
-         * 子类 initHDBData()      super  后
+         * 子类 initDataHDB()      super  后
          * </pre>
          */
-        void onHDBPermissionSuccess();
+        void onPermissionSuccessHDB();
 
         /**
          * 当权限扫描不通过，且请求被拒绝时执行此方法。若不许执行权限扫描或避免此方法。
          */
-        void onHDBPermissionRejection();
+        void onPermissionRejectionHDB();
     }
 
     interface BaseFgmApi {
