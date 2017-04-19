@@ -43,31 +43,4 @@ public abstract class BaseApplication extends Application {
             e.printStackTrace();
         }
     }
-
-    /*
-     * 如果要使用蒲公英内测功能，需要在AndroidManifest配置文件中加入：
-     * <application>
-     *     ...
-     *     <provider
-     *         android:name="android.support.v4.content.FileProvider"
-     *         android:authorities="此处输入授权名，可以随意输入但要保证唯一性，可能会和手机其他App产生冲突"
-     *         android:exported="false"
-     *         android:grantUriPermissions="true">
-     *         <meta-data
-     *             android:name="android.support.FILE_PROVIDER_PATHS"
-     *             android:resource="@xml/pgycrash_paths"/>
-     *     </provider>
-     * </application>
-     *
-     * 然后再res下的xml文件夹（不存在则创建）中创建pgycrash_paths.xml文件，写入内容：
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <paths>
-     *     <external-path
-     *         name="files_root"
-     *         path="Android/data/com/pgyersdk"/>
-     *     <external-path
-     *         name="external_storage_root"
-     *         path="."/>
-     * </paths>
-     */
 }
