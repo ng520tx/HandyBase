@@ -148,11 +148,11 @@ public final class DeviceUtils {
      * @return MAC地址
      */
     private String getMacAddressByFile() {
-        ShellUtils.CommandResult result = ShellUtils.execCmd("getprop wifi.interface", false);
+        ShellUtils.CommandResult result = ShellUtils.getInstance().execCmd("getprop wifi.interface", false);
         if (result.result == 0) {
             String name = result.successMsg;
             if (name != null) {
-                result = ShellUtils.execCmd("cat /sys/class/net/" + name + "/address", false);
+                result = ShellUtils.getInstance().execCmd("cat /sys/class/net/" + name + "/address", false);
                 if (result.result == 0) {
                     if (result.successMsg != null) {
                         return result.successMsg;
@@ -195,7 +195,7 @@ public final class DeviceUtils {
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      */
     public void shutdown(Context context) {
-        ShellUtils.execCmd("reboot -p", true);
+        ShellUtils.getInstance().execCmd("reboot -p", true);
         Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -207,7 +207,7 @@ public final class DeviceUtils {
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      */
     public void reboot(Context context) {
-        ShellUtils.execCmd("reboot", true);
+        ShellUtils.getInstance().execCmd("reboot", true);
         Intent intent = new Intent(Intent.ACTION_REBOOT);
         intent.putExtra("nowait", 1);
         intent.putExtra("interval", 1);
@@ -235,7 +235,7 @@ public final class DeviceUtils {
      * <p>需要root权限</p>
      */
     public void reboot2Recovery() {
-        ShellUtils.execCmd("reboot recovery", true);
+        ShellUtils.getInstance().execCmd("reboot recovery", true);
     }
 
     /**
@@ -243,6 +243,6 @@ public final class DeviceUtils {
      * <p>需要root权限</p>
      */
     public void reboot2Bootloader() {
-        ShellUtils.execCmd("reboot bootloader", true);
+        ShellUtils.getInstance().execCmd("reboot bootloader", true);
     }
 }
