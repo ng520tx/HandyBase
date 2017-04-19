@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:1.1.2'
+    compile 'com.github.liujie045:HandyBase:2.0.1'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -13,6 +13,7 @@
         }
         dependencies {
             classpath 'com.android.tools.build:gradle:2.3.0'
+            classpath 'me.tatarka:gradle-retrolambda:3.6.0'
             classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         }
     }
@@ -29,25 +30,12 @@
 #### Step 2.添加compile引用到Module的build.gradle配置文件中
 ```javascript
     apply plugin: 'com.android.application'（or：apply plugin: 'com.android.library'）
+    apply plugin: 'me.tatarka.retrolambda'
     apply plugin: 'com.jakewharton.butterknife'
-    
-    dependencies {
-        compile 'com.github.liujie045:HandyBase:1.1.2'
-        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-    }
-```
-
-```javascript
-若要使用Lambda则在Module的build.gradle配置文件中添加：
     android {
         ...
         defaultConfig {
             ...
-            jackOptions {
-                enabled true
-            }
-            
             javaCompileOptions {
                 annotationProcessorOptions {
                     arguments = [ eventBusIndex : 'com.example.myapp.MyEventBusIndex' ]
@@ -60,19 +48,27 @@
             targetCompatibility JavaVersion.VERSION_1_8
         }
     }
+    
+    dependencies {
+        ...
+        compile 'com.github.liujie045:HandyBase:2.0.1'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    }
 ```
+
 #### Step 3.工具类已在BaseApplication中初始化
 ```javascript
     try {
         if (isInitHandyBaseUtils) {
-            HandyBaseUtils.getInstance().registerUtils(getApplicationContext());
-            
-            /* 清空手机内部和外部缓存数据 */
-            CleanUtils.getInstance().cleanInternalCache();
-            CleanUtils.getInstance().cleanExternalCache();
-            
-            CrashUtils.getInstance().initCrashUtils(); //初始化崩溃捕获工具
-            LogUtils.getInstance().initLogUtils(true, true, 'v', "HandyLog"); //初始化日志输出工具
+            CrashUtils.getInstance().init(getApplicationContext()); //初始化崩溃捕获工具
+
+            LogUtils.getInstance().initBuilder(getApplicationContext())
+                    .setLogSwitch(AppUtils.getInstance().isAppDebug(getApplicationContext()))// 设置log总开关，默认开
+                    .setGlobalTag("HandyBase")// 设置log全局标签，默认为空，当全局标签不为空时，我们输出的log全部为该tag，为空时，如果传入的tag为空那就显示类名，否则显示tag
+                    .setLog2FileSwitch(false)// 打印log时是否存到文件的开关，默认关
+                    .setBorderSwitch(true)// 输出日志是否带边框开关，默认开
+                    .setLogFilter(LogUtils.V);// log过滤器，和logcat过滤器同理，默认Verbose
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -85,24 +81,19 @@
         {
             isInitHandyBaseUtils = false;
         }
-        
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            // TODO: 2017/3/24 手动初始化工具类 
-        }
+        ...
     }
 ```
 
 #### Step 4.已在BaseActivity中内置Android6.0权限扫描功能，框架已默认添加了四种权限
 ```javascript
 已默认追加的权限：
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 获取网络状态 -->
     <uses-permission android:name="android.permission.INTERNET"/> <!-- 网络通信-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>  <!-- 获取设备信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 获取MAC地址-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 读写sdcard，storage等等 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/> <!-- 允许程序录制音频 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>  <!-- 获取设备信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 获取WIFI状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 获取网络状态 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 读写sdcard，storage等等 -->
 ```
 
 ```javascript
@@ -112,19 +103,18 @@
         ...
         PermissionsUtils.getInstance().addPermissions( new ArrayList<String>() {{
             add(Manifest.permission.CAMERA);
-            add(Manifest.permission.ACCESS_FINE_LOCATION);
         }});
     }
 ```
 
 ```javascript
 配置好权限后在BaseActivity中onStart方法中会默认进行扫描操作。
-如果扫描权限发现已全部允许，则调用onActivityPermissionSuccess()接口方法。
-如果扫描权限发现有未启用的权限，则调用onActivityPermissionRejection()接口方法。在此方法中可以弹出对话框提示用户手动开启权限，从设置界面返回到应用时需再次扫描权限
+如果扫描权限发现已全部允许，则调用onPermissionSuccessHDB()接口方法。
+如果扫描权限发现有未启用的权限，则调用onPermissionRejectionHDB()接口方法。在此方法中可以弹出对话框提示用户手动开启权限，从设置界面返回到应用时需再次扫描权限
 参考操作：
     @Override
-    public void onActivityPermissionRejection() {
-        super.onActivityPermissionRejection();
+    public void onPermissionRejectionHDB() {
+        super.onPermissionRejectionHDB();
         SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener()
         @Override
         public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -213,10 +203,39 @@
         android:name="PGYER_APPID"
         android:value="此处填写蒲公英平台上传应用后获得的AppId" >
     </meta-data>
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="此处输入授权名，可以随意输入但要保证唯一性，可能会和手机其他App产生冲突"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/pgycrash_paths"/>
+    </provider>
 </application>
 ```
 
+```javascript
+在res下的xml文件夹（不存在则创建）中创建pgycrash_paths.xml文件，写入内容：
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path
+        name="files_root"
+        path="Android/data/项目包名/pgycrash"/>
+    <external-path
+        name="external_storage_root"
+        path="."/>
+</paths>
+```
+
 ##  更新日志
+***2017年4月19日 v2.0.1***
+
+* 更新了项目框架
+* 更新了Utils工具类框架
+* 更新了异常处理工具类的捕获异常时的处理
+* 使用retrolambda替换了默认的Lambda表达式功能
+
 ***2017年3月29日 v1.1.2***
 
 * 更新BaseAppApi
