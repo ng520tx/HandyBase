@@ -52,7 +52,7 @@ public final class AesUtils {
                 }
             }
         }
-        if (EmptyUtils.isEmpty(DEFAULT_KEY)) {
+        if (EmptyUtils.getInstance().isEmpty(DEFAULT_KEY)) {
             throw new Exception("密钥为空");
         } else if (DEFAULT_KEY.length() != 16) {
             throw new Exception("密钥长度必须为16位");
