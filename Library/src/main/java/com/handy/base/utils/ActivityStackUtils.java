@@ -105,7 +105,7 @@ public final class ActivityStackUtils {
     public void finishToFirstActivity() {
         if (activityStack != null) {
             for (Activity activity : activityStack) {
-                LogUtils.d(activity.getPackageName() + activity.getLocalClassName());
+                LogUtils.getInstance().d(activity.getPackageName() + activity.getLocalClassName());
             }
             for (int i = 1; i < activityStack.size(); i++) {
                 if (null != activityStack.get(i)) {
