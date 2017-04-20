@@ -94,7 +94,7 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint()) {
+        if (getUserVisibleHint() && isAlive) {
             onRefreshHDB();
             if (isOnRequestHDB) {
                 onRequestHDB();
@@ -112,7 +112,7 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser && isAlive) {
             onVisiableHDB();
             if (isOnRequestHDB) {
                 onRequestHDB();
