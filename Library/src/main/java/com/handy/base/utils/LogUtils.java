@@ -321,7 +321,6 @@ public final class LogUtils {
         String date = new SimpleDateFormat("MM-dd", Locale.getDefault()).format(now);
         final String fullPath = dir + date + ".txt";
         if (!createOrExistsFile(fullPath)) {
-            Log.e(tag, "log to " + fullPath + " failed!");
             return;
         }
         String time = new SimpleDateFormat("MM-dd HH:mm:ss.SSS ", Locale.getDefault()).format(now);
@@ -345,10 +344,8 @@ public final class LogUtils {
                 try {
                     bw = new BufferedWriter(new FileWriter(fullPath, true));
                     bw.write(dateLogContent);
-                    Log.d(tag, "log to " + fullPath + " success!");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(tag, "log to " + fullPath + " failed!");
                 } finally {
                     try {
                         if (bw != null) {
