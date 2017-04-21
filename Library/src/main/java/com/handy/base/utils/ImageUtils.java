@@ -31,6 +31,9 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.view.View;
 
 import java.io.BufferedInputStream;
@@ -998,7 +1001,7 @@ public final class ImageUtils {
     }
 
     /**
-     * 添加文字水印
+     * 添加文字水印，支持换行
      *
      * @param src      源图片
      * @param content  水印文本
@@ -1013,7 +1016,7 @@ public final class ImageUtils {
     }
 
     /**
-     * 添加文字水印
+     * 添加文字水印，支持换行
      *
      * @param src      源图片
      * @param content  水印文本
@@ -1027,13 +1030,16 @@ public final class ImageUtils {
     public Bitmap addTextWatermark(Bitmap src, String content, float textSize, int color, float x, float y, boolean recycle) {
         if (isEmptyBitmap(src) || content == null) return null;
         Bitmap ret = src.copy(src.getConfig(), true);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         Canvas canvas = new Canvas(ret);
         paint.setColor(color);
         paint.setTextSize(textSize);
         Rect bounds = new Rect();
         paint.getTextBounds(content, 0, content.length(), bounds);
-        canvas.drawText(content, x, y + textSize, paint);
+        StaticLayout layout = new StaticLayout(content, paint, ret.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+        if (x > 0) x = x - 1;
+        canvas.translate(x, y);
+        layout.draw(canvas);
         if (recycle && !src.isRecycled()) src.recycle();
         return ret;
     }
