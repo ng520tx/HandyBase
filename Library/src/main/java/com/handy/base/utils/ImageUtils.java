@@ -1040,6 +1040,7 @@ public final class ImageUtils {
         if (x > 0) x = x - 1;
         canvas.translate(x, y);
         layout.draw(canvas);
+        canvas.restore();
         if (recycle && !src.isRecycled()) src.recycle();
         return ret;
     }
