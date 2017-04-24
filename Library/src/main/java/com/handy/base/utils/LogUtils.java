@@ -17,10 +17,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Formatter;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -318,13 +315,11 @@ public final class LogUtils {
     }
 
     private void print2File(final String tag, final String msg) {
-        Date now = new Date();
-        String date = new SimpleDateFormat("MM-dd", Locale.getDefault()).format(now);
-        final String fullPath = dir + date + ".txt";
+        final String fullPath = dir + TimeUtils.getInstance().getNowTimeString("yyyy-MM-dd") + ".txt";
         if (!createOrExistsFile(fullPath)) {
             return;
         }
-        String time = new SimpleDateFormat("MM-dd HH:mm:ss.SSS ", Locale.getDefault()).format(now);
+        String time = TimeUtils.getInstance().getNowTimeString("yyyy-MM-dd HH:mm:ss.SSS");
         StringBuilder sb = new StringBuilder();
         if (sLogBorderSwitch) {
             sb.append(TOP_BORDER).append(LINE_SEPARATOR);
@@ -334,7 +329,7 @@ public final class LogUtils {
             sb.append(time).append(tag).append(LINE_SEPARATOR).append(msg).append(LINE_SEPARATOR);
         }
         sb.append(LINE_SEPARATOR);
-        final String dateLogContent = sb.toString();
+        final String dateLogContent = sEncryptSwitch ? AesUtils.getInstance().encrypt(sb.toString()) : sb.toString();
         if (executor == null) {
             executor = Executors.newSingleThreadExecutor();
         }
