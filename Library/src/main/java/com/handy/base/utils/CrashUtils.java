@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -93,6 +94,7 @@ public final class CrashUtils implements UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
+                LogUtils.getInstance().e(Log.getStackTraceString(throwable));
                 Toast.makeText(context, "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
