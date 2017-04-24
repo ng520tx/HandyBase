@@ -65,6 +65,7 @@ public final class LogUtils {
     private boolean sLogSwitch = true; // log总开关，默认开
     private String sGlobalTag = null; // log标签
     private boolean sTagIsSpace = true; // log标签是否为空白
+    private boolean sEncryptSwitch = false; // log是否加密
     private boolean sLogHeadSwitch = true; // log头部开关，默认开
     private boolean sLog2FileSwitch = false;// log写入文件开关，默认关
     private boolean sLogBorderSwitch = true; // log边框开关，默认开
@@ -410,6 +411,11 @@ public final class LogUtils {
 
         public Builder setLogSwitch(boolean logSwitch) {
             sLogSwitch = logSwitch;
+            return this;
+        }
+
+        public Builder setEncryptSwitch(boolean encryptSwitch) {
+            sEncryptSwitch = encryptSwitch;
             return this;
         }
 
