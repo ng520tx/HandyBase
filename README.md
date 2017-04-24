@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.0.1'
+    compile 'com.github.liujie045:HandyBase:2.0.4'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -12,7 +12,7 @@
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:2.3.0'
+            classpath 'com.android.tools.build:gradle:2.3.1'
             classpath 'me.tatarka:gradle-retrolambda:3.6.0'
             classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         }
@@ -51,7 +51,7 @@
     
     dependencies {
         ...
-        compile 'com.github.liujie045:HandyBase:2.0.1'
+        compile 'com.github.liujie045:HandyBase:最新版本'
         annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
         annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     }
@@ -60,16 +60,27 @@
 #### Step 3.工具类已在BaseApplication中初始化
 ```javascript
     try {
-        if (isInitHandyBaseUtils) {
+        /* 初始化工具类功能 */
+        if (isInitUtils) {
             CrashUtils.getInstance().init(getApplicationContext()); //初始化崩溃捕获工具
 
-            LogUtils.getInstance().initBuilder(getApplicationContext())
-                    .setLogSwitch(AppUtils.getInstance().isAppDebug(getApplicationContext()))// 设置log总开关，默认开
-                    .setGlobalTag("HandyBase")// 设置log全局标签，默认为空，当全局标签不为空时，我们输出的log全部为该tag，为空时，如果传入的tag为空那就显示类名，否则显示tag
-                    .setLog2FileSwitch(false)// 打印log时是否存到文件的开关，默认关
-                    .setBorderSwitch(true)// 输出日志是否带边框开关，默认开
-                    .setLogFilter(LogUtils.V);// log过滤器，和logcat过滤器同理，默认Verbose
-        }
+            if (AppUtils.getInstance().isAppDebug(getApplicationContext())) {
+                LogUtils.getInstance().initBuilder(getApplicationContext())
+                        .setLogSwitch(AppUtils.getInstance().isAppDebug(getApplicationContext())) //设置log总开关，默认开
+                        .setGlobalTag("HandyBase") //设置log全局标签，默认为空，当全局标签不为空时，我们输出的log全部为该tag，为空时，如果传入的tag为空那就显示类名，否则显示tag
+                        .setLog2FileSwitch(true) //打印log时是否存到文件的开关，默认关
+                        .setEncryptSwitch(false) //存到文件的log内容加密，默认关
+                        .setBorderSwitch(true) //输出日志是否带边框开关，默认开
+                        .setLogFilter(LogUtils.V); //log过滤器，和logcat过滤器同理，默认Verbose
+            } else {
+                LogUtils.getInstance().initBuilder(getApplicationContext())
+                        .setLogSwitch(AppUtils.getInstance().isAppDebug(getApplicationContext())) //设置log总开关，默认开
+                        .setGlobalTag("") //设置log全局标签，默认为空，当全局标签不为空时，我们输出的log全部为该tag，为空时，如果传入的tag为空那就显示类名，否则显示tag
+                        .setLog2FileSwitch(true) //打印log时是否存到文件的开关，默认关
+                        .setEncryptSwitch(true) //存到文件的log内容加密，默认关
+                        .setBorderSwitch(false) //输出日志是否带边框开关，默认开
+                        .setLogFilter(LogUtils.V); //log过滤器，和logcat过滤器同理，默认Verbose
+            }
     } catch (Exception e) {
         e.printStackTrace();
     }
@@ -204,7 +215,7 @@
         android:value="此处填写蒲公英平台上传应用后获得的AppId" >
     </meta-data>
     <provider
-        android:name="android.support.v4.content.FileProvider"
+        android:name="com.handy.base.provider.pgyProvider"
         android:authorities="此处输入授权名，可以随意输入但要保证唯一性，可能会和手机其他App产生冲突"
         android:exported="false"
         android:grantUriPermissions="true">
@@ -229,6 +240,11 @@
 ```
 
 ##  更新日志
+***2017年4月24日 v2.0.1***
+
+* 更新了ShareUtils构造函数
+* LogUtils日志打印中增加了加密能力
+
 ***2017年4月19日 v2.0.1***
 
 * 更新了项目框架
