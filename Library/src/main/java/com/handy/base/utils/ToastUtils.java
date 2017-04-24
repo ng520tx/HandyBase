@@ -34,10 +34,13 @@ public final class ToastUtils {
 
     /**
      * 吐司初始化
+     * <pre>
+     *  {@code true}: 弹出新吐司
+     *  {@code false}: 只修改文本内容
+     *  如果为{@code false}的话可用来做显示任意时长的吐司
+     * </pre>
      *
      * @param isJumpWhenMore 当连续弹出吐司时，是要弹出新吐司还是只修改文本内容
-     *                       <p>{@code true}: 弹出新吐司<br>{@code false}: 只修改文本内容</p>
-     *                       <p>如果为{@code false}的话可用来做显示任意时长的吐司</p>
      */
     public void init(boolean isJumpWhenMore) {
         this.isJumpWhenMore = isJumpWhenMore;
