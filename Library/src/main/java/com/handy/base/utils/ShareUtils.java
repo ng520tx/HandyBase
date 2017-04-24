@@ -27,20 +27,34 @@ public final class ShareUtils {
      * <p>在Application中初始化</p>
      */
     private ShareUtils(Context context, String spName) {
+        shareName = spName;
         sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE);
         editor = sp.edit();
         editor.apply();
     }
 
-    public static ShareUtils getInstance(Context context, String shareName) {
-        if (EmptyUtils.getInstance().isEmpty(shareName)) {
-            if (instance == null) {
-                synchronized (ShareUtils.class) {
-                    if (instance == null) {
-                        instance = new ShareUtils(context, "HandyBaseShare");
-                    }
+    public static ShareUtils getInstance(Context context) {
+        if (instance == null) {
+            synchronized (ShareUtils.class) {
+                if (instance == null) {
+                    instance = new ShareUtils(context, "HandyBaseShare");
                 }
             }
+        } else {
+            if (!instance.shareName.equals("HandyBaseShare")) {
+                synchronized (ShareUtils.class) {
+                    instance = null;
+                    instance = new ShareUtils(context, "HandyBaseShare");
+                }
+            }
+        }
+        return instance;
+    }
+
+    public static ShareUtils getInstance(Context context, String shareName) {
+        if (EmptyUtils.getInstance().isEmpty(shareName)) {
+            LogUtils.getInstance().e("参数shareName为空，无法获取Share缓存对象");
+            return null;
         } else {
             if (instance == null) {
                 synchronized (ShareUtils.class) {
@@ -49,7 +63,10 @@ public final class ShareUtils {
                     }
                 }
             } else {
-                if (EmptyUtils.getInstance().isNotEmpty(instance.shareName) && !instance.shareName.equals(shareName)) {
+                if (EmptyUtils.getInstance().isEmpty(instance.shareName)) {
+                    LogUtils.getInstance().e("当前对象的shareName为空，无法获取Share缓存对象");
+                    return null;
+                } else if (!instance.shareName.equals(shareName)) {
                     instance = null;
                     instance = new ShareUtils(context, shareName);
                 }
