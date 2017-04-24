@@ -1,5 +1,10 @@
 package com.handy.base.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * <pre>
  *  author: Handy
@@ -195,5 +200,55 @@ public final class StringUtils {
             }
         }
         return new String(chars);
+    }
+
+    /**
+     * 获取异常内容
+     *
+     * @param e 异常类
+     * @return 异常堆栈内容
+     */
+    public String getExceptionInfoByStackTraceElement(Exception e) {
+        String sOut = "";
+        StackTraceElement[] trace = e.getStackTrace();
+        for (StackTraceElement s : trace) {
+            sOut += "\tat " + s + "\r\n";
+        }
+        return sOut;
+    }
+
+    /**
+     * 获取异常内容
+     *
+     * @param e 异常类
+     * @return 异常堆栈内容
+     */
+    public String getExceptionInfoByPrintStream(Exception e) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream pout = new PrintStream(out);
+        e.printStackTrace(pout);
+        String ret = new String(out.toByteArray());
+        pout.close();
+        try {
+            out.close();
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+        return ret;
+    }
+
+    /**
+     * 获取异常内容
+     *
+     * @param e 异常类
+     * @return 异常堆栈内容
+     */
+    private String getExceptionInfoByPrintWriter(Throwable e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw, true);
+        e.printStackTrace(pw);
+        pw.flush();
+        sw.flush();
+        return sw.toString();
     }
 }
