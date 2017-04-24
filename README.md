@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.0.4'
+    compile 'com.github.liujie045:HandyBase:2.0.5'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -240,10 +240,18 @@
 ```
 
 ##  更新日志
-***2017年4月24日 v2.0.1***
+***2017年4月24日 v2.0.5***
+
+* 更新了QuickAdapter的版本为1.0.7
+
+***2017年4月24日 v2.0.4***
 
 * 更新了ShareUtils构造函数
 * LogUtils日志打印中增加了加密能力
+
+***2017年4月20日 v2.0.3***
+
+* 修复了BaseFragmet的启动bug
 
 ***2017年4月19日 v2.0.1***
 
