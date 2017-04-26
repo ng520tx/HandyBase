@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -37,7 +38,7 @@ public final class ActivityStackUtils {
      */
     public void addActivity(Activity activity) {
         if (activityStack == null) {
-            activityStack = new Stack<Activity>();
+            activityStack = new Stack<>();
         }
         activityStack.add(activity);
     }
@@ -45,7 +46,7 @@ public final class ActivityStackUtils {
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
-    public Activity currentActivity() {
+    public Activity getCurrent() {
         if (activityStack != null) {
             Activity activity = activityStack.lastElement();
             return activity;
@@ -56,20 +57,45 @@ public final class ActivityStackUtils {
     /**
      * 结束当前Activity（堆栈中最后一个压入的）
      */
-    public void finishActivity() {
+    public void finish() {
         if (activityStack != null) {
             Activity activity = activityStack.lastElement();
-            finishActivity(activity);
+            finishChoiceDesc(activity);
         }
     }
 
     /**
-     * 结束指定的Activity
+     * 按顺序结束指定的Activity
      */
-    public void finishActivity(Activity activity) {
+    public void finishChoiceAsc(Activity activity) {
         if (activity != null && activityStack != null) {
             activityStack.remove(activity);
-            activity.finish();
+            if (!activity.isFinishing()) activity.finish();
+        }
+    }
+
+    /**
+     * 按倒叙结束指定的Activity
+     */
+    public void finishChoiceDesc(Activity activity) {
+        if (activity != null && activityStack != null) {
+            Collections.reverse(activityStack); // 倒序排列
+            activityStack.remove(activity);
+            if (!activity.isFinishing()) activity.finish();
+            Collections.reverse(activityStack); // 倒序排列
+        }
+    }
+
+    public void finishChoices(Activity activity) {
+        if (activity != null && activityStack != null) {
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (aty.getClass().equals(activity.getClass())) {
+                    iterator.remove();
+                    if (!aty.isFinishing()) aty.finish();
+                }
+            }
         }
     }
 
