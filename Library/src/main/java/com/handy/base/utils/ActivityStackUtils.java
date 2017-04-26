@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -77,9 +78,12 @@ public final class ActivityStackUtils {
      */
     public void finishActivity(Class<?> cls) {
         if (activityStack != null) {
-            for (Activity activity : activityStack) {
-                if (activity.getClass().equals(cls)) {
-                    finishActivity(activity);
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (aty.getClass().equals(cls)) {
+                    iterator.remove();
+                    aty.finish();
                 }
             }
         }
@@ -90,10 +94,11 @@ public final class ActivityStackUtils {
      */
     public void finishAllActivity() {
         if (activityStack != null) {
-            for (int i = 0; i < activityStack.size(); i++) {
-                if (null != activityStack.get(i)) {
-                    activityStack.get(i).finish();
-                }
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                iterator.remove();
+                aty.finish();
             }
             activityStack.clear();
         }
@@ -104,13 +109,12 @@ public final class ActivityStackUtils {
      */
     public void finishToFirstActivity() {
         if (activityStack != null) {
-            for (Activity activity : activityStack) {
-                LogUtils.getInstance().d(activity.getPackageName() + activity.getLocalClassName());
-            }
-            for (int i = 1; i < activityStack.size(); i++) {
-                if (null != activityStack.get(i)) {
-                    activityStack.get(i).finish();
-                    activityStack.remove(i);
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (activityStack.size() > 1) {
+                    iterator.remove();
+                    aty.finish();
                 }
             }
         }
