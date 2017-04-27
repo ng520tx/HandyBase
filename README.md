@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.0.7'
+    compile 'com.github.liujie045:HandyBase:2.0.8'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -240,6 +240,11 @@
 ```
 
 ##  更新日志
+***2017年4月27日 v2.0.8***
+
+* 优化了ImageUtils中绘制水印右边距
+* 增加了以照片高度比例配置水印字体大小的绘制方法
+
 ***2017年4月27日 v2.0.7***
 
 * 优化了BaseActivity，新增了setContentViewHDB方法
