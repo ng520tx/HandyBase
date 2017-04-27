@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.0.6'
+    compile 'com.github.liujie045:HandyBase:2.0.7'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -240,6 +240,10 @@
 ```
 
 ##  更新日志
+***2017年4月27日 v2.0.7***
+
+* 优化了BaseActivity，新增了setContentViewHDB方法
+
 ***2017年4月27日 v2.0.6***
 
 * 优化了ActivityStackUtils
