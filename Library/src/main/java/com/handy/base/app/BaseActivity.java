@@ -101,7 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     protected void onDestroy() {
         super.onDestroy();
         isAlive = false;
-        ActivityStackUtils.getInstance().finishActivity(this);
+        ActivityStackUtils.getInstance().finishChoiceDesc(this);
     }
 
     @Override
