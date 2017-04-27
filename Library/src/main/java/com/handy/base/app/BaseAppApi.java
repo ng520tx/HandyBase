@@ -1,6 +1,7 @@
 package com.handy.base.app;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ class BaseAppApi {
          *  在onCreate被调用，被调用后若视图设置成功则
          * </pre>
          */
-        boolean setContentViewHDB(int layoutResId);
+        boolean setContentViewHDB(@LayoutRes int layoutResId);
 
         /**
          * <pre>
