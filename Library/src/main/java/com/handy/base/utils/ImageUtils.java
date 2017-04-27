@@ -1018,6 +1018,21 @@ public final class ImageUtils {
     /**
      * 添加文字水印，支持换行
      *
+     * @param src       源图片
+     * @param content   水印文本
+     * @param textScale 水印字体比例（字体大小 = 照片高度 / 字体比例）
+     * @param color     水印字体颜色
+     * @param x         起始坐标x
+     * @param y         起始坐标y
+     * @return 带有文字水印的图片
+     */
+    public Bitmap addTextWatermarkScale(Bitmap src, String content, int textScale, int color, float x, float y) {
+        return addTextWatermark(src, content, src.getHeight() / textScale, color, x, y, false);
+    }
+
+    /**
+     * 添加文字水印，支持换行
+     *
      * @param src      源图片
      * @param content  水印文本
      * @param textSize 水印字体大小
@@ -1036,7 +1051,7 @@ public final class ImageUtils {
         paint.setTextSize(textSize);
         Rect bounds = new Rect();
         paint.getTextBounds(content, 0, content.length(), bounds);
-        StaticLayout layout = new StaticLayout(content, paint, ret.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+        StaticLayout layout = new StaticLayout(content, paint, (int) (ret.getWidth() - x), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
         if (x > 0) x = x - 1;
         canvas.translate(x, y);
         layout.draw(canvas);
@@ -1437,10 +1452,6 @@ public final class ImageUtils {
             in.close();
             int i = 0;
             Bitmap bitmap = null;
-            // options.inJustDecodeBounds=true那么将不返回实际的bitmap对象，不给其分配内存空间但是可以得到一些解码边界信息即图片大小等信息
-            // outHeight(图片原始高度)和 outWidth(图片的原始宽度)
-            // inSampleSize表示缩略图大小为原始图片大小的几分之一
-            // options.outWidth >> i(右移运算符)表示：outWidth/(2^i)
             while (true) {
                 if ((options.outWidth >> i <= maxByteSize) && (options.outHeight >> i <= maxByteSize)) {
                     in = new BufferedInputStream(new FileInputStream(new File(path)));
