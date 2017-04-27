@@ -65,7 +65,7 @@ public final class ActivityStackUtils {
     }
 
     /**
-     * 按顺序结束指定的Activity
+     * 按顺序单次结束指定的Activity
      */
     public void finishChoiceAsc(Activity activity) {
         if (activity != null && activityStack != null) {
@@ -75,7 +75,7 @@ public final class ActivityStackUtils {
     }
 
     /**
-     * 按倒叙结束指定的Activity
+     * 按倒叙单次结束指定的Activity
      */
     public void finishChoiceDesc(Activity activity) {
         if (activity != null && activityStack != null) {
@@ -86,6 +86,9 @@ public final class ActivityStackUtils {
         }
     }
 
+    /**
+     * 结束全部指定的Activit
+     */
     public void finishChoices(Activity activity) {
         if (activity != null && activityStack != null) {
             Iterator iterator = activityStack.iterator();
@@ -100,16 +103,52 @@ public final class ActivityStackUtils {
     }
 
     /**
-     * 结束指定类名的Activity
+     * 按顺序单次结束指定的Activity
      */
-    public void finishActivity(Class<?> cls) {
+    public void finishChoiceAsc(Class<?> cls) {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
                 Activity aty = (Activity) iterator.next();
                 if (aty.getClass().equals(cls)) {
                     iterator.remove();
-                    aty.finish();
+                    if (!aty.isFinishing()) aty.finish();
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 按倒叙单次结束指定的Activity
+     */
+    public void finishChoiceDesc(Class<?> cls) {
+        if (activityStack != null) {
+            Collections.reverse(activityStack); // 倒序排列
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (aty.getClass().equals(cls)) {
+                    iterator.remove();
+                    if (!aty.isFinishing()) aty.finish();
+                    break;
+                }
+            }
+            Collections.reverse(activityStack); // 倒序排列
+        }
+    }
+
+    /**
+     * 结束全部指定的Activit
+     */
+    public void finishChoices(Class<?> cls) {
+        if (activityStack != null) {
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (aty.getClass().equals(cls)) {
+                    iterator.remove();
+                    if (!aty.isFinishing()) aty.finish();
                 }
             }
         }
@@ -118,13 +157,13 @@ public final class ActivityStackUtils {
     /**
      * 结束所有Activity
      */
-    public void finishAllActivity() {
+    public void finishAll() {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
                 Activity aty = (Activity) iterator.next();
                 iterator.remove();
-                aty.finish();
+                if (!aty.isFinishing()) aty.finish();
             }
             activityStack.clear();
         }
@@ -133,14 +172,14 @@ public final class ActivityStackUtils {
     /**
      * 结束第一个Activity之后的所有Activity
      */
-    public void finishToFirstActivity() {
+    public void finish2First() {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
                 Activity aty = (Activity) iterator.next();
                 if (activityStack.size() > 1) {
                     iterator.remove();
-                    aty.finish();
+                    if (!aty.isFinishing()) aty.finish();
                 }
             }
         }
@@ -151,7 +190,7 @@ public final class ActivityStackUtils {
      */
     public void AppExit(Context context) {
         try {
-            finishAllActivity();
+            finishAll();
             ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             activityMgr.killBackgroundProcesses(context.getPackageName());
             System.exit(0);
