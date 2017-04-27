@@ -5,9 +5,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
@@ -28,6 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     public int screenWidth = 0; //屏幕宽度
     public int screenHeight = 0; //屏幕高度
+    public View contentView = null; //界面视图布局
 
     public boolean isAlive = false; //Activity的活跃状态
     public boolean isInitViewHDB = true; //onStart中初始化界面视图
@@ -102,6 +106,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
         super.onDestroy();
         isAlive = false;
         ActivityStackUtils.getInstance().finishChoiceDesc(this);
+    }
+
+    @Override
+    public boolean setContentViewHDB(@LayoutRes int layoutResId) {
+        contentView = LayoutInflater.from(context).inflate(layoutResId, null);
+        if (contentView != null) {
+            setContentView(contentView);
+            return true;
+        }
+        return false;
     }
 
     @Override
