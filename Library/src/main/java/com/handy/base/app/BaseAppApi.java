@@ -104,10 +104,10 @@ class BaseAppApi {
         /**
          * <pre>
          *  初始化界面数据
-         *  在onResume方法中被调用。
+         *  在onActivityCreated方法中被调用。
          * </pre>
          */
-        void initDataHDB();
+        void initDataHDB(@Nullable Bundle savedInstanceState);
 
         /**
          * <pre>
