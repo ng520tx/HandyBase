@@ -19,6 +19,14 @@ class BaseAppApi {
 
         /**
          * <pre>
+         *  初始化界面视图布局
+         *  在onCreate被调用，被调用后若视图设置成功则
+         * </pre>
+         */
+        boolean setContentViewHDB(int layoutResId);
+
+        /**
+         * <pre>
          *  初始化意图内容数据
          *  在onStart中，当意图内容不为null且size大于0时被调用
          * </pre>
