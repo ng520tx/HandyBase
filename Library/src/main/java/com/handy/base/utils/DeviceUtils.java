@@ -61,7 +61,7 @@ public final class DeviceUtils {
      */
     @SuppressLint("HardwareIds")
     public static String getAndroidID() {
-        return Settings.Secure.getString(Utils.getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(Utils.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     /**
@@ -97,7 +97,7 @@ public final class DeviceUtils {
     private static String getMacAddressByWifiInfo() {
         try {
             @SuppressLint("WifiManagerLeak")
-            WifiManager wifi = (WifiManager) Utils.getActivity().getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) Utils.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wifi != null) {
                 WifiInfo info = wifi.getConnectionInfo();
                 if (info != null) return info.getMacAddress();
@@ -191,7 +191,7 @@ public final class DeviceUtils {
         Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Utils.getActivity().startActivity(intent);
+        Utils.getApplicationContext().startActivity(intent);
     }
 
     /**
@@ -204,7 +204,7 @@ public final class DeviceUtils {
         intent.putExtra("nowait", 1);
         intent.putExtra("interval", 1);
         intent.putExtra("window", 0);
-        Utils.getActivity().sendBroadcast(intent);
+        Utils.getApplicationContext().sendBroadcast(intent);
     }
 
     /**
@@ -214,7 +214,7 @@ public final class DeviceUtils {
      * @param reason 传递给内核来请求特殊的引导模式，如"recovery"
      */
     public static void reboot(String reason) {
-        PowerManager mPowerManager = (PowerManager) Utils.getActivity().getSystemService(Context.POWER_SERVICE);
+        PowerManager mPowerManager = (PowerManager) Utils.getApplicationContext().getSystemService(Context.POWER_SERVICE);
         try {
             mPowerManager.reboot(reason);
         } catch (Exception e) {

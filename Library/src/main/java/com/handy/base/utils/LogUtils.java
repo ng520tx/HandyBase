@@ -384,10 +384,10 @@ public final class LogUtils {
         public Builder() {
             if (defaultDir != null) return;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                    && Utils.getActivity().getExternalCacheDir() != null)
-                defaultDir = Utils.getActivity().getExternalCacheDir() + FILE_SEP + "log" + FILE_SEP;
+                    && Utils.getApplicationContext().getExternalCacheDir() != null)
+                defaultDir = Utils.getApplicationContext().getExternalCacheDir() + FILE_SEP + "log" + FILE_SEP;
             else {
-                defaultDir = Utils.getActivity().getCacheDir() + FILE_SEP + "log" + FILE_SEP;
+                defaultDir = Utils.getApplicationContext().getCacheDir() + FILE_SEP + "log" + FILE_SEP;
             }
         }
 

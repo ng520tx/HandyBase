@@ -85,7 +85,7 @@ public final class IntentUtils {
             data = Uri.fromFile(file);
         } else {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            data = FileProvider.getUriForFile(Utils.getActivity(), authority, file);
+            data = FileProvider.getUriForFile(Utils.getApplicationContext(), authority, file);
         }
         intent.setDataAndType(data, type);
         return intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -110,7 +110,7 @@ public final class IntentUtils {
      * @return intent
      */
     public static Intent getLaunchAppIntent(String packageName) {
-        return Utils.getActivity().getPackageManager().getLaunchIntentForPackage(packageName);
+        return Utils.getApplicationContext().getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
     /**

@@ -95,16 +95,16 @@ public final class CrashUtils implements UncaughtExceptionHandler {
     public boolean init() {
         if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            File baseCache = Utils.getActivity().getExternalCacheDir();
+            File baseCache = Utils.getApplicationContext().getExternalCacheDir();
             if (baseCache == null) return false;
             crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         } else {
-            File baseCache = Utils.getActivity().getCacheDir();
+            File baseCache = Utils.getApplicationContext().getCacheDir();
             if (baseCache == null) return false;
             crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         }
         try {
-            PackageInfo pi = Utils.getActivity().getPackageManager().getPackageInfo(Utils.getActivity().getPackageName(), 0);
+            PackageInfo pi = Utils.getApplicationContext().getPackageManager().getPackageInfo(Utils.getApplicationContext().getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -123,7 +123,7 @@ public final class CrashUtils implements UncaughtExceptionHandler {
             public void run() {
                 Looper.prepare();
                 LogUtils.e(Log.getStackTraceString(throwable));
-                Toast.makeText(Utils.getActivity(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
+                Toast.makeText(Utils.getApplicationContext(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }.start();

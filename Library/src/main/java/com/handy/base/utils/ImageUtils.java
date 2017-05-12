@@ -716,7 +716,7 @@ public final class ImageUtils {
         if (isEmptyBitmap(src)) return null;
         RenderScript rs = null;
         try {
-            rs = RenderScript.create(Utils.getActivity());
+            rs = RenderScript.create(Utils.getApplicationContext());
             rs.setMessageHandler(new RenderScript.RSMessageHandler());
             Allocation input = Allocation.createFromBitmap(rs, src, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
             Allocation output = Allocation.createTyped(rs, input.getType());

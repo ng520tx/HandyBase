@@ -27,7 +27,7 @@ public class SPUtils {
      * @param spName spName
      */
     public SPUtils(String spName) {
-        sp = Utils.getActivity().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        sp = Utils.getApplicationContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
         editor = sp.edit();
         editor.apply();
     }

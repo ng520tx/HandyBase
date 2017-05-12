@@ -32,7 +32,7 @@ public final class ScreenUtils {
      * @return 屏幕宽px
      */
     public static int getScreenWidth() {
-        WindowManager windowManager = (WindowManager) Utils.getActivity().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager windowManager = (WindowManager) Utils.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(dm);// 给白纸设置宽高
         return dm.widthPixels;
@@ -44,7 +44,7 @@ public final class ScreenUtils {
      * @return 屏幕高px
      */
     public static int getScreenHeight() {
-        WindowManager windowManager = (WindowManager) Utils.getActivity().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager windowManager = (WindowManager) Utils.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(dm);// 给白纸设置宽高
         return dm.heightPixels;
@@ -56,7 +56,7 @@ public final class ScreenUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isLandscape() {
-        return Utils.getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        return Utils.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -79,7 +79,7 @@ public final class ScreenUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isPortrait() {
-        return Utils.getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        return Utils.getApplicationContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     /**
@@ -154,7 +154,7 @@ public final class ScreenUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isScreenLock() {
-        KeyguardManager km = (KeyguardManager) Utils.getActivity().getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager km = (KeyguardManager) Utils.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
 
@@ -165,7 +165,7 @@ public final class ScreenUtils {
      */
     public static int getSleepDuration() {
         try {
-            return Settings.System.getInt(Utils.getActivity().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
+            return Settings.System.getInt(Utils.getApplicationContext().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
             return -123;
@@ -179,6 +179,6 @@ public final class ScreenUtils {
      * @param duration 时长
      */
     public static void setSleepDuration(int duration) {
-        Settings.System.putInt(Utils.getActivity().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, duration);
+        Settings.System.putInt(Utils.getApplicationContext().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, duration);
     }
 }

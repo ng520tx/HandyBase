@@ -172,8 +172,8 @@ public final class ActivityStackUtils {
     public static void AppExit() {
         try {
             finishAll();
-            ActivityManager activityMgr = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.killBackgroundProcesses(Utils.getActivity().getPackageName());
+            ActivityManager activityMgr = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+            activityMgr.killBackgroundProcesses(Utils.getApplicationContext().getPackageName());
             System.exit(0);
         } catch (Exception e) {
         }

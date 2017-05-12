@@ -41,7 +41,7 @@ public final class LocationUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isGpsEnabled() {
-        LocationManager lm = (LocationManager) Utils.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) Utils.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -51,7 +51,7 @@ public final class LocationUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isLocationEnabled() {
-        LocationManager lm = (LocationManager) Utils.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) Utils.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -61,7 +61,7 @@ public final class LocationUtils {
     public static void openGpsSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Utils.getActivity().startActivity(intent);
+        Utils.getApplicationContext().startActivity(intent);
     }
 
     /**
@@ -81,7 +81,7 @@ public final class LocationUtils {
      */
     public static boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) Utils.getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) Utils.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled()) {
             ToastUtils.showShortSafe("无法定位，请打开定位服务");
@@ -138,7 +138,7 @@ public final class LocationUtils {
      * @return {@link Address}
      */
     public static Address getAddress(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(Utils.getActivity(), Locale.getDefault());
+        Geocoder geocoder = new Geocoder(Utils.getApplicationContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);

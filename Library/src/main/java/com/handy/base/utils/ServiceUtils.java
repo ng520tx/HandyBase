@@ -30,7 +30,7 @@ public final class ServiceUtils {
      * @return 服务名集合
      */
     public static Set getAllRunningService() {
-        ActivityManager activityManager = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningServiceInfo> infos = activityManager.getRunningServices(0x7FFFFFFF);
         Set<String> names = new HashSet<>();
         if (infos == null || infos.size() == 0) return null;
@@ -59,8 +59,8 @@ public final class ServiceUtils {
      * @param cls 服务类
      */
     public static void startService(Class<?> cls) {
-        Intent intent = new Intent(Utils.getActivity(), cls);
-        Utils.getActivity().startService(intent);
+        Intent intent = new Intent(Utils.getApplicationContext(), cls);
+        Utils.getApplicationContext().startService(intent);
     }
 
     /**
@@ -85,8 +85,8 @@ public final class ServiceUtils {
      * @return {@code true}: 停止成功<br>{@code false}: 停止失败
      */
     public static boolean stopService(Class<?> cls) {
-        Intent intent = new Intent(Utils.getActivity(), cls);
-        return Utils.getActivity().stopService(intent);
+        Intent intent = new Intent(Utils.getApplicationContext(), cls);
+        return Utils.getApplicationContext().stopService(intent);
     }
 
     /**
@@ -128,8 +128,8 @@ public final class ServiceUtils {
      *              </ul>
      */
     public static void bindService(Class<?> cls, ServiceConnection conn, int flags) {
-        Intent intent = new Intent(Utils.getActivity(), cls);
-        Utils.getActivity().bindService(intent, conn, flags);
+        Intent intent = new Intent(Utils.getApplicationContext(), cls);
+        Utils.getApplicationContext().bindService(intent, conn, flags);
     }
 
     /**
@@ -138,7 +138,7 @@ public final class ServiceUtils {
      * @param conn 服务连接对象
      */
     public static void unbindService(ServiceConnection conn) {
-        Utils.getActivity().unbindService(conn);
+        Utils.getApplicationContext().unbindService(conn);
     }
 
     /**
@@ -148,7 +148,7 @@ public final class ServiceUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isServiceRunning(String className) {
-        ActivityManager activityManager = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningServiceInfo> infos = activityManager.getRunningServices(0x7FFFFFFF);
         if (infos == null || infos.size() == 0) return false;
         for (RunningServiceInfo info : infos) {
