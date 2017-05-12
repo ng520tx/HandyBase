@@ -15,17 +15,8 @@ import java.util.List;
  */
 public final class ShellUtils {
 
-    private volatile static ShellUtils instance;
-
-    public static ShellUtils getInstance() {
-        if (instance == null) {
-            synchronized (ShellUtils.class) {
-                if (instance == null) {
-                    instance = new ShellUtils();
-                }
-            }
-        }
-        return instance;
+    private ShellUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -35,7 +26,7 @@ public final class ShellUtils {
      * @param isRoot  是否需要root权限执行
      * @return CommandResult
      */
-    public CommandResult execCmd(String command, boolean isRoot) {
+    public static CommandResult execCmd(String command, boolean isRoot) {
         return execCmd(new String[]{command}, isRoot, true);
     }
 
@@ -46,7 +37,7 @@ public final class ShellUtils {
      * @param isRoot   是否需要root权限执行
      * @return CommandResult
      */
-    public CommandResult execCmd(List<String> commands, boolean isRoot) {
+    public static CommandResult execCmd(List<String> commands, boolean isRoot) {
         return execCmd(commands == null ? null : commands.toArray(new String[]{}), isRoot, true);
     }
 
@@ -57,7 +48,7 @@ public final class ShellUtils {
      * @param isRoot   是否需要root权限执行
      * @return CommandResult
      */
-    public CommandResult execCmd(String[] commands, boolean isRoot) {
+    public static CommandResult execCmd(String[] commands, boolean isRoot) {
         return execCmd(commands, isRoot, true);
     }
 
@@ -69,7 +60,7 @@ public final class ShellUtils {
      * @param isNeedResultMsg 是否需要结果消息
      * @return CommandResult
      */
-    public CommandResult execCmd(String command, boolean isRoot, boolean isNeedResultMsg) {
+    public static CommandResult execCmd(String command, boolean isRoot, boolean isNeedResultMsg) {
         return execCmd(new String[]{command}, isRoot, isNeedResultMsg);
     }
 
@@ -81,7 +72,7 @@ public final class ShellUtils {
      * @param isNeedResultMsg 是否需要结果消息
      * @return CommandResult
      */
-    public CommandResult execCmd(List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
+    public static CommandResult execCmd(List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
         return execCmd(commands == null ? null : commands.toArray(new String[]{}), isRoot, isNeedResultMsg);
     }
 
@@ -93,7 +84,7 @@ public final class ShellUtils {
      * @param isNeedResultMsg 是否需要结果消息
      * @return CommandResult
      */
-    public CommandResult execCmd(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+    public static CommandResult execCmd(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
         int result = -1;
         if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
@@ -132,7 +123,7 @@ public final class ShellUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.getInstance().closeIO(os, successResult, errorResult);
+            CloseUtils.closeIO(os, successResult, errorResult);
             if (process != null) {
                 process.destroy();
             }
@@ -143,10 +134,19 @@ public final class ShellUtils {
     /**
      * 返回的命令结果
      */
-    public class CommandResult {
-        public int result; //结果码
-        public String successMsg; //成功信息
-        public String errorMsg; //错误信息
+    public static class CommandResult {
+        /**
+         * 结果码
+         **/
+        public int result;
+        /**
+         * 成功信息
+         **/
+        public String successMsg;
+        /**
+         * 错误信息
+         **/
+        public String errorMsg;
 
         public CommandResult(int result, String successMsg, String errorMsg) {
             this.result = result;
