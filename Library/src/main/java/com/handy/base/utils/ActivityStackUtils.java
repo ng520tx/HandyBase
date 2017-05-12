@@ -169,11 +169,11 @@ public final class ActivityStackUtils {
     /**
      * 退出应用程序
      */
-    public static void AppExit(Context context) {
+    public static void AppExit() {
         try {
             finishAll();
-            ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.killBackgroundProcesses(context.getPackageName());
+            ActivityManager activityMgr = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            activityMgr.killBackgroundProcesses(Utils.getActivity().getPackageName());
             System.exit(0);
         } catch (Exception e) {
         }
