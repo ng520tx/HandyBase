@@ -15,17 +15,8 @@ import android.view.ViewGroup;
  */
 public final class SizeUtils {
 
-    private volatile static SizeUtils instance;
-
-    public static SizeUtils getInstance() {
-        if (instance == null) {
-            synchronized (SizeUtils.class) {
-                if (instance == null) {
-                    instance = new SizeUtils();
-                }
-            }
-        }
-        return instance;
+    private SizeUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -37,7 +28,7 @@ public final class SizeUtils {
      * @param metrics DisplayMetrics
      * @return 转换结果
      */
-    public float applyDimension(int unit, float value, DisplayMetrics metrics) {
+    public static float applyDimension(int unit, float value, DisplayMetrics metrics) {
         switch (unit) {
             case TypedValue.COMPLEX_UNIT_PX:
                 return value;
@@ -71,7 +62,7 @@ public final class SizeUtils {
      * @param view     视图
      * @param listener 监听器
      */
-    public void forceGetViewSize(final View view, final onGetSizeListener listener) {
+    public static void forceGetViewSize(final View view, final onGetSizeListener listener) {
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -88,7 +79,7 @@ public final class SizeUtils {
      * @param view 视图
      * @return arr[0]: 视图宽度, arr[1]: 视图高度
      */
-    public int[] measureView(View view) {
+    public static int[] measureView(View view) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp == null) {
             lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -111,7 +102,7 @@ public final class SizeUtils {
      * @param view 视图
      * @return 视图宽度
      */
-    public int getMeasuredWidth(View view) {
+    public static int getMeasuredWidth(View view) {
         return measureView(view)[0];
     }
 
@@ -121,7 +112,7 @@ public final class SizeUtils {
      * @param view 视图
      * @return 视图高度
      */
-    public int getMeasuredHeight(View view) {
+    public static int getMeasuredHeight(View view) {
         return measureView(view)[1];
     }
 
