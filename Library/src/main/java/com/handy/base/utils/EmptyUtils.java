@@ -20,17 +20,8 @@ import java.util.Map;
  */
 public final class EmptyUtils {
 
-    private volatile static EmptyUtils instance;
-
-    public static EmptyUtils getInstance() {
-        if (instance == null) {
-            synchronized (EmptyUtils.class) {
-                if (instance == null) {
-                    instance = new EmptyUtils();
-                }
-            }
-        }
-        return instance;
+    private EmptyUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -39,7 +30,7 @@ public final class EmptyUtils {
      * @param obj 对象
      * @return {@code true}: 为空<br>{@code false}: 不为空
      */
-    public boolean isEmpty(Object obj) {
+    public static boolean isEmpty(Object obj) {
         if (obj == null) {
             return true;
         }
@@ -78,7 +69,7 @@ public final class EmptyUtils {
      * @param obj 对象
      * @return {@code true}: 非空<br>{@code false}: 空
      */
-    public boolean isNotEmpty(Object obj) {
+    public static boolean isNotEmpty(Object obj) {
         return !isEmpty(obj);
     }
 
@@ -90,7 +81,7 @@ public final class EmptyUtils {
      * @param input 判断的字符串内容
      * @return boolean 若输入字符串为null或空字符串，返回true
      */
-    public boolean isEmptyString(String input) {
+    public static boolean isEmptyString(String input) {
         if (input == null || "".equals(input) || input.length() == 0)
             return true;
         for (int i = 0; i < input.length(); i++) {
