@@ -15,6 +15,7 @@ import android.view.View;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
 import com.handy.base.utils.ScreenUtils;
+import com.handy.base.utils.Utils;
 
 /**
  * <pre>
@@ -52,10 +53,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
             this.activity = this;
             this.application = getApplication();
             this.savedInstanceState = savedInstanceState;
-            this.screenWidth = ScreenUtils.getInstance().getScreenWidth(context);
-            this.screenHeight = ScreenUtils.getInstance().getScreenHeight(context);
+            this.screenWidth = ScreenUtils.getScreenWidth();
+            this.screenHeight = ScreenUtils.getScreenHeight();
 
-            ActivityStackUtils.getInstance().addActivity(this);
+            Utils.init(this);
+            ActivityStackUtils.addActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,10 +104,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        isAlive = false;
-        ActivityStackUtils.getInstance().finishChoiceDesc(this);
+    protected void onPause() {
+        super.onPause();
+        if (isFinishing()) {
+            isAlive = false;
+            ActivityStackUtils.finishChoiceDesc(this);
+        }
     }
 
     @Override
@@ -124,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     @Override
     public void checkPermissionsHDB() {
-        if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
+        if (!PermissionsUtils.checkDeniedPermissions(activity, true)) {
             onPermissionSuccessHDB();
         }
     }
@@ -188,7 +192,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (!PermissionsUtils.getInstance().checkDeniedPermissions(activity, true)) {
+            if (!PermissionsUtils.checkDeniedPermissions(activity, true)) {
                 onPermissionSuccessHDB();
             }
         } else {
@@ -199,14 +203,14 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 //    @Override
 //    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
 //        super.onSaveInstanceState(outState, outPersistentState);
-//        outState.putSerializable("ActivityStack", ActivityStackUtils.getInstance().getActivityStack());
+//        outState.putSerializable("ActivityStack", ActivityStackUtils.getActivityStack());
 //    }
 //
 //    @Override
 //    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
 //        super.onRestoreInstanceState(savedInstanceState, persistentState);
 //        if (savedInstanceState != null && savedInstanceState.size() > 0) {
-//            ActivityStackUtils.getInstance().setActivityStack((Stack<Activity>) savedInstanceState.getSerializable("ActivityStack"));
+//            ActivityStackUtils.setActivityStack((Stack<Activity>) savedInstanceState.getSerializable("ActivityStack"));
 //        }
 //    }
 }
