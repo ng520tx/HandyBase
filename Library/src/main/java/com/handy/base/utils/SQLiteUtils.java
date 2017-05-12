@@ -348,7 +348,7 @@ public class SQLiteUtils {
         @Override
         public void onCreate(SQLiteDatabase db) {
             for (SQLTable sqlTable : sqLiteTables) {
-                if (EmptyUtils.getInstance().isNotEmpty(sqlTable.getTableName()) && EmptyUtils.getInstance().isNotEmpty(sqlTable.getCreateSQL())) {
+                if (EmptyUtils.isNotEmpty(sqlTable.getTableName()) && EmptyUtils.isNotEmpty(sqlTable.getCreateSQL())) {
                     db.execSQL(sqlTable.getCreateSQL());
                 }
             }
@@ -357,7 +357,7 @@ public class SQLiteUtils {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             for (SQLTable sqlTable : sqLiteTables) {
-                if (EmptyUtils.getInstance().isNotEmpty(sqlTable.getTableName()) && EmptyUtils.getInstance().isNotEmpty(sqlTable.getCreateSQL())) {
+                if (EmptyUtils.isNotEmpty(sqlTable.getTableName()) && EmptyUtils.isNotEmpty(sqlTable.getCreateSQL())) {
                     db.execSQL("DROP TABLE IF EXISTS " + sqlTable.getTableName());
                 }
             }
