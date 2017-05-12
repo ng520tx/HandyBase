@@ -33,6 +33,7 @@ public final class PermissionsUtils {
         Permissions = new ArrayList<String>() {{
             add(Manifest.permission.INTERNET);
             add(Manifest.permission.RECORD_AUDIO);
+            add(Manifest.permission.RESTART_PACKAGES);
             add(Manifest.permission.READ_PHONE_STATE);
             add(Manifest.permission.ACCESS_WIFI_STATE);
             add(Manifest.permission.ACCESS_NETWORK_STATE);
@@ -40,8 +41,8 @@ public final class PermissionsUtils {
         }};
     }
 
-    public static List<String> getPermissions() {
-        return new ArrayList<>(Permissions);
+    public static ArrayList<String> getPermissions() {
+        return Permissions;
     }
 
     /**
@@ -73,9 +74,6 @@ public final class PermissionsUtils {
      * @return 如果有未启用的权限返回false
      */
     private static boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest) {
-        if (Permissions == null || Permissions.size() == 0)
-            initPermissions();
-
         for (int index = 0; index < Permissions.size(); index++) {
             if (ContextCompat.checkSelfPermission(activity, Permissions.get(index)) == PackageManager.PERMISSION_DENIED) {
                 if (isRequest)
@@ -105,6 +103,9 @@ public final class PermissionsUtils {
      * @return 如果有未启用的权限返回true
      */
     public static boolean checkDeniedPermissions(Activity activity, boolean isRequest) {
+        if (Permissions == null || Permissions.size() == 0)
+            initPermissions();
+
         if (Permissions != null && Permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest)) {
@@ -158,6 +159,9 @@ public final class PermissionsUtils {
      * @return 如果有未启用的权限返回true
      */
     public static boolean checkDeniedPermissions(Activity activity, Class intentClass, boolean isRequest, boolean isFinish) {
+        if (Permissions == null || Permissions.size() == 0)
+            initPermissions();
+
         if (Permissions != null && Permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest)) {
