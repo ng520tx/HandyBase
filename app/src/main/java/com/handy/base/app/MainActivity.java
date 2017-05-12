@@ -20,9 +20,8 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.crashTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.getInstance().openActivity(activity, SubActivity.class, false);
+                IntentUtils.openActivity(activity, SubActivity.class, false);
             }
         });
     }
-
 }
