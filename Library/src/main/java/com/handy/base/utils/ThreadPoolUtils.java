@@ -29,9 +29,12 @@ public final class ThreadPoolUtils {
     public static final int FixedThread = 0;
     public static final int CachedThread = 1;
     public static final int SingleThread = 2;
-    private volatile static ThreadPoolUtils instance;
     private ExecutorService exec;
     private ScheduledExecutorService scheduleExec;
+
+    private ThreadPoolUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
 
     /**
      * ThreadPoolUtils构造函数
@@ -39,7 +42,7 @@ public final class ThreadPoolUtils {
      * @param type         线程池类型
      * @param corePoolSize 只对Fixed和Scheduled线程池起效
      */
-    private ThreadPoolUtils(@Type int type, int corePoolSize) {
+    public ThreadPoolUtils(@Type int type, int corePoolSize) {
         // 构造有定时功能的线程池
         // ThreadPoolExecutor(corePoolSize, Integer.MAX_VALUE, 10L, TimeUnit.MILLISECONDS, new BlockingQueue<Runnable>)
         scheduleExec = Executors.newScheduledThreadPool(corePoolSize);
@@ -60,17 +63,6 @@ public final class ThreadPoolUtils {
                 exec = Executors.newCachedThreadPool();
                 break;
         }
-    }
-
-    public static ThreadPoolUtils getInstance(@Type int type, int corePoolSize) {
-        if (instance == null) {
-            synchronized (ThreadPoolUtils.class) {
-                if (instance == null) {
-                    instance = new ThreadPoolUtils(type, corePoolSize);
-                }
-            }
-        }
-        return instance;
     }
 
     /**
@@ -212,8 +204,7 @@ public final class ThreadPoolUtils {
      * @return 表示任务的 Future 列表，列表顺序与给定任务列表的迭代器所生成的顺序相同。如果操作未超时，则已完成所有任务。如果确实超时了，则某些任务尚未完成。
      * @throws InterruptedException 如果等待时发生中断，在这种情况下取消尚未完成的任务
      */
-    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws
-            InterruptedException {
+    public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
         return exec.invokeAll(tasks, timeout, unit);
     }
 
@@ -248,8 +239,7 @@ public final class ThreadPoolUtils {
      * @throws ExecutionException   如果没有任务成功完成
      * @throws TimeoutException     如果在所有任务成功完成之前给定的超时期满
      */
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws
-            InterruptedException, ExecutionException, TimeoutException {
+    public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return exec.invokeAny(tasks, timeout, unit);
     }
 
