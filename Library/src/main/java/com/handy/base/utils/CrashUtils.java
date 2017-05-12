@@ -4,6 +4,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -115,7 +118,17 @@ public final class CrashUtils implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, final Throwable throwable) {
-        String now = new SimpleDateFormat("yyMMdd HH-mm-ss", Locale.getDefault()).format(new Date());
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                LogUtils.e(Log.getStackTraceString(throwable));
+                Toast.makeText(Utils.getActivity(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
+                Looper.loop();
+            }
+        }.start();
+
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         final String fullPath = crashDir + now + ".txt";
         if (!createOrExistsFile(fullPath)) return;
         new Thread(new Runnable() {
@@ -138,8 +151,11 @@ public final class CrashUtils implements UncaughtExceptionHandler {
                 }
             }
         }).start();
-        if (mHandler != null) {
-            mHandler.uncaughtException(thread, throwable);
+
+        try {
+            Thread.sleep(2000);
+            ActivityStackUtils.AppExit(); //退出程序
+        } catch (InterruptedException ignored) {
         }
     }
 
