@@ -20,17 +20,8 @@ import java.io.InputStreamReader;
  */
 public final class SDCardUtils {
 
-    private volatile static SDCardUtils instance;
-
-    public static SDCardUtils getInstance() {
-        if (instance == null) {
-            synchronized (SDCardUtils.class) {
-                if (instance == null) {
-                    instance = new SDCardUtils();
-                }
-            }
-        }
-        return instance;
+    private SDCardUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -38,7 +29,7 @@ public final class SDCardUtils {
      *
      * @return true : 可用<br>false : 不可用
      */
-    public boolean isSDCardEnable() {
+    public static boolean isSDCardEnable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
@@ -48,7 +39,7 @@ public final class SDCardUtils {
      *
      * @return SD卡路径
      */
-    public String getSDCardPath() {
+    public static String getSDCardPath() {
         if (!isSDCardEnable()) return null;
         String cmd = "cat /proc/mounts";
         Runtime run = Runtime.getRuntime();
@@ -71,7 +62,7 @@ public final class SDCardUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.getInstance().closeIO(bufferedReader);
+            CloseUtils.closeIO(bufferedReader);
         }
         return Environment.getExternalStorageDirectory().getPath() + File.separator;
     }
@@ -81,7 +72,7 @@ public final class SDCardUtils {
      *
      * @return SD卡data路径
      */
-    public String getDataPath() {
+    public static String getDataPath() {
         if (!isSDCardEnable()) return null;
         return Environment.getExternalStorageDirectory().getPath() + File.separator + "data" + File.separator;
     }
@@ -92,13 +83,13 @@ public final class SDCardUtils {
      * @return SD卡剩余空间
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public String getFreeSpace() {
+    public static String getFreeSpace() {
         if (!isSDCardEnable()) return null;
         StatFs stat = new StatFs(getSDCardPath());
         long blockSize, availableBlocks;
         availableBlocks = stat.getAvailableBlocksLong();
         blockSize = stat.getBlockSizeLong();
-        return ConvertUtils.getInstance().byte2FitMemorySize(availableBlocks * blockSize);
+        return ConvertUtils.byte2FitMemorySize(availableBlocks * blockSize);
     }
 
     /**
@@ -107,7 +98,7 @@ public final class SDCardUtils {
      * @return SDCardInfo
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public String getSDCardInfo() {
+    public static String getSDCardInfo() {
         if (!isSDCardEnable()) return null;
         SDCardInfo sd = new SDCardInfo();
         sd.isExist = true;
@@ -122,7 +113,7 @@ public final class SDCardUtils {
         return sd.toString();
     }
 
-    public class SDCardInfo {
+    public static class SDCardInfo {
         boolean isExist;
         long totalBlocks;
         long freeBlocks;
