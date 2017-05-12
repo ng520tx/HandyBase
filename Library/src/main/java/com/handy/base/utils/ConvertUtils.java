@@ -1,7 +1,6 @@
 package com.handy.base.utils;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,18 +30,10 @@ import java.io.UnsupportedEncodingException;
  */
 public final class ConvertUtils {
 
-    private volatile static ConvertUtils instance;
-    private final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    public static ConvertUtils getInstance() {
-        if (instance == null) {
-            synchronized (ConvertUtils.class) {
-                if (instance == null) {
-                    instance = new ConvertUtils();
-                }
-            }
-        }
-        return instance;
+    private ConvertUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -53,7 +44,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return 16进制大写字符串
      */
-    public String bytes2HexString(byte[] bytes) {
+    public static String bytes2HexString(byte[] bytes) {
         if (bytes == null) return null;
         int len = bytes.length;
         if (len <= 0) return null;
@@ -73,7 +64,7 @@ public final class ConvertUtils {
      * @param hexString 十六进制字符串
      * @return 字节数组
      */
-    public byte[] hexString2Bytes(String hexString) {
+    public static byte[] hexString2Bytes(String hexString) {
         if (isSpace(hexString)) return null;
         int len = hexString.length();
         if (len % 2 != 0) {
@@ -94,7 +85,7 @@ public final class ConvertUtils {
      * @param hexChar hex单个字节
      * @return 0..15
      */
-    private int hex2Dec(char hexChar) {
+    private static int hex2Dec(char hexChar) {
         if (hexChar >= '0' && hexChar <= '9') {
             return hexChar - '0';
         } else if (hexChar >= 'A' && hexChar <= 'F') {
@@ -110,7 +101,7 @@ public final class ConvertUtils {
      * @param chars 字符数组
      * @return 字节数组
      */
-    public byte[] chars2Bytes(char[] chars) {
+    public static byte[] chars2Bytes(char[] chars) {
         if (chars == null || chars.length <= 0) return null;
         int len = chars.length;
         byte[] bytes = new byte[len];
@@ -126,7 +117,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return 字符数组
      */
-    public char[] bytes2Chars(byte[] bytes) {
+    public static char[] bytes2Chars(byte[] bytes) {
         if (bytes == null) return null;
         int len = bytes.length;
         if (len <= 0) return null;
@@ -150,7 +141,7 @@ public final class ConvertUtils {
      *                   </ul>
      * @return 字节数
      */
-    public long memorySize2Byte(long memorySize, @MemoryConstants.Unit int unit) {
+    public static long memorySize2Byte(long memorySize, @MemoryConstants.Unit int unit) {
         if (memorySize < 0) return -1;
         return memorySize * unit;
     }
@@ -168,7 +159,7 @@ public final class ConvertUtils {
      *                </ul>
      * @return 以unit为单位的size
      */
-    public double byte2MemorySize(long byteNum, @MemoryConstants.Unit int unit) {
+    public static double byte2MemorySize(long byteNum, @MemoryConstants.Unit int unit) {
         if (byteNum < 0) return -1;
         return (double) byteNum / unit;
     }
@@ -181,7 +172,7 @@ public final class ConvertUtils {
      * @return 合适内存大小
      */
     @SuppressLint("DefaultLocale")
-    public String byte2FitMemorySize(long byteNum) {
+    public static String byte2FitMemorySize(long byteNum) {
         if (byteNum < 0) {
             return "shouldn't be less than zero!";
         } else if (byteNum < MemoryConstants.KB) {
@@ -209,7 +200,7 @@ public final class ConvertUtils {
      *                 </ul>
      * @return 毫秒时间戳
      */
-    public long timeSpan2Millis(long timeSpan, @TimeConstants.Unit int unit) {
+    public static long timeSpan2Millis(long timeSpan, @TimeConstants.Unit int unit) {
         return timeSpan * unit;
     }
 
@@ -227,7 +218,7 @@ public final class ConvertUtils {
      *               </ul>
      * @return 以unit为单位的时间长度
      */
-    public long millis2TimeSpan(long millis, @TimeConstants.Unit int unit) {
+    public static long millis2TimeSpan(long millis, @TimeConstants.Unit int unit) {
         return millis / unit;
     }
 
@@ -248,7 +239,7 @@ public final class ConvertUtils {
      * @return 合适时间长度
      */
     @SuppressLint("DefaultLocale")
-    public String millis2FitTimeSpan(long millis, int precision) {
+    public static String millis2FitTimeSpan(long millis, int precision) {
         if (millis <= 0 || precision <= 0) return null;
         StringBuilder sb = new StringBuilder();
         String[] units = {"天", "小时", "分钟", "秒", "毫秒"};
@@ -270,7 +261,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return bits
      */
-    public String bytes2Bits(byte[] bytes) {
+    public static String bytes2Bits(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte aByte : bytes) {
             for (int j = 7; j >= 0; --j) {
@@ -286,7 +277,7 @@ public final class ConvertUtils {
      * @param bits 二进制
      * @return bytes
      */
-    public byte[] bits2Bytes(String bits) {
+    public static byte[] bits2Bytes(String bits) {
         int lenMod = bits.length() % 8;
         int byteLen = bits.length() / 8;
         // 不是8的倍数前面补0
@@ -312,7 +303,7 @@ public final class ConvertUtils {
      * @param is 输入流
      * @return outputStream子类
      */
-    public ByteArrayOutputStream input2OutputStream(InputStream is) {
+    public static ByteArrayOutputStream input2OutputStream(InputStream is) {
         if (is == null) return null;
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -326,19 +317,8 @@ public final class ConvertUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.getInstance().closeIO(is);
+            CloseUtils.closeIO(is);
         }
-    }
-
-    /**
-     * outputStream转inputStream
-     *
-     * @param out 输出流
-     * @return inputStream子类
-     */
-    public ByteArrayInputStream output2InputStream(OutputStream out) {
-        if (out == null) return null;
-        return new ByteArrayInputStream(((ByteArrayOutputStream) out).toByteArray());
     }
 
     /**
@@ -347,7 +327,7 @@ public final class ConvertUtils {
      * @param is 输入流
      * @return 字节数组
      */
-    public byte[] inputStream2Bytes(InputStream is) {
+    public static byte[] inputStream2Bytes(InputStream is) {
         if (is == null) return null;
         return input2OutputStream(is).toByteArray();
     }
@@ -358,7 +338,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return 输入流
      */
-    public InputStream bytes2InputStream(byte[] bytes) {
+    public static InputStream bytes2InputStream(byte[] bytes) {
         if (bytes == null || bytes.length <= 0) return null;
         return new ByteArrayInputStream(bytes);
     }
@@ -369,7 +349,7 @@ public final class ConvertUtils {
      * @param out 输出流
      * @return 字节数组
      */
-    public byte[] outputStream2Bytes(OutputStream out) {
+    public static byte[] outputStream2Bytes(OutputStream out) {
         if (out == null) return null;
         return ((ByteArrayOutputStream) out).toByteArray();
     }
@@ -380,7 +360,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return 字节数组
      */
-    public OutputStream bytes2OutputStream(byte[] bytes) {
+    public static OutputStream bytes2OutputStream(byte[] bytes) {
         if (bytes == null || bytes.length <= 0) return null;
         ByteArrayOutputStream os = null;
         try {
@@ -391,7 +371,7 @@ public final class ConvertUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.getInstance().closeIO(os);
+            CloseUtils.closeIO(os);
         }
     }
 
@@ -402,7 +382,7 @@ public final class ConvertUtils {
      * @param charsetName 编码格式
      * @return 字符串
      */
-    public String inputStream2String(InputStream is, String charsetName) {
+    public static String inputStream2String(InputStream is, String charsetName) {
         if (is == null || isSpace(charsetName)) return null;
         try {
             return new String(inputStream2Bytes(is), charsetName);
@@ -419,7 +399,7 @@ public final class ConvertUtils {
      * @param charsetName 编码格式
      * @return 输入流
      */
-    public InputStream string2InputStream(String string, String charsetName) {
+    public static InputStream string2InputStream(String string, String charsetName) {
         if (string == null || isSpace(charsetName)) return null;
         try {
             return new ByteArrayInputStream(string.getBytes(charsetName));
@@ -436,7 +416,7 @@ public final class ConvertUtils {
      * @param charsetName 编码格式
      * @return 字符串
      */
-    public String outputStream2String(OutputStream out, String charsetName) {
+    public static String outputStream2String(OutputStream out, String charsetName) {
         if (out == null || isSpace(charsetName)) return null;
         try {
             return new String(outputStream2Bytes(out), charsetName);
@@ -453,7 +433,7 @@ public final class ConvertUtils {
      * @param charsetName 编码格式
      * @return 输入流
      */
-    public OutputStream string2OutputStream(String string, String charsetName) {
+    public static OutputStream string2OutputStream(String string, String charsetName) {
         if (string == null || isSpace(charsetName)) return null;
         try {
             return bytes2OutputStream(string.getBytes(charsetName));
@@ -470,7 +450,7 @@ public final class ConvertUtils {
      * @param format 格式
      * @return 字节数组
      */
-    public byte[] bitmap2Bytes(Bitmap bitmap, Bitmap.CompressFormat format) {
+    public static byte[] bitmap2Bytes(Bitmap bitmap, Bitmap.CompressFormat format) {
         if (bitmap == null) return null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(format, 100, baos);
@@ -483,7 +463,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return bitmap
      */
-    public Bitmap bytes2Bitmap(byte[] bytes) {
+    public static Bitmap bytes2Bitmap(byte[] bytes) {
         return (bytes == null || bytes.length == 0) ? null : BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
@@ -493,7 +473,7 @@ public final class ConvertUtils {
      * @param drawable drawable对象
      * @return bitmap
      */
-    public Bitmap drawable2Bitmap(Drawable drawable) {
+    public static Bitmap drawable2Bitmap(Drawable drawable) {
         return drawable == null ? null : ((BitmapDrawable) drawable).getBitmap();
     }
 
@@ -504,7 +484,7 @@ public final class ConvertUtils {
      * @param bitmap bitmap对象
      * @return drawable
      */
-    public Drawable bitmap2Drawable(Resources res, Bitmap bitmap) {
+    public static Drawable bitmap2Drawable(Resources res, Bitmap bitmap) {
         return bitmap == null ? null : new BitmapDrawable(res, bitmap);
     }
 
@@ -515,7 +495,7 @@ public final class ConvertUtils {
      * @param format   格式
      * @return 字节数组
      */
-    public byte[] drawable2Bytes(Drawable drawable, Bitmap.CompressFormat format) {
+    public static byte[] drawable2Bytes(Drawable drawable, Bitmap.CompressFormat format) {
         return drawable == null ? null : bitmap2Bytes(drawable2Bitmap(drawable), format);
     }
 
@@ -526,7 +506,7 @@ public final class ConvertUtils {
      * @param bytes 字节数组
      * @return drawable
      */
-    public Drawable bytes2Drawable(Resources res, byte[] bytes) {
+    public static Drawable bytes2Drawable(Resources res, byte[] bytes) {
         return res == null ? null : bitmap2Drawable(res, bytes2Bitmap(bytes));
     }
 
@@ -536,7 +516,7 @@ public final class ConvertUtils {
      * @param view 视图
      * @return bitmap
      */
-    public Bitmap view2Bitmap(View view) {
+    public static Bitmap view2Bitmap(View view) {
         if (view == null) return null;
         Bitmap ret = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(ret);
@@ -556,8 +536,8 @@ public final class ConvertUtils {
      * @param dpValue dp值
      * @return px值
      */
-    public int dp2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    public static int dp2px(float dpValue) {
+        final float scale = Utils.getActivity().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
@@ -567,8 +547,8 @@ public final class ConvertUtils {
      * @param pxValue px值
      * @return dp值
      */
-    public int px2dp(Context context, float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    public static int px2dp(float pxValue) {
+        final float scale = Utils.getActivity().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -578,8 +558,8 @@ public final class ConvertUtils {
      * @param spValue sp值
      * @return px值
      */
-    public int sp2px(Context context, float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+    public static int sp2px(float spValue) {
+        final float fontScale = Utils.getActivity().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -589,8 +569,8 @@ public final class ConvertUtils {
      * @param pxValue px值
      * @return sp值
      */
-    public int px2sp(Context context, float pxValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+    public static int px2sp(float pxValue) {
+        final float fontScale = Utils.getActivity().getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
 
@@ -600,7 +580,7 @@ public final class ConvertUtils {
      * @param s 待校验字符串
      * @return {@code true}: null或全空白字符<br> {@code false}: 不为null且不全空白字符
      */
-    private boolean isSpace(String s) {
+    private static boolean isSpace(String s) {
         if (s == null) return true;
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
@@ -608,5 +588,16 @@ public final class ConvertUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * outputStream转inputStream
+     *
+     * @param out 输出流
+     * @return inputStream子类
+     */
+    public ByteArrayInputStream output2InputStream(OutputStream out) {
+        if (out == null) return null;
+        return new ByteArrayInputStream(((ByteArrayOutputStream) out).toByteArray());
     }
 }
