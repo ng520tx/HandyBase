@@ -18,35 +18,12 @@ import java.util.Stack;
  */
 public final class ActivityStackUtils {
 
-    private volatile static ActivityStackUtils instance;
     private static Stack<Activity> activityStack; //Activity栈
-
-    public static ActivityStackUtils getInstance() {
-        if (instance == null) {
-            synchronized (ActivityStackUtils.class) {
-                if (instance == null) {
-                    instance = new ActivityStackUtils();
-                }
-            }
-        }
-        return instance;
-    }
-
-
-    /**
-     * 添加Activity到堆栈
-     */
-    public void addActivity(Activity activity) {
-        if (activityStack == null) {
-            activityStack = new Stack<>();
-        }
-        activityStack.add(activity);
-    }
 
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
-    public Activity getCurrent() {
+    public static Activity getCurrent() {
         if (activityStack != null) {
             Activity activity = activityStack.lastElement();
             return activity;
@@ -57,7 +34,7 @@ public final class ActivityStackUtils {
     /**
      * 结束当前Activity（堆栈中最后一个压入的）
      */
-    public void finish() {
+    public static void finish() {
         if (activityStack != null) {
             Activity activity = activityStack.lastElement();
             finishChoiceDesc(activity);
@@ -67,7 +44,7 @@ public final class ActivityStackUtils {
     /**
      * 按顺序单次结束指定的Activity
      */
-    public void finishChoiceAsc(Activity activity) {
+    public static void finishChoiceAsc(Activity activity) {
         if (activity != null && activityStack != null) {
             activityStack.remove(activity);
             if (!activity.isFinishing()) activity.finish();
@@ -77,7 +54,7 @@ public final class ActivityStackUtils {
     /**
      * 按倒叙单次结束指定的Activity
      */
-    public void finishChoiceDesc(Activity activity) {
+    public static void finishChoiceDesc(Activity activity) {
         if (activity != null && activityStack != null) {
             Collections.reverse(activityStack); // 倒序排列
             activityStack.remove(activity);
@@ -89,7 +66,7 @@ public final class ActivityStackUtils {
     /**
      * 结束全部指定的Activit
      */
-    public void finishChoices(Activity activity) {
+    public static void finishChoices(Activity activity) {
         if (activity != null && activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
@@ -105,7 +82,7 @@ public final class ActivityStackUtils {
     /**
      * 按顺序单次结束指定的Activity
      */
-    public void finishChoiceAsc(Class<?> cls) {
+    public static void finishChoiceAsc(Class<?> cls) {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
@@ -122,7 +99,7 @@ public final class ActivityStackUtils {
     /**
      * 按倒叙单次结束指定的Activity
      */
-    public void finishChoiceDesc(Class<?> cls) {
+    public static void finishChoiceDesc(Class<?> cls) {
         if (activityStack != null) {
             Collections.reverse(activityStack); // 倒序排列
             Iterator iterator = activityStack.iterator();
@@ -141,7 +118,7 @@ public final class ActivityStackUtils {
     /**
      * 结束全部指定的Activit
      */
-    public void finishChoices(Class<?> cls) {
+    public static void finishChoices(Class<?> cls) {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
@@ -157,7 +134,7 @@ public final class ActivityStackUtils {
     /**
      * 结束所有Activity
      */
-    public void finishAll() {
+    public static void finishAll() {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
@@ -172,7 +149,7 @@ public final class ActivityStackUtils {
     /**
      * 结束第一个Activity之后的所有Activity
      */
-    public void finish2First() {
+    public static void finish2First() {
         if (activityStack != null) {
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
@@ -188,7 +165,7 @@ public final class ActivityStackUtils {
     /**
      * 退出应用程序
      */
-    public void AppExit(Context context) {
+    public static void AppExit(Context context) {
         try {
             finishAll();
             ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -198,11 +175,21 @@ public final class ActivityStackUtils {
         }
     }
 
-    public Stack<Activity> getActivityStack() {
+    public static Stack<Activity> getActivityStack() {
         return activityStack;
     }
 
-    public void setActivityStack(Stack<Activity> activityStack) {
+    public static void setActivityStack(Stack<Activity> activityStack) {
         ActivityStackUtils.activityStack = activityStack;
+    }
+
+    /**
+     * 添加Activity到堆栈
+     */
+    public void addActivity(Activity activity) {
+        if (activityStack == null) {
+            activityStack = new Stack<>();
+        }
+        activityStack.add(activity);
     }
 }
