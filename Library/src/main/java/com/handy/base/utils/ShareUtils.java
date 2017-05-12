@@ -52,8 +52,8 @@ public final class ShareUtils {
     }
 
     public static ShareUtils getInstance(Context context, String shareName) {
-        if (EmptyUtils.getInstance().isEmpty(shareName)) {
-            LogUtils.getInstance().e("参数shareName为空，无法获取Share缓存对象");
+        if (EmptyUtils.isEmpty(shareName)) {
+            LogUtils.e("参数shareName为空，无法获取Share缓存对象");
             return null;
         } else {
             if (instance == null) {
@@ -63,8 +63,8 @@ public final class ShareUtils {
                     }
                 }
             } else {
-                if (EmptyUtils.getInstance().isEmpty(instance.shareName)) {
-                    LogUtils.getInstance().e("当前对象的shareName为空，无法获取Share缓存对象");
+                if (EmptyUtils.isEmpty(instance.shareName)) {
+                    LogUtils.e("当前对象的shareName为空，无法获取Share缓存对象");
                     return null;
                 } else if (!instance.shareName.equals(shareName)) {
                     instance = null;
