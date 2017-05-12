@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.1.0'
+    compile 'com.github.liujie045:HandyBase:2.1.1'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -231,6 +231,10 @@
 ```
 
 ##  更新日志
+***2017年5月12日 v2.1.1***
+
+* Utils工具类框架增加部分方法
+
 ***2017年5月12日 v2.1.0***
 
 * 更新Utils工具类框架为2017年5月12日版本
