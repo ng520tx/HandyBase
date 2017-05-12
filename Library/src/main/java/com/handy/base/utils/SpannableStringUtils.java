@@ -778,10 +778,7 @@ public final class SpannableStringUtils {
             return stripeWidth + gapWidth;
         }
 
-        public void drawLeadingMargin(Canvas c, Paint p, int x, int dir,
-                                      int top, int baseline, int bottom,
-                                      CharSequence text, int start, int end,
-                                      boolean first, Layout layout) {
+        public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout layout) {
             Paint.Style style = p.getStyle();
             int color = p.getColor();
 
@@ -812,10 +809,7 @@ public final class SpannableStringUtils {
             return 2 * radius + gapWidth;
         }
 
-        public void drawLeadingMargin(Canvas c, Paint p, int x, int dir,
-                                      int top, int baseline, int bottom,
-                                      CharSequence text, int start, int end,
-                                      boolean first, Layout l) {
+        public void drawLeadingMargin(Canvas c, Paint p, int x, int dir, int top, int baseline, int bottom, CharSequence text, int start, int end, boolean first, Layout l) {
             if (((Spanned) text).getSpanStart(this) == start) {
                 Paint.Style style = p.getStyle();
                 int oldColor = 0;
@@ -976,9 +970,7 @@ public final class SpannableStringUtils {
         public abstract Drawable getDrawable();
 
         @Override
-        public int getSize(@NonNull Paint paint, CharSequence text,
-                           int start, int end,
-                           Paint.FontMetricsInt fm) {
+        public int getSize(@NonNull Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
             Drawable d = getCachedDrawable();
             Rect rect = d.getBounds();
             final int fontHeight = (int) (paint.getFontMetrics().descent - paint.getFontMetrics().ascent);
@@ -1001,9 +993,7 @@ public final class SpannableStringUtils {
         }
 
         @Override
-        public void draw(@NonNull Canvas canvas, CharSequence text,
-                         int start, int end, float x,
-                         int top, int y, int bottom, @NonNull Paint paint) {
+        public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
             Drawable d = getCachedDrawable();
             Rect rect = d.getBounds();
             canvas.save();
