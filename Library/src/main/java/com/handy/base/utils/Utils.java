@@ -1,7 +1,6 @@
 package com.handy.base.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 
 /**
@@ -15,7 +14,6 @@ import android.content.Context;
 public final class Utils {
 
     @SuppressLint("StaticFieldLeak")
-    private static Activity activity;
     private static Context context;
 
     private Utils() {
@@ -25,25 +23,10 @@ public final class Utils {
     /**
      * 初始化工具类
      *
-     * @param activity 活动界面
+     * @param context ApplicationContext
      */
-    public static void init(Activity activity) {
-        Utils.activity = activity;
-        Utils.context = activity.getApplicationContext();
-    }
-
     public static void init(Context context) {
         Utils.context = context.getApplicationContext();
-    }
-
-    /**
-     * 获取Activity
-     *
-     * @return Activity
-     */
-    public static Activity getActivity() {
-        if (activity != null) return activity;
-        throw new NullPointerException("u should init first");
     }
 
     /**
