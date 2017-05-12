@@ -13,17 +13,8 @@ import java.io.IOException;
  */
 public final class CloseUtils {
 
-    private volatile static CloseUtils instance;
-
-    public static CloseUtils getInstance() {
-        if (instance == null) {
-            synchronized (CloseUtils.class) {
-                if (instance == null) {
-                    instance = new CloseUtils();
-                }
-            }
-        }
-        return instance;
+    private CloseUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -31,7 +22,7 @@ public final class CloseUtils {
      *
      * @param closeables closeables
      */
-    public void closeIO(Closeable... closeables) {
+    public static void closeIO(Closeable... closeables) {
         if (closeables == null) return;
         for (Closeable closeable : closeables) {
             if (closeable != null) {
@@ -49,7 +40,7 @@ public final class CloseUtils {
      *
      * @param closeables closeables
      */
-    public void closeIOQuietly(Closeable... closeables) {
+    public static void closeIOQuietly(Closeable... closeables) {
         if (closeables == null) return;
         for (Closeable closeable : closeables) {
             if (closeable != null) {
