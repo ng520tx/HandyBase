@@ -7,10 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2017/03/13
- *     desc  : 存储相关常量
+ *  author: Handy
+ *  blog  : https://github.com/liujie045
+ *  time  : 2017-4-18 10:14:23
+ *  desc  : 存储相关常量
  * </pre>
  */
 public final class MemoryConstants {
