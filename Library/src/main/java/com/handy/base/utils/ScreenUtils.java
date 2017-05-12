@@ -22,17 +22,8 @@ import android.view.WindowManager;
  */
 public final class ScreenUtils {
 
-    private volatile static ScreenUtils instance;
-
-    public static ScreenUtils getInstance() {
-        if (instance == null) {
-            synchronized (ScreenUtils.class) {
-                if (instance == null) {
-                    instance = new ScreenUtils();
-                }
-            }
-        }
-        return instance;
+    private ScreenUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -40,8 +31,8 @@ public final class ScreenUtils {
      *
      * @return 屏幕宽px
      */
-    public int getScreenWidth(Context context) {
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    public static int getScreenWidth() {
+        WindowManager windowManager = (WindowManager) Utils.getActivity().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(dm);// 给白纸设置宽高
         return dm.widthPixels;
@@ -52,11 +43,20 @@ public final class ScreenUtils {
      *
      * @return 屏幕高px
      */
-    public int getScreenHeight(Context context) {
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    public static int getScreenHeight() {
+        WindowManager windowManager = (WindowManager) Utils.getActivity().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();// 创建了一张白纸
         windowManager.getDefaultDisplay().getMetrics(dm);// 给白纸设置宽高
         return dm.heightPixels;
+    }
+
+    /**
+     * 判断是否横屏
+     *
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public static boolean isLandscape() {
+        return Utils.getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -69,26 +69,8 @@ public final class ScreenUtils {
      *
      * @param activity activity
      */
-    public void setLandscape(Activity activity) {
+    public static void setLandscape(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    }
-
-    /**
-     * 设置屏幕为竖屏
-     *
-     * @param activity activity
-     */
-    public void setPortrait(Activity activity) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-
-    /**
-     * 判断是否横屏
-     *
-     * @return {@code true}: 是<br>{@code false}: 否
-     */
-    public boolean isLandscape(Context context) {
-        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -96,8 +78,17 @@ public final class ScreenUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isPortrait(Context context) {
-        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    public static boolean isPortrait() {
+        return Utils.getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    /**
+     * 设置屏幕为竖屏
+     *
+     * @param activity activity
+     */
+    public static void setPortrait(Activity activity) {
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     /**
@@ -106,7 +97,7 @@ public final class ScreenUtils {
      * @param activity activity
      * @return 屏幕旋转角度
      */
-    public int getScreenRotation(Activity activity) {
+    public static int getScreenRotation(Activity activity) {
         switch (activity.getWindowManager().getDefaultDisplay().getRotation()) {
             default:
             case Surface.ROTATION_0:
@@ -126,7 +117,7 @@ public final class ScreenUtils {
      * @param activity activity
      * @return Bitmap
      */
-    public Bitmap captureWithStatusBar(Activity activity) {
+    public static Bitmap captureWithStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
@@ -144,12 +135,12 @@ public final class ScreenUtils {
      * @param activity activity
      * @return Bitmap
      */
-    public Bitmap captureWithoutStatusBar(Activity activity) {
+    public static Bitmap captureWithoutStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
         Bitmap bmp = view.getDrawingCache();
-        int statusBarHeight = StatusBarUtils.getInstance().getStatusBarHeight(activity);
+        int statusBarHeight = BarUtils.getStatusBarHeight(activity);
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         Bitmap ret = Bitmap.createBitmap(bmp, 0, statusBarHeight, dm.widthPixels, dm.heightPixels - statusBarHeight);
@@ -162,9 +153,23 @@ public final class ScreenUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isScreenLock(Context context) {
-        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+    public static boolean isScreenLock() {
+        KeyguardManager km = (KeyguardManager) Utils.getActivity().getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
+    }
+
+    /**
+     * 获取进入休眠时长
+     *
+     * @return 进入休眠时长，报错返回-123
+     */
+    public static int getSleepDuration() {
+        try {
+            return Settings.System.getInt(Utils.getActivity().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+            return -123;
+        }
     }
 
     /**
@@ -173,21 +178,7 @@ public final class ScreenUtils {
      *
      * @param duration 时长
      */
-    public void setSleepDuration(Context context, int duration) {
-        Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, duration);
-    }
-
-    /**
-     * 获取进入休眠时长
-     *
-     * @return 进入休眠时长，报错返回-123
-     */
-    public int getSleepDuration(Context context) {
-        try {
-            return Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-            return -123;
-        }
+    public static void setSleepDuration(int duration) {
+        Settings.System.putInt(Utils.getActivity().getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, duration);
     }
 }
