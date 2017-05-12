@@ -1,5 +1,6 @@
 package com.handy.base.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -29,31 +30,23 @@ import java.util.concurrent.Future;
  */
 public final class NetworkUtils {
 
-    private volatile static NetworkUtils instance;
-    private final int NETWORK_TYPE_GSM = 16;
-    private final int NETWORK_TYPE_TD_SCDMA = 17;
-    private final int NETWORK_TYPE_IWLAN = 18;
+    private static final int NETWORK_TYPE_GSM = 16;
+    private static final int NETWORK_TYPE_TD_SCDMA = 17;
+    private static final int NETWORK_TYPE_IWLAN = 18;
 
-    public static NetworkUtils getInstance() {
-        if (instance == null) {
-            synchronized (NetworkUtils.class) {
-                if (instance == null) {
-                    instance = new NetworkUtils();
-                }
-            }
-        }
-        return instance;
+    private NetworkUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
      * 打开网络设置界面
      * <p>3.0以下打开设置界面</p>
      */
-    public void openWirelessSettings(Context context) {
-        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
-            context.startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    public static void openWirelessSettings() {
+        if (android.os.Build.VERSION.SDK_INT > 10) {
+            Utils.getActivity().startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } else {
-            context.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            Utils.getActivity().startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 
@@ -63,8 +56,8 @@ public final class NetworkUtils {
      *
      * @return NetworkInfo
      */
-    private NetworkInfo getActiveNetworkInfo(Context context) {
-        return ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+    private static NetworkInfo getActiveNetworkInfo() {
+        return ((ConnectivityManager) Utils.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
     }
 
     /**
@@ -73,8 +66,8 @@ public final class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isConnected(Context context) {
-        NetworkInfo info = getActiveNetworkInfo(context);
+    public static boolean isConnected() {
+        NetworkInfo info = getActiveNetworkInfo();
         return info != null && info.isConnected();
     }
 
@@ -82,28 +75,16 @@ public final class NetworkUtils {
      * 判断网络是否可用
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
      *
-     * @param context 上下文
      * @return {@code true}: 可用<br>{@code false}: 不可用
      */
-    public boolean isAvailable(Context context) {
-        NetworkInfo info = getActiveNetworkInfo(context);
-        return info != null && info.isAvailable();
-    }
-
-    /**
-     * 判断网络是否可用
-     * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
-     *
-     * @return {@code true}: 可用<br>{@code false}: 不可用
-     */
-    public boolean isAvailableByPing() {
-        ShellUtils.CommandResult result = ShellUtils.getInstance().execCmd("ping -c 1 -w 1 223.5.5.5", false);
+    public static boolean isAvailableByPing() {
+        ShellUtils.CommandResult result = ShellUtils.execCmd("ping -c 1 -w 1 223.5.5.5", false);
         boolean ret = result.result == 0;
         if (result.errorMsg != null) {
-            LogUtils.getInstance().d("isAvailableByPing errorMsg", result.errorMsg);
+            LogUtils.d("isAvailableByPing errorMsg", result.errorMsg);
         }
         if (result.successMsg != null) {
-            LogUtils.getInstance().d("isAvailableByPing successMsg", result.successMsg);
+            LogUtils.d("isAvailableByPing successMsg", result.successMsg);
         }
         return ret;
     }
@@ -113,9 +94,9 @@ public final class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean getDataEnabled(Context context) {
+    public static boolean getDataEnabled() {
         try {
-            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) Utils.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
             Method getMobileDataEnabledMethod = tm.getClass().getDeclaredMethod("getDataEnabled");
             if (null != getMobileDataEnabledMethod) {
                 return (boolean) getMobileDataEnabledMethod.invoke(tm);
@@ -132,9 +113,9 @@ public final class NetworkUtils {
      *
      * @param enabled {@code true}: 打开<br>{@code false}: 关闭
      */
-    public void setDataEnabled(Context context, boolean enabled) {
+    public static void setDataEnabled(boolean enabled) {
         try {
-            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) Utils.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
             Method setMobileDataEnabledMethod = tm.getClass().getDeclaredMethod("setDataEnabled", boolean.class);
             if (null != setMobileDataEnabledMethod) {
                 setMobileDataEnabledMethod.invoke(tm, enabled);
@@ -150,8 +131,8 @@ public final class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean is4G(Context context) {
-        NetworkInfo info = getActiveNetworkInfo(context);
+    public static boolean is4G() {
+        NetworkInfo info = getActiveNetworkInfo();
         return info != null && info.isAvailable() && info.getSubtype() == TelephonyManager.NETWORK_TYPE_LTE;
     }
 
@@ -161,8 +142,9 @@ public final class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean getWifiEnabled(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    public static boolean getWifiEnabled() {
+        @SuppressLint("WifiManagerLeak")
+        WifiManager wifiManager = (WifiManager) Utils.getActivity().getSystemService(Context.WIFI_SERVICE);
         return wifiManager.isWifiEnabled();
     }
 
@@ -172,8 +154,9 @@ public final class NetworkUtils {
      *
      * @param enabled {@code true}: 打开<br>{@code false}: 关闭
      */
-    public void setWifiEnabled(Context context, boolean enabled) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    public static void setWifiEnabled(boolean enabled) {
+        @SuppressLint("WifiManagerLeak")
+        WifiManager wifiManager = (WifiManager) Utils.getActivity().getSystemService(Context.WIFI_SERVICE);
         if (enabled) {
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
@@ -191,10 +174,9 @@ public final class NetworkUtils {
      *
      * @return {@code true}: 连接<br>{@code false}: 未连接
      */
-    public boolean isWifiConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm != null && cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
+    public static boolean isWifiConnected() {
+        ConnectivityManager cm = (ConnectivityManager) Utils.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm != null && cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
 
     /**
@@ -204,8 +186,8 @@ public final class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isWifiAvailable(Context context) {
-        return getWifiEnabled(context) && isAvailableByPing();
+    public static boolean isWifiAvailable() {
+        return getWifiEnabled() && isAvailableByPing();
     }
 
     /**
@@ -214,8 +196,8 @@ public final class NetworkUtils {
      *
      * @return 运营商名称
      */
-    public String getNetworkOperatorName(Context context) {
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    public static String getNetworkOperatorName() {
+        TelephonyManager tm = (TelephonyManager) Utils.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getNetworkOperatorName() : null;
     }
 
@@ -225,22 +207,24 @@ public final class NetworkUtils {
      *
      * @return 网络类型
      * <ul>
-     * <li>{@link NetworkType#NETWORK_WIFI   } </li>
-     * <li>{@link NetworkType#NETWORK_4G     } </li>
-     * <li>{@link NetworkType#NETWORK_3G     } </li>
-     * <li>{@link NetworkType#NETWORK_2G     } </li>
-     * <li>{@link NetworkType#NETWORK_UNKNOWN} </li>
-     * <li>{@link NetworkType#NETWORK_NO     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_WIFI   } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_4G     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_3G     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_2G     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_UNKNOWN} </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_NO     } </li>
      * </ul>
      */
-    public NetworkType getNetworkType(Context context) {
+    public static NetworkType getNetworkType() {
         NetworkType netType = NetworkType.NETWORK_NO;
-        NetworkInfo info = getActiveNetworkInfo(context);
+        NetworkInfo info = getActiveNetworkInfo();
         if (info != null && info.isAvailable()) {
+
             if (info.getType() == ConnectivityManager.TYPE_WIFI) {
                 netType = NetworkType.NETWORK_WIFI;
             } else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
                 switch (info.getSubtype()) {
+
                     case NETWORK_TYPE_GSM:
                     case TelephonyManager.NETWORK_TYPE_GPRS:
                     case TelephonyManager.NETWORK_TYPE_CDMA:
@@ -249,6 +233,7 @@ public final class NetworkUtils {
                     case TelephonyManager.NETWORK_TYPE_IDEN:
                         netType = NetworkType.NETWORK_2G;
                         break;
+
                     case NETWORK_TYPE_TD_SCDMA:
                     case TelephonyManager.NETWORK_TYPE_EVDO_A:
                     case TelephonyManager.NETWORK_TYPE_UMTS:
@@ -261,11 +246,13 @@ public final class NetworkUtils {
                     case TelephonyManager.NETWORK_TYPE_HSPAP:
                         netType = NetworkType.NETWORK_3G;
                         break;
+
                     case NETWORK_TYPE_IWLAN:
                     case TelephonyManager.NETWORK_TYPE_LTE:
                         netType = NetworkType.NETWORK_4G;
                         break;
                     default:
+
                         String subtypeName = info.getSubtypeName();
                         if (subtypeName.equalsIgnoreCase("TD-SCDMA") || subtypeName.equalsIgnoreCase("WCDMA") || subtypeName.equalsIgnoreCase("CDMA2000")) {
                             netType = NetworkType.NETWORK_3G;
@@ -288,7 +275,7 @@ public final class NetworkUtils {
      * @param useIPv4 是否用IPv4
      * @return IP地址
      */
-    public String getIPAddress(boolean useIPv4) {
+    public static String getIPAddress(boolean useIPv4) {
         try {
             for (Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces(); nis.hasMoreElements(); ) {
                 NetworkInterface ni = nis.nextElement();
@@ -323,7 +310,7 @@ public final class NetworkUtils {
      * @param domain 域名
      * @return ip地址
      */
-    public String getDomainAddress(final String domain) {
+    public static String getDomainAddress(final String domain) {
         try {
             ExecutorService exec = Executors.newCachedThreadPool();
             Future<String> fs = exec.submit(new Callable<String>() {
