@@ -20,6 +20,10 @@ public final class ActivityStackUtils {
 
     private static Stack<Activity> activityStack; //Activity栈
 
+    private ActivityStackUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */

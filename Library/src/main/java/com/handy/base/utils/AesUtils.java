@@ -32,6 +32,10 @@ public final class AesUtils {
     private static final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
     private static String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
+    private AesUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
     public static String getDEFAULT_KEY() {
         return DEFAULT_KEY;
     }
@@ -74,7 +78,7 @@ public final class AesUtils {
             byte[] srcByte = src.getBytes();
             byte[] encrypted = cipher.doFinal(srcByte);
             //Base64转码。
-            return Base64Utils.getInstance().encode(encrypted);
+            return Base64Utils.encode(encrypted);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,7 +108,7 @@ public final class AesUtils {
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
             //Base64转码。
-            byte[] srcByte = Base64Utils.getInstance().decode(src);
+            byte[] srcByte = Base64Utils.decode(src);
             //解密。
             byte[] decrypted = cipher.doFinal(srcByte);
             return new String(decrypted);
