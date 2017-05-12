@@ -1,7 +1,5 @@
 package com.handy.base.utils;
 
-import android.content.Context;
-
 import java.io.File;
 
 /**
@@ -14,17 +12,8 @@ import java.io.File;
  */
 public final class CleanUtils {
 
-    private volatile static CleanUtils instance;
-
-    public static CleanUtils getInstance() {
-        if (instance == null) {
-            synchronized (CleanUtils.class) {
-                if (instance == null) {
-                    instance = new CleanUtils();
-                }
-            }
-        }
-        return instance;
+    private CleanUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -33,8 +22,8 @@ public final class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanInternalCache(Context context) {
-        return FileUtils.getInstance().deleteFilesInDir(context.getCacheDir());
+    public static boolean cleanInternalCache() {
+        return FileUtils.deleteFilesInDir(Utils.getActivity().getCacheDir());
     }
 
     /**
@@ -43,8 +32,8 @@ public final class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanInternalFiles(Context context) {
-        return FileUtils.getInstance().deleteFilesInDir(context.getFilesDir());
+    public static boolean cleanInternalFiles() {
+        return FileUtils.deleteFilesInDir(Utils.getActivity().getFilesDir());
     }
 
     /**
@@ -53,19 +42,19 @@ public final class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanInternalDbs(Context context) {
-        return FileUtils.getInstance().deleteFilesInDir(context.getFilesDir().getParent() + File.separator + "databases");
+    public static boolean cleanInternalDbs() {
+        return FileUtils.deleteFilesInDir(Utils.getActivity().getFilesDir().getParent() + File.separator + "databases");
     }
 
     /**
      * 根据名称清除数据库
      * <p>/data/data/com.xxx.xxx/databases/dbName</p>
      *
-     * @param dbName 数据库名称
+     * @param dbName  数据库名称
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanInternalDbByName(Context context, String dbName) {
-        return context.deleteDatabase(dbName);
+    public static boolean cleanInternalDbByName(String dbName) {
+        return Utils.getActivity().deleteDatabase(dbName);
     }
 
     /**
@@ -74,8 +63,8 @@ public final class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanInternalSP(Context context) {
-        return FileUtils.getInstance().deleteFilesInDir(context.getFilesDir().getParent() + File.separator + "shared_prefs");
+    public static boolean cleanInternalSP() {
+        return FileUtils.deleteFilesInDir(Utils.getActivity().getFilesDir().getParent() + File.separator + "shared_prefs");
     }
 
     /**
@@ -84,8 +73,8 @@ public final class CleanUtils {
      *
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanExternalCache(Context context) {
-        return SDCardUtils.getInstance().isSDCardEnable() && FileUtils.getInstance().deleteFilesInDir(context.getExternalCacheDir());
+    public static boolean cleanExternalCache() {
+        return SDCardUtils.isSDCardEnable() && FileUtils.deleteFilesInDir(Utils.getActivity().getExternalCacheDir());
     }
 
     /**
@@ -94,8 +83,8 @@ public final class CleanUtils {
      * @param dirPath 目录路径
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanCustomCache(String dirPath) {
-        return FileUtils.getInstance().deleteFilesInDir(dirPath);
+    public static boolean cleanCustomCache(String dirPath) {
+        return FileUtils.deleteFilesInDir(dirPath);
     }
 
     /**
@@ -104,7 +93,7 @@ public final class CleanUtils {
      * @param dir 目录
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
-    public boolean cleanCustomCache(File dir) {
-        return FileUtils.getInstance().deleteFilesInDir(dir);
+    public static boolean cleanCustomCache(File dir) {
+        return FileUtils.deleteFilesInDir(dir);
     }
 }
