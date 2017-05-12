@@ -12,18 +12,17 @@ import android.support.v4.util.SimpleArrayMap;
  */
 public final class PinyinUtils {
 
-    private volatile static PinyinUtils instance;
     // 多音字姓氏映射表
-    private final SimpleArrayMap<Character, String> surnames;
+    private static final SimpleArrayMap<Character, String> surnames;
     /**
      * 获取拼音对照表，对比过pinyin4j和其他方式，这样查表设计的好处就是读取快
      * <p>当该类加载后会一直占有123KB的内存</p>
      * <p>如果你想存进文件，然后读取操作的话也是可以，但速度肯定没有这样空间换时间快，毕竟现在设备内存都很大</p>
      * <p>如需更多用法可以用pinyin4j开源库</p>
      */
-    private final String pinyinTable;
+    private static final String pinyinTable;
 
-    {
+    static {
         surnames = new SimpleArrayMap<>(35);
         surnames.put('乐', "yue");
         surnames.put('乘', "sheng");
@@ -61,6 +60,7 @@ public final class PinyinUtils {
         surnames.put('难', "ning");
         surnames.put('黑', "he");
 
+        //noinspection StringBufferReplaceableByString
         pinyinTable = new StringBuilder(125412)
                 .append("yi    ding  kao   qi    shang xia   none  wan   zhang san   shang xia   ji    bu    yu    mian  gai   chou  chou  zhuan qie   pi    shi   shi   qiu   bing  ye    cong  dong  si    cheng diu   qiu   liang diu   you   liang yan   bing  sang  shu   jiu   ge    ya    qiang zhong ji    jie   feng  guan  chuan chan  lin   zhuo  zhu   none  wan   dan   wei   zhu   jing  li    ju    pie   fu    yi    yi    nai   none  jiu   jiu   tuo   me    yi    none  zhi   wu    zha   hu    fa    le    zhong ping  pang  qiao  hu    guai  cheng cheng yi    yin   none  mie   jiu   qi    ye    xi    xiang gai   diu   none  none  shu   none  shi   ji    nang  jia   none  shi   none  none  mai   luan  none  ru    xi    yan   fu    sha   na    gan   none  none  none  none  qian  zhi   gui   gan   luan  lin   yi    jue   le    none  yu    zheng shi   shi   er    chu   yu    kui   yu    yun   hu    qi    wu    jing  si    sui   gen   gen   ya    xie   ya    qi    ya    ji    tou   wang  kang  ta    jiao  hai   yi    chan  heng  mu    none  xiang jing  ting  liang heng  jing  ye    qin   bo    you   xie   dan   lian  duo   wei   ren   ren   ji    none  wang  yi    shen  ren   le    ding  ze    jin   pu    chou  ba    zhang jin   jie   bing  reng  cong  fo    san   lun   none  cang  zi    shi   ta    zhang fu    xian  xian  cha   hong  tong  ren   qian  gan   ge    di    dai   ling  yi    chao  chang sa    shang yi    mu    men   ren   jia   chao  yang  qian  zhong pi    wan   wu    jian  jia   yao   feng  cang  ren   wang  fen   di    fang  zhong qi    pei   yu    diao  dun   wen   yi    xin   kang  yi    ji    ai    wu    ji    fu    fa    xiu   jin   bei   chen  fu    tang  zhong you   huo   hui   yu    cui   yun   san   wei   chuan che   ya    xian  shang chang lun   cang  xun   xin   wei   zhu   chi   xuan  nao   bo    gu    ni    ni    xie   ban   xu    ling  zhou  shen  qu    si    beng  si    jia   pi    yi    si    ai    zheng dian  han   mai   dan   zhu   bu    qu    bi    shao  ci    wei   di    zhu   zuo   you   yang  ti    zhan  he    bi    tuo   she   yu    yi    fo    zuo   gou   ning  tong  ni    xuan  ju    yong  wa    qian  none  ka    none  pei   huai  he    lao   xiang ge    yang  bai   fa    ming  jia   nai   bing  ji    heng  huo   gui   quan  tiao  jiao  ci    yi    shi   xing  shen  tuo   kan   zhi   gai   lai   yi    chi   kua   guang li    yin   shi   mi    zhu   xu    you   an    lu    mou   er    lun   dong  cha   chi   xun   gong  zhou  yi    ru    jian  xia   jia   zai   lu:   none  jiao  zhen  ce    qiao  kuai  chai  ning  nong  jin   wu    hou   jiong cheng zhen  cuo   chou  qin   lu:   ju    shu   ting  shen  tuo   bo    nan   hao   bian  tui   yu    xi    cu    e     qiu   xu    kuang ku    wu    jun   yi    fu    lang  zu    qiao  li    yong  hun   jing  xian  san   pai   su    fu    xi    li    mian  ping  bao   yu    si    xia   xin   xiu   yu    ti    che   chou  none  yan   liang li    lai   si    jian  xiu   fu    he    ju    xiao  pai   jian  biao  ti    fei   feng  ya    an    bei   yu    xin   bi    chi   chang zhi   bing  zan   yao   cui   lia   wan   lai   cang  zong  ge    guan  bei   tian  shu   shu   men   dao   tan   jue   chui  xing  peng  tang  hou   yi    qi    ti    gan   jing  jie   xu    chang jie   fang  zhi   kong  juan  zong  ju    qian  ni    lun   zhuo  wo    luo   song  leng  hun   dong  zi    ben   wu    ju    nai   cai   jian  zhai  ye    zhi   sha   qing  none  ying  cheng qian  yan   nuan  zhong chun  jia   jie   wei   yu    bing  ruo   ti    wei   pian  yan   feng  tang  wo    e     xie   che   sheng kan   di    zuo   cha   ting  bei   ye    huang yao   zhan  qiu   yan   you   jian  xu    zha   chai  fu    bi    zhi   zong  mian  ji    yi    xie   xun   si    duan  ce    zhen  ou    tou   tou   bei   za    lou   jie   wei   fen   chang kui   sou   chi   su    xia   fu    yuan  rong  li    ru    yun   gou   ma    bang  dian  tang  hao   jie   xi    shan  qian  jue   cang  chu   san   bei   xiao  yong  yao   ta    suo   wang  fa    bing  jia   dai   zai   tang  none  bin   chu   nuo   zan   lei   cui   yong  zao   zong  peng  song  ao    chuan yu    zhai  zu    shang qian")
                 .append("g qiang chi   sha   han   zhang qing  yan   di    xi    lou   bei   piao  jin   lian  lu    man   qian  xian  qiu   ying  dong  zhuan xiang shan  qiao  jiong tui   zun   pu    xi    lao   chang guang liao  qi    deng  chan  wei   zhang fan   hui   chuan tie   dan   jiao  jiu   seng  fen   xian  jue   e     jiao  jian  tong  lin   bo    gu    xian  su    xian  jiang min   ye    jin   jia   qiao  pi    feng  zhou  ai    sai   yi    jun   nong  shan  yi    dang  jing  xuan  kuai  jian  chu   dan   jiao  sha   zai   none  bin   an    ru    tai   chou  chai  lan   ni    jin   qian  meng  wu    neng  qiong ni    chang lie   lei   lu:   kuang bao   du    biao  zan   zhi   si    you   hao   qin   chen  li    teng  wei   long  chu   chan  rang  shu   hui   li    luo   zan   nuo   tang  yan   lei   nang  er    wu    yun   zan   yuan  xiong chong zhao  xiong xian  guang dui   ke    dui   mian  tu    chang er    dui   er    jin   tu    si    yan   yan   shi   shi   dang  qian  dou   fen   mao   xin   dou   bai   jing  li    kuang ru    wang  nei   quan  liang yu    ba    gong  liu   xi    none  lan   gong  tian  guan  xing  bing  qi    ju    dian  zi    none  yang  jian  shou  ji    yi    ji    chan  jiong mao   ran   nei   yuan  mao   gang  ran   ce    jiong ce    zai   gua   jiong mao   zhou  mao   gou   xu    mian  mi    rong  yin   xie   kan   jun   nong  yi    mi    shi   guan  meng  zhong zui   yuan  ming  kou   none  fu    xie   mi    bing  dong  tai   gang  feng  bing  hu    chong jue   hu    kuang ye    leng  pan   fu    min   dong  xian  lie   xia   jian  jing  shu   mei   shang qi    gu    zhun  song  jing  liang qing  diao  ling  dong  gan   jian  yin   cou   ai    li    cang  ming  zhun  cui   si    duo   jin   lin   lin   ning  xi    du    ji    fan   fan   fan   feng  ju    chu   none  feng  none  none  fu    feng  ping  feng  kai   huang kai   gan   deng  ping  qu    xiong kuai  tu    ao    chu   ji    dang  han   han   zao   dao   diao  dao   ren   ren   chuangfen   qie   yi    ji    kan   qian  cun   chu   wen   ji    dan   xing  hua   wan   jue   li    yue   lie   liu   ze    gang  chuangfu    chu   qu    ju    shan  min   ling  zhong pan   bie   jie   jie   bao   li    shan  bie   chan  jing  gua   gen   dao   chuangkui   ku    duo   er    zhi   shua  quan  cha   ci    ke    jie   gui   ci    gui   kai   duo   ji    ti    jing  lou   luo   ze    yuan  cuo   xue   ke    la    qian  cha   chuan gua   jian  cuo   li    ti    fei   pou   chan  qi    chuangzi    gang  wan   bo    ji    duo   qing  yan   zhuo  jian  ji    bo    yan   ju    huo   sheng jian  duo   duan  wu    gua   fu    sheng jian  ge    zha   kai   chuangjuan  chan  tuan  lu    li    fou   shan  piao  kou   jiao  gua   qiao  jue   hua   zha   zhuo  lian  ju    pi    liu   gui   jiao  gui   jian  jian  tang  huo   ji    jian  yi    jian  zhi   chan  cuan  mo    li    zhu   li    ya    quan  ban   gong  jia   wu    mai   lie   jing  keng  xie   zhi   dong  zhu   nu    jie   qu    shao  yi    zhu   mo    li    jing  lao   lao   juan  kou   yang  wa    xiao  mou   kuang jie   lie   he    shi   ke    jing  hao   bo    min   chi   lang  yong  yong  mian  ke    xun   juan  qing  lu    bu    meng  lai   le    kai   mian  dong  xu    xu    kan   wu    yi    xun   weng  sheng lao   mu    lu    piao  shi   ji    qin   qiang jiao  quan  xiang yi    qiao  fan   juan  tong  ju    dan   xie   mai   xun   xun   lu:   li    che   rang  quan  bao   shao  yun   jiu   bao   gou   wu    yun   none  none  gai   gai   bao   cong  none  xiong peng  ju    tao   ge    pu    an    pao   fu    gong  da    jiu   qiong bi    hua   bei   nao   chi   fang  jiu   yi    za    jiang kang  jiang kuang hu    xia   qu    fan   gui   qie   cang  kuang fei   hu    yu    gui   kui   hui   dan   kui   lian  lian  suan  du    jiu   qu    xi    pi    qu    yi    an    yan   bian  ni    qu    shi   xin   qian  nian  sa    zu    sheng wu    hui   ban   shi   xi    wan   hua   xie   wan   bei   zu    zhuo  xie   dan   mai   nan   dan   ji    bo    shuai bu    kuang bian  bu    zhan  ka    lu    you   lu    xi    gua   wo    xie   jie   jie   wei   ang   qiong zhi   mao   yin   we")
@@ -95,15 +95,8 @@ public final class PinyinUtils {
                 .append("xie   yue   ").toString();
     }
 
-    public static PinyinUtils getInstance() {
-        if (instance == null) {
-            synchronized (PinyinUtils.class) {
-                if (instance == null) {
-                    instance = new PinyinUtils();
-                }
-            }
-        }
-        return instance;
+    private PinyinUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -112,7 +105,7 @@ public final class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 拼音
      */
-    public String ccs2Pinyin(CharSequence ccs) {
+    public static String ccs2Pinyin(CharSequence ccs) {
         return ccs2Pinyin(ccs, "");
     }
 
@@ -123,7 +116,7 @@ public final class PinyinUtils {
      * @param split 汉字拼音之间的分隔符
      * @return 拼音
      */
-    public String ccs2Pinyin(CharSequence ccs, CharSequence split) {
+    public static String ccs2Pinyin(CharSequence ccs, CharSequence split) {
         if (ccs == null || ccs.length() == 0) return null;
         StringBuilder sb = new StringBuilder();
         for (int i = 0, len = ccs.length(); i < len; i++) {
@@ -145,7 +138,7 @@ public final class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 拼音
      */
-    public String getPinyinFirstLetter(CharSequence ccs) {
+    public static String getPinyinFirstLetter(CharSequence ccs) {
         if (ccs == null || ccs.length() == 0) return null;
         return ccs2Pinyin(String.valueOf(ccs.charAt(0))).substring(0, 1);
     }
@@ -156,7 +149,7 @@ public final class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 所有汉字的首字母
      */
-    public String getPinyinFirstLetters(CharSequence ccs) {
+    public static String getPinyinFirstLetters(CharSequence ccs) {
         return getPinyinFirstLetters(ccs, "");
     }
 
@@ -167,7 +160,7 @@ public final class PinyinUtils {
      * @param split 首字母之间的分隔符
      * @return 所有汉字的首字母
      */
-    public String getPinyinFirstLetters(CharSequence ccs, CharSequence split) {
+    public static String getPinyinFirstLetters(CharSequence ccs, CharSequence split) {
         if (ccs == null || ccs.length() == 0) return null;
         int len = ccs.length();
         StringBuilder sb = new StringBuilder(len);
@@ -183,7 +176,7 @@ public final class PinyinUtils {
      * @param name 名字
      * @return 姓氏的拼音
      */
-    public String getSurnamePinyin(CharSequence name) {
+    public static String getSurnamePinyin(CharSequence name) {
         if (name == null || name.length() == 0) return null;
         if (name.length() >= 2) {
             CharSequence str = name.subSequence(0, 2);
@@ -210,7 +203,7 @@ public final class PinyinUtils {
      * @param name 名字
      * @return 姓氏的首字母
      */
-    public String getSurnameFirstLetter(CharSequence name) {
+    public static String getSurnameFirstLetter(CharSequence name) {
         String surname = getSurnamePinyin(name);
         if (surname == null || surname.length() == 0) return null;
         return String.valueOf(surname.charAt(0));
