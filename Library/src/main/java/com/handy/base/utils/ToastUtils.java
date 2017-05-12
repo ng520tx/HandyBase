@@ -1,9 +1,14 @@
 package com.handy.base.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 /**
@@ -16,34 +21,59 @@ import android.widget.Toast;
  */
 public final class ToastUtils {
 
-    private volatile static ToastUtils instance;
-    private Toast toast;
-    private boolean isJumpWhenMore = true;
-    private Handler sHandler = new Handler(Looper.getMainLooper());
+    private static Toast sToast;
+    private static int gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+    private static int xOffset = 0;
+    private static int yOffset = (int) (64 * Utils.getActivity().getResources().getDisplayMetrics().density + 0.5);
+    @SuppressLint("StaticFieldLeak")
+    private static View customView;
+    private static Handler sHandler = new Handler(Looper.getMainLooper());
 
-    public static ToastUtils getInstance() {
-        if (instance == null) {
-            synchronized (ToastUtils.class) {
-                if (instance == null) {
-                    instance = new ToastUtils();
-                }
-            }
-        }
-        return instance;
+    private ToastUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
-     * 吐司初始化
-     * <pre>
-     *  {@code true}: 弹出新吐司
-     *  {@code false}: 只修改文本内容
-     *  如果为{@code false}的话可用来做显示任意时长的吐司
-     * </pre>
+     * 设置吐司位置
      *
-     * @param isJumpWhenMore 当连续弹出吐司时，是要弹出新吐司还是只修改文本内容
+     * @param gravity 位置
+     * @param xOffset x偏移
+     * @param yOffset y偏移
      */
-    public void init(boolean isJumpWhenMore) {
-        this.isJumpWhenMore = isJumpWhenMore;
+    public static void setGravity(int gravity, int xOffset, int yOffset) {
+        ToastUtils.gravity = gravity;
+        ToastUtils.xOffset = xOffset;
+        ToastUtils.yOffset = yOffset;
+    }
+
+    /**
+     * 设置吐司view
+     *
+     * @param layoutId 视图
+     */
+    public static void setView(@LayoutRes int layoutId) {
+        LayoutInflater inflate = (LayoutInflater) Utils.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ToastUtils.customView = inflate.inflate(layoutId, null);
+    }
+
+    /**
+     * 获取吐司view
+     *
+     * @return view 自定义view
+     */
+    public static View getView() {
+        if (customView != null) return customView;
+        if (sToast != null) return sToast.getView();
+        return null;
+    }
+
+    /**
+     * 设置吐司view
+     *
+     * @param view 视图
+     */
+    public static void setView(View view) {
+        ToastUtils.customView = view;
     }
 
     /**
@@ -51,11 +81,11 @@ public final class ToastUtils {
      *
      * @param text 文本
      */
-    public void showShortToastSafe(final Context context, final CharSequence text) {
+    public static void showShortSafe(final CharSequence text) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, text, Toast.LENGTH_SHORT);
+                show(text, Toast.LENGTH_SHORT);
             }
         });
     }
@@ -65,11 +95,11 @@ public final class ToastUtils {
      *
      * @param resId 资源Id
      */
-    public void showShortToastSafe(final Context context, final @StringRes int resId) {
+    public static void showShortSafe(final @StringRes int resId) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, resId, Toast.LENGTH_SHORT);
+                show(resId, Toast.LENGTH_SHORT);
             }
         });
     }
@@ -80,11 +110,11 @@ public final class ToastUtils {
      * @param resId 资源Id
      * @param args  参数
      */
-    public void showShortToastSafe(final Context context, final @StringRes int resId, final Object... args) {
+    public static void showShortSafe(final @StringRes int resId, final Object... args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, resId, Toast.LENGTH_SHORT, args);
+                show(resId, Toast.LENGTH_SHORT, args);
             }
         });
     }
@@ -95,11 +125,11 @@ public final class ToastUtils {
      * @param format 格式
      * @param args   参数
      */
-    public void showShortToastSafe(final Context context, final String format, final Object... args) {
+    public static void showShortSafe(final String format, final Object... args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, format, Toast.LENGTH_SHORT, args);
+                show(format, Toast.LENGTH_SHORT, args);
             }
         });
     }
@@ -109,11 +139,11 @@ public final class ToastUtils {
      *
      * @param text 文本
      */
-    public void showLongToastSafe(final Context context, final CharSequence text) {
+    public static void showLongSafe(final CharSequence text) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, text, Toast.LENGTH_LONG);
+                show(text, Toast.LENGTH_LONG);
             }
         });
     }
@@ -123,11 +153,11 @@ public final class ToastUtils {
      *
      * @param resId 资源Id
      */
-    public void showLongToastSafe(final Context context, final @StringRes int resId) {
+    public static void showLongSafe(final @StringRes int resId) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, resId, Toast.LENGTH_LONG);
+                show(resId, Toast.LENGTH_LONG);
             }
         });
     }
@@ -138,11 +168,11 @@ public final class ToastUtils {
      * @param resId 资源Id
      * @param args  参数
      */
-    public void showLongToastSafe(final Context context, final @StringRes int resId, final Object... args) {
+    public static void showLongSafe(final @StringRes int resId, final Object... args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, resId, Toast.LENGTH_LONG, args);
+                show(resId, Toast.LENGTH_LONG, args);
             }
         });
     }
@@ -153,11 +183,11 @@ public final class ToastUtils {
      * @param format 格式
      * @param args   参数
      */
-    public void showLongToastSafe(final Context context, final String format, final Object... args) {
+    public static void showLongSafe(final String format, final Object... args) {
         sHandler.post(new Runnable() {
             @Override
             public void run() {
-                showToast(context, format, Toast.LENGTH_LONG, args);
+                show(format, Toast.LENGTH_LONG, args);
             }
         });
     }
@@ -167,8 +197,8 @@ public final class ToastUtils {
      *
      * @param text 文本
      */
-    public void showShortToast(Context context, CharSequence text) {
-        showToast(context, text, Toast.LENGTH_SHORT);
+    public static void showShort(CharSequence text) {
+        show(text, Toast.LENGTH_SHORT);
     }
 
     /**
@@ -176,8 +206,8 @@ public final class ToastUtils {
      *
      * @param resId 资源Id
      */
-    public void showShortToast(Context context, @StringRes int resId) {
-        showToast(context, resId, Toast.LENGTH_SHORT);
+    public static void showShort(@StringRes int resId) {
+        show(resId, Toast.LENGTH_SHORT);
     }
 
     /**
@@ -186,8 +216,8 @@ public final class ToastUtils {
      * @param resId 资源Id
      * @param args  参数
      */
-    public void showShortToast(Context context, @StringRes int resId, Object... args) {
-        showToast(context, resId, Toast.LENGTH_SHORT, args);
+    public static void showShort(@StringRes int resId, Object... args) {
+        show(resId, Toast.LENGTH_SHORT, args);
     }
 
     /**
@@ -196,8 +226,8 @@ public final class ToastUtils {
      * @param format 格式
      * @param args   参数
      */
-    public void showShortToast(Context context, String format, Object... args) {
-        showToast(context, format, Toast.LENGTH_SHORT, args);
+    public static void showShort(String format, Object... args) {
+        show(format, Toast.LENGTH_SHORT, args);
     }
 
     /**
@@ -205,8 +235,8 @@ public final class ToastUtils {
      *
      * @param text 文本
      */
-    public void showLongToast(Context context, CharSequence text) {
-        showToast(context, text, Toast.LENGTH_LONG);
+    public static void showLong(CharSequence text) {
+        show(text, Toast.LENGTH_LONG);
     }
 
     /**
@@ -214,8 +244,8 @@ public final class ToastUtils {
      *
      * @param resId 资源Id
      */
-    public void showLongToast(Context context, @StringRes int resId) {
-        showToast(context, resId, Toast.LENGTH_LONG);
+    public static void showLong(@StringRes int resId) {
+        show(resId, Toast.LENGTH_LONG);
     }
 
     /**
@@ -224,8 +254,8 @@ public final class ToastUtils {
      * @param resId 资源Id
      * @param args  参数
      */
-    public void showLongToast(Context context, @StringRes int resId, Object... args) {
-        showToast(context, resId, Toast.LENGTH_LONG, args);
+    public static void showLong(@StringRes int resId, Object... args) {
+        show(resId, Toast.LENGTH_LONG, args);
     }
 
     /**
@@ -234,8 +264,8 @@ public final class ToastUtils {
      * @param format 格式
      * @param args   参数
      */
-    public void showLongToast(Context context, String format, Object... args) {
-        showToast(context, format, Toast.LENGTH_LONG, args);
+    public static void showLong(String format, Object... args) {
+        show(format, Toast.LENGTH_LONG, args);
     }
 
     /**
@@ -244,8 +274,8 @@ public final class ToastUtils {
      * @param resId    资源Id
      * @param duration 显示时长
      */
-    private void showToast(Context context, @StringRes int resId, int duration) {
-        showToast(context, context.getResources().getText(resId).toString(), duration);
+    private static void show(@StringRes int resId, int duration) {
+        show(Utils.getActivity().getResources().getText(resId).toString(), duration);
     }
 
     /**
@@ -255,8 +285,8 @@ public final class ToastUtils {
      * @param duration 显示时长
      * @param args     参数
      */
-    private void showToast(Context context, @StringRes int resId, int duration, Object... args) {
-        showToast(context, String.format(context.getResources().getString(resId), args), duration);
+    private static void show(@StringRes int resId, int duration, Object... args) {
+        show(String.format(Utils.getActivity().getResources().getString(resId), args), duration);
     }
 
     /**
@@ -266,8 +296,8 @@ public final class ToastUtils {
      * @param duration 显示时长
      * @param args     参数
      */
-    private void showToast(Context context, String format, int duration, Object... args) {
-        showToast(context, String.format(format, args), duration);
+    private static void show(String format, int duration, Object... args) {
+        show(String.format(format, args), duration);
     }
 
     /**
@@ -276,24 +306,26 @@ public final class ToastUtils {
      * @param text     文本
      * @param duration 显示时长
      */
-    private void showToast(Context context, CharSequence text, int duration) {
-        if (isJumpWhenMore) cancelToast();
-        if (toast == null) {
-            toast = Toast.makeText(context, text, duration);
+    private static void show(CharSequence text, int duration) {
+        cancel();
+        if (customView != null) {
+            sToast = new Toast(Utils.getActivity());
+            sToast.setView(customView);
+            sToast.setDuration(duration);
         } else {
-            toast.setText(text);
-            toast.setDuration(duration);
+            sToast = Toast.makeText(Utils.getActivity(), text, duration);
         }
-        toast.show();
+        sToast.setGravity(gravity, xOffset, yOffset);
+        sToast.show();
     }
 
     /**
      * 取消吐司显示
      */
-    public void cancelToast() {
-        if (toast != null) {
-            toast.cancel();
-            toast = null;
+    public static void cancel() {
+        if (sToast != null) {
+            sToast.cancel();
+            sToast = null;
         }
     }
 }
