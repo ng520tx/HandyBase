@@ -28,17 +28,8 @@ import java.util.Set;
  */
 public final class ProcessUtils {
 
-    private volatile static ProcessUtils instance;
-
-    public static ProcessUtils getInstance() {
-        if (instance == null) {
-            synchronized (ProcessUtils.class) {
-                if (instance == null) {
-                    instance = new ProcessUtils();
-                }
-            }
-        }
-        return instance;
+    private ProcessUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -48,8 +39,8 @@ public final class ProcessUtils {
      *
      * @return 前台应用包名
      */
-    public String getForegroundProcessName(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    public static String getForegroundProcessName() {
+        ActivityManager manager = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = manager.getRunningAppProcesses();
         if (infos != null && infos.size() != 0) {
             for (ActivityManager.RunningAppProcessInfo info : infos) {
@@ -59,22 +50,22 @@ public final class ProcessUtils {
             }
         }
         if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.LOLLIPOP) {
-            PackageManager packageManager = context.getPackageManager();
+            PackageManager packageManager = Utils.getActivity().getPackageManager();
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             System.out.println(list);
             if (list.size() > 0) {// 有"有权查看使用权限的应用"选项
                 try {
-                    ApplicationInfo info = packageManager.getApplicationInfo(context.getPackageName(), 0);
-                    AppOpsManager aom = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+                    ApplicationInfo info = packageManager.getApplicationInfo(Utils.getActivity().getPackageName(), 0);
+                    AppOpsManager aom = (AppOpsManager) Utils.getActivity().getSystemService(Context.APP_OPS_SERVICE);
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
-                        context.startActivity(intent);
+                        Utils.getActivity().startActivity(intent);
                     }
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
-                        LogUtils.getInstance().d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
+                        LogUtils.d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
                         return null;
                     }
-                    UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+                    UsageStatsManager usageStatsManager = (UsageStatsManager) Utils.getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
                     long endTime = System.currentTimeMillis();
                     long beginTime = endTime - 86400000 * 7;
                     List<UsageStats> usageStatses = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, beginTime, endTime);
@@ -90,7 +81,7 @@ public final class ProcessUtils {
                     e.printStackTrace();
                 }
             } else {
-                LogUtils.getInstance().d("getForegroundApp", "无\"有权查看使用权限的应用\"选项");
+                LogUtils.d("getForegroundApp", "无\"有权查看使用权限的应用\"选项");
             }
         }
         return null;
@@ -102,8 +93,8 @@ public final class ProcessUtils {
      *
      * @return 后台服务进程
      */
-    public Set<String> getAllBackgroundProcesses(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    public static Set<String> getAllBackgroundProcesses() {
+        ActivityManager am = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         Set<String> set = new HashSet<>();
         for (ActivityManager.RunningAppProcessInfo info : infos) {
@@ -118,8 +109,8 @@ public final class ProcessUtils {
      *
      * @return 被暂时杀死的服务集合
      */
-    public Set<String> killAllBackgroundProcesses(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    public static Set<String> killAllBackgroundProcesses() {
+        ActivityManager am = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         Set<String> set = new HashSet<>();
         for (ActivityManager.RunningAppProcessInfo info : infos) {
@@ -144,8 +135,8 @@ public final class ProcessUtils {
      * @param packageName 包名
      * @return {@code true}: 杀死成功<br>{@code false}: 杀死失败
      */
-    public boolean killBackgroundProcesses(Context context, @NonNull String packageName) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    public static boolean killBackgroundProcesses(@NonNull String packageName) {
+        ActivityManager am = (ActivityManager) Utils.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
         if (infos == null || infos.size() == 0) return true;
         for (ActivityManager.RunningAppProcessInfo info : infos) {
