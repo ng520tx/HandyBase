@@ -26,21 +26,13 @@ import java.util.Locale;
  */
 public final class LocationUtils {
 
-    private volatile static LocationUtils instance;
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private static OnLocationChangeListener mListener;
+    private static MyLocationListener myLocationListener;
+    private static LocationManager mLocationManager;
 
-    private LocationManager mLocationManager;
-    private OnLocationChangeListener mListener;
-    private MyLocationListener myLocationListener;
-
-    public static LocationUtils getInstance() {
-        if (instance == null) {
-            synchronized (LocationUtils.class) {
-                if (instance == null) {
-                    instance = new LocationUtils();
-                }
-            }
-        }
-        return instance;
+    private LocationUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -48,8 +40,8 @@ public final class LocationUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isGpsEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    public static boolean isGpsEnabled() {
+        LocationManager lm = (LocationManager) Utils.getActivity().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -58,18 +50,18 @@ public final class LocationUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isLocationEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    public static boolean isLocationEnabled() {
+        LocationManager lm = (LocationManager) Utils.getActivity().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
      * 打开Gps设置界面
      */
-    public void openGpsSettings(Context context) {
+    public static void openGpsSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        Utils.getActivity().startActivity(intent);
     }
 
     /**
@@ -87,12 +79,12 @@ public final class LocationUtils {
      * @param listener    位置刷新的回调接口
      * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    public boolean register(Context context, long minTime, long minDistance, OnLocationChangeListener listener) {
+    public static boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) Utils.getActivity().getSystemService(Context.LOCATION_SERVICE);
         mListener = listener;
-        if (!isLocationEnabled(context)) {
-            ToastUtils.getInstance().showShortToastSafe(context, "无法定位，请打开定位服务");
+        if (!isLocationEnabled()) {
+            ToastUtils.showShortSafe("无法定位，请打开定位服务");
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
@@ -103,11 +95,10 @@ public final class LocationUtils {
         return true;
     }
 
-
     /**
      * 注销
      */
-    public void unregister() {
+    public static void unregister() {
         if (mLocationManager != null) {
             if (myLocationListener != null) {
                 mLocationManager.removeUpdates(myLocationListener);
@@ -122,17 +113,17 @@ public final class LocationUtils {
      *
      * @return {@link Criteria}
      */
-    private Criteria getCriteria() {
+    private static Criteria getCriteria() {
         Criteria criteria = new Criteria();
-        //设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
+        // 设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        //设置是否要求速度
+        // 设置是否要求速度
         criteria.setSpeedRequired(false);
         // 设置是否允许运营商收费
         criteria.setCostAllowed(false);
-        //设置是否需要方位信息
+        // 设置是否需要方位信息
         criteria.setBearingRequired(false);
-        //设置是否需要海拔信息
+        // 设置是否需要海拔信息
         criteria.setAltitudeRequired(false);
         // 设置对电源的需求
         criteria.setPowerRequirement(Criteria.POWER_LOW);
@@ -146,8 +137,8 @@ public final class LocationUtils {
      * @param longitude 经度
      * @return {@link Address}
      */
-    public Address getAddress(Context context, double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+    public static Address getAddress(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(Utils.getActivity(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);
@@ -164,8 +155,8 @@ public final class LocationUtils {
      * @param longitude 经度
      * @return 所在国家
      */
-    public String getCountryName(Context context, double latitude, double longitude) {
-        Address address = getAddress(context, latitude, longitude);
+    public static String getCountryName(double latitude, double longitude) {
+        Address address = getAddress(latitude, longitude);
         return address == null ? "unknown" : address.getCountryName();
     }
 
@@ -176,8 +167,8 @@ public final class LocationUtils {
      * @param longitude 经度
      * @return 所在地
      */
-    public String getLocality(Context context, double latitude, double longitude) {
-        Address address = getAddress(context, latitude, longitude);
+    public static String getLocality(double latitude, double longitude) {
+        Address address = getAddress(latitude, longitude);
         return address == null ? "unknown" : address.getLocality();
     }
 
@@ -188,9 +179,72 @@ public final class LocationUtils {
      * @param longitude 经度
      * @return 所在街道
      */
-    public String getStreet(Context context, double latitude, double longitude) {
-        Address address = getAddress(context, latitude, longitude);
+    public static String getStreet(double latitude, double longitude) {
+        Address address = getAddress(latitude, longitude);
         return address == null ? "unknown" : address.getAddressLine(0);
+    }
+
+    /**
+     * 是否更好的位置
+     *
+     * @param newLocation         The new Location that you want to evaluate
+     * @param currentBestLocation The current Location fix, to which you want to compare the new one
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public static boolean isBetterLocation(Location newLocation, Location currentBestLocation) {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = newLocation.getTime() - currentBestLocation.getTime();
+        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+        boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location, use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true;
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false;
+        }
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (newLocation.getAccuracy() - currentBestLocation.getAccuracy());
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = isSameProvider(newLocation.getProvider(),
+                currentBestLocation.getProvider());
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 是否相同的提供者
+     *
+     * @param provider0 提供者1
+     * @param provider1 提供者2
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public static boolean isSameProvider(String provider0, String provider1) {
+        if (provider0 == null) {
+            return provider1 == null;
+        }
+        return provider0.equals(provider1);
     }
 
     public interface OnLocationChangeListener {
@@ -219,7 +273,8 @@ public final class LocationUtils {
         void onStatusChanged(String provider, int status, Bundle extras);//位置状态发生改变
     }
 
-    private class MyLocationListener implements LocationListener {
+    private static class MyLocationListener
+            implements LocationListener {
         /**
          * 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
          *
@@ -246,13 +301,13 @@ public final class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为可见状态");
+                    LogUtils.d("onStatusChanged", "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为服务区外状态");
+                    LogUtils.d("onStatusChanged", "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    LogUtils.getInstance().d("onStatusChanged", "当前GPS状态为暂停服务状态");
+                    LogUtils.d("onStatusChanged", "当前GPS状态为暂停服务状态");
                     break;
             }
         }
