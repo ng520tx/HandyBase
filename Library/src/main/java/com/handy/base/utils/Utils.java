@@ -51,7 +51,7 @@ public final class Utils {
      *
      * @return ApplicationContext
      */
-    public static Context getContext() {
+    public static Context getApplicationContext() {
         return context;
     }
 }
