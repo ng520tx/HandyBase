@@ -16,17 +16,8 @@ import android.net.Uri;
  */
 public final class ClipboardUtils {
 
-    private volatile static ClipboardUtils instance;
-
-    public static ClipboardUtils getInstance() {
-        if (instance == null) {
-            synchronized (ClipboardUtils.class) {
-                if (instance == null) {
-                    instance = new ClipboardUtils();
-                }
-            }
-        }
-        return instance;
+    private ClipboardUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -34,8 +25,8 @@ public final class ClipboardUtils {
      *
      * @param text 文本
      */
-    public void copyText(Context context, CharSequence text) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    public static void copyText(CharSequence text) {
+        ClipboardManager clipboard = (ClipboardManager) Utils.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText("text", text));
     }
 
@@ -44,11 +35,11 @@ public final class ClipboardUtils {
      *
      * @return 剪贴板的文本
      */
-    public CharSequence getText(Context context) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    public static CharSequence getText() {
+        ClipboardManager clipboard = (ClipboardManager) Utils.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
-            return clip.getItemAt(0).coerceToText(context);
+            return clip.getItemAt(0).coerceToText(Utils.getActivity());
         }
         return null;
     }
@@ -58,9 +49,9 @@ public final class ClipboardUtils {
      *
      * @param uri uri
      */
-    public void copyUri(Context context, Uri uri) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setPrimaryClip(ClipData.newUri(context.getContentResolver(), "uri", uri));
+    public static void copyUri(Uri uri) {
+        ClipboardManager clipboard = (ClipboardManager) Utils.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newUri(Utils.getActivity().getContentResolver(), "uri", uri));
     }
 
     /**
@@ -68,8 +59,8 @@ public final class ClipboardUtils {
      *
      * @return 剪贴板的uri
      */
-    public Uri getUri(Context context) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    public static Uri getUri() {
+        ClipboardManager clipboard = (ClipboardManager) Utils.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
             return clip.getItemAt(0).getUri();
@@ -82,8 +73,8 @@ public final class ClipboardUtils {
      *
      * @param intent 意图
      */
-    public void copyIntent(Context context, Intent intent) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    public static void copyIntent(Intent intent) {
+        ClipboardManager clipboard = (ClipboardManager) Utils.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newIntent("intent", intent));
     }
 
@@ -92,8 +83,8 @@ public final class ClipboardUtils {
      *
      * @return 剪贴板的意图
      */
-    public Intent getIntent(Context context) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+    public static Intent getIntent() {
+        ClipboardManager clipboard = (ClipboardManager) Utils.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
             return clip.getItemAt(0).getIntent();
