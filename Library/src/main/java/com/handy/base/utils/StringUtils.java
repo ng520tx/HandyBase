@@ -15,17 +15,8 @@ import java.io.StringWriter;
  */
 public final class StringUtils {
 
-    private volatile static StringUtils instance;
-
-    public static StringUtils getInstance() {
-        if (instance == null) {
-            synchronized (StringUtils.class) {
-                if (instance == null) {
-                    instance = new StringUtils();
-                }
-            }
-        }
-        return instance;
+    private StringUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -34,7 +25,7 @@ public final class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: 空<br> {@code false}: 不为空
      */
-    public boolean isEmpty(CharSequence s) {
+    public static boolean isEmpty(CharSequence s) {
         return s == null || s.length() == 0;
     }
 
@@ -44,7 +35,7 @@ public final class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: null或全空格<br> {@code false}: 不为null且不全空格
      */
-    public boolean isTrimEmpty(String s) {
+    public static boolean isTrimEmpty(String s) {
         return (s == null || s.trim().length() == 0);
     }
 
@@ -54,7 +45,7 @@ public final class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: null或全空白字符<br> {@code false}: 不为null且不全空白字符
      */
-    public boolean isSpace(String s) {
+    public static boolean isSpace(String s) {
         if (s == null) return true;
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
@@ -71,7 +62,7 @@ public final class StringUtils {
      * @param b 待校验字符串b
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
-    public boolean equals(CharSequence a, CharSequence b) {
+    public static boolean equals(CharSequence a, CharSequence b) {
         if (a == b) return true;
         int length;
         if (a != null && b != null && (length = a.length()) == b.length()) {
@@ -94,8 +85,8 @@ public final class StringUtils {
      * @param b 待校验字符串b
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
-    public boolean equalsIgnoreCase(String a, String b) {
-        return (a == b) || (b != null) && (a.length() == b.length()) && a.regionMatches(true, 0, b, 0, b.length());
+    public static boolean equalsIgnoreCase(String a, String b) {
+        return a == null ? b == null : a.equalsIgnoreCase(b);
     }
 
     /**
@@ -104,7 +95,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return s为null转为长度为0字符串，否则不改变
      */
-    public String null2Length0(String s) {
+    public static String null2Length0(String s) {
         return s == null ? "" : s;
     }
 
@@ -114,7 +105,7 @@ public final class StringUtils {
      * @param s 字符串
      * @return null返回0，其他返回自身长度
      */
-    public int length(CharSequence s) {
+    public static int length(CharSequence s) {
         return s == null ? 0 : s.length();
     }
 
@@ -124,7 +115,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 首字母大写字符串
      */
-    public String upperFirstLetter(String s) {
+    public static String upperFirstLetter(String s) {
         if (isEmpty(s) || !Character.isLowerCase(s.charAt(0))) return s;
         return String.valueOf((char) (s.charAt(0) - 32)) + s.substring(1);
     }
@@ -135,7 +126,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 首字母小写字符串
      */
-    public String lowerFirstLetter(String s) {
+    public static String lowerFirstLetter(String s) {
         if (isEmpty(s) || !Character.isUpperCase(s.charAt(0))) return s;
         return String.valueOf((char) (s.charAt(0) + 32)) + s.substring(1);
     }
@@ -146,7 +137,7 @@ public final class StringUtils {
      * @param s 待反转字符串
      * @return 反转字符串
      */
-    public String reverse(String s) {
+    public static String reverse(String s) {
         int len = length(s);
         if (len <= 1) return s;
         int mid = len >> 1;
@@ -166,7 +157,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 半角字符串
      */
-    public String toDBC(String s) {
+    public static String toDBC(String s) {
         if (isEmpty(s)) return s;
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
@@ -187,7 +178,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 全角字符串
      */
-    public String toSBC(String s) {
+    public static String toSBC(String s) {
         if (isEmpty(s)) return s;
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
@@ -208,7 +199,7 @@ public final class StringUtils {
      * @param e 异常类
      * @return 异常堆栈内容
      */
-    public String getExceptionInfoByStackTraceElement(Exception e) {
+    public static String getExceptionInfoByStackTraceElement(Exception e) {
         String sOut = "";
         StackTraceElement[] trace = e.getStackTrace();
         for (StackTraceElement s : trace) {
@@ -223,7 +214,7 @@ public final class StringUtils {
      * @param e 异常类
      * @return 异常堆栈内容
      */
-    public String getExceptionInfoByPrintStream(Exception e) {
+    public static String getExceptionInfoByPrintStream(Exception e) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream pout = new PrintStream(out);
         e.printStackTrace(pout);
@@ -243,7 +234,7 @@ public final class StringUtils {
      * @param e 异常类
      * @return 异常堆栈内容
      */
-    private String getExceptionInfoByPrintWriter(Throwable e) {
+    public static String getExceptionInfoByPrintWriter(Throwable e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw, true);
         e.printStackTrace(pw);
