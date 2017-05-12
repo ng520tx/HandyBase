@@ -29,35 +29,20 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public final class AesUtils {
 
-    private volatile static AesUtils instance;
-    private final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
-    private String DEFAULT_KEY = "HANDY_SECRET_KEY";
+    private static final byte[] iv = {1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 0};
+    private static String DEFAULT_KEY = "HANDY_SECRET_KEY";
 
-    public static AesUtils getInstance() {
-        if (instance == null) {
-            synchronized (AesUtils.class) {
-                if (instance == null) {
-                    instance = new AesUtils();
-                }
-            }
-        }
-        return instance;
+    public static String getDEFAULT_KEY() {
+        return DEFAULT_KEY;
     }
 
-    public static AesUtils getInstance(String DEFAULT_KEY) throws Exception {
-        if (instance == null) {
-            synchronized (AesUtils.class) {
-                if (instance == null) {
-                    instance = new AesUtils();
-                }
-            }
-        }
-        if (EmptyUtils.getInstance().isEmpty(DEFAULT_KEY)) {
-            throw new Exception("密钥为空");
-        } else if (DEFAULT_KEY.length() != 16) {
-            throw new Exception("密钥长度必须为16位");
+    public static void setDEFAULT_KEY(String default_key) {
+        if (EmptyUtils.isEmpty(default_key)) {
+            LogUtils.d("密钥为空");
+        } else if (default_key.length() != 16) {
+            LogUtils.d("密钥长度必须为16位");
         } else {
-            return instance;
+            DEFAULT_KEY = default_key;
         }
     }
 
@@ -67,7 +52,7 @@ public final class AesUtils {
      * @param src 明文
      * @return 密文
      */
-    public String encrypt(String src) {
+    public static String encrypt(String src) {
         try {
             return encrypt(DEFAULT_KEY, src);
         } catch (Exception e) {
@@ -76,7 +61,7 @@ public final class AesUtils {
         return null;
     }
 
-    private String encrypt(String key, String src) {
+    private static String encrypt(String key, String src) {
         try {
             byte[] keyByte = key.getBytes();
             SecretKeySpec keySpec = new SecretKeySpec(keyByte, "AES");
@@ -89,8 +74,7 @@ public final class AesUtils {
             byte[] srcByte = src.getBytes();
             byte[] encrypted = cipher.doFinal(srcByte);
             //Base64转码。
-            String result = Base64Utils.getInstance().encode(encrypted);
-            return result;
+            return Base64Utils.getInstance().encode(encrypted);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,7 +87,7 @@ public final class AesUtils {
      * @param src 密文
      * @return 明文
      */
-    public String decrypt(String src) {
+    public static String decrypt(String src) {
         try {
             return decrypt(DEFAULT_KEY, src);
         } catch (Exception e) {
@@ -112,7 +96,7 @@ public final class AesUtils {
         return null;
     }
 
-    private String decrypt(String key, String src) {
+    private static String decrypt(String key, String src) {
         try {
             byte[] keyByte = key.getBytes();
             SecretKeySpec keySpec = new SecretKeySpec(keyByte, "AES");
@@ -123,8 +107,7 @@ public final class AesUtils {
             byte[] srcByte = Base64Utils.getInstance().decode(src);
             //解密。
             byte[] decrypted = cipher.doFinal(srcByte);
-            String result = new String(decrypted);
-            return result;
+            return new String(decrypted);
         } catch (Exception e) {
             e.printStackTrace();
         }
