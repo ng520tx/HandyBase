@@ -10,11 +10,10 @@ package com.handy.base.utils;
  */
 public final class LunarUtils {
 
-    private volatile static LunarUtils instance;
     /*
      * |----4位闰月|-------------13位1为30天，0为29天|
      */
-    private int[] lunar_month_days = {1887, 0x1694, 0x16aa, 0x4ad5, 0xab6, 0xc4b7, 0x4ae, 0xa56, 0xb52a, 0x1d2a,
+    private static int[] lunar_month_days = {1887, 0x1694, 0x16aa, 0x4ad5, 0xab6, 0xc4b7, 0x4ae, 0xa56, 0xb52a, 0x1d2a,
             0xd54, 0x75aa, 0x156a, 0x1096d, 0x95c, 0x14ae, 0xaa4d, 0x1a4c, 0x1b2a, 0x8d55, 0xad4, 0x135a, 0x495d, 0x95c,
             0xd49b, 0x149a, 0x1a4a, 0xbaa5, 0x16a8, 0x1ad4, 0x52da, 0x12b6, 0xe937, 0x92e, 0x1496, 0xb64b, 0xd4a, 0xda8,
             0x95b5, 0x56c, 0x12ae, 0x492f, 0x92e, 0xcc96, 0x1a94, 0x1d4a, 0xada9, 0xb5a, 0x56c, 0x726e, 0x125c, 0xf92d,
@@ -31,7 +30,7 @@ public final class LunarUtils {
             0x1694, 0xd6aa, 0x15aa, 0xab4, 0x94ba, 0x14b6, 0xa56, 0x7527, 0xd26, 0xee53, 0xd54, 0x15aa, 0xa9b5, 0x96c,
             0x14ae, 0x8a4e, 0x1a4c, 0x11d26, 0x1aa4, 0x1b54, 0xcd6a, 0xada, 0x95c, 0x949d, 0x149a, 0x1a2a, 0x5b25,
             0x1aa4, 0xfb52, 0x16b4, 0xaba, 0xa95b, 0x936, 0x1496, 0x9a4b, 0x154a, 0x136a5, 0xda4, 0x15ac};
-    private int[] solar_1_1 = {1887, 0xec04c, 0xec23f, 0xec435, 0xec649, 0xec83e, 0xeca51, 0xecc46, 0xece3a,
+    private static int[] solar_1_1 = {1887, 0xec04c, 0xec23f, 0xec435, 0xec649, 0xec83e, 0xeca51, 0xecc46, 0xece3a,
             0xed04d, 0xed242, 0xed436, 0xed64a, 0xed83f, 0xeda53, 0xedc48, 0xede3d, 0xee050, 0xee244, 0xee439, 0xee64d,
             0xee842, 0xeea36, 0xeec4a, 0xeee3e, 0xef052, 0xef246, 0xef43a, 0xef64e, 0xef843, 0xefa37, 0xefc4b, 0xefe41,
             0xf0054, 0xf0248, 0xf043c, 0xf0650, 0xf0845, 0xf0a38, 0xf0c4d, 0xf0e42, 0xf1037, 0xf124a, 0xf143e, 0xf1651,
@@ -53,18 +52,11 @@ public final class LunarUtils {
             0x106a3d, 0x106c51, 0x106e47, 0x10703c, 0x10724f, 0x107444, 0x107638, 0x10784c, 0x107a3f, 0x107c53,
             0x107e48};
 
-    public static LunarUtils getInstance() {
-        if (instance == null) {
-            synchronized (LunarUtils.class) {
-                if (instance == null) {
-                    instance = new LunarUtils();
-                }
-            }
-        }
-        return instance;
+    private LunarUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    private int GetBitInt(int data, int length, int shift) {
+    private static int GetBitInt(int data, int length, int shift) {
         return (data & (((1 << length) - 1) << shift)) >> shift;
     }
 
@@ -76,7 +68,7 @@ public final class LunarUtils {
      * @param d 日
      * @return 阳历
      */
-    private long SolarToInt(int y, int m, int d) {
+    private static long SolarToInt(int y, int m, int d) {
         m = (m + 9) % 12;
         y = y - m / 10;
         return 365 * y + y / 4 - y / 100 + y / 400 + (m * 306 + 5) / 10 + (d - 1);
@@ -87,13 +79,13 @@ public final class LunarUtils {
      * @return String of Ganzhi: 甲子年 Tiangan:甲乙丙丁戊己庚辛壬癸
      * Dizhi: 子丑寅卯辰巳无为申酉戌亥
      */
-    public String lunarYearToGanZhi(int lunarYear) {
+    public static String lunarYearToGanZhi(int lunarYear) {
         final String[] tianGan = {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
         final String[] diZhi = {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
         return tianGan[(lunarYear - 4) % 10] + diZhi[(lunarYear - 4) % 12] + "年";
     }
 
-    private Solar SolarFromInt(long g) {
+    private static Solar SolarFromInt(long g) {
         long y = (10000 * g + 14780) / 3652425;
         long ddd = g - (365 * y + y / 4 - y / 100 + y / 400);
         if (ddd < 0) {
@@ -117,7 +109,7 @@ public final class LunarUtils {
      * @param lunar 农历
      * @return 阴历
      */
-    public Solar LunarToSolar(Lunar lunar) {
+    public static Solar LunarToSolar(Lunar lunar) {
         int days = lunar_month_days[lunar.lunarYear - lunar_month_days[0]];
         int leap = GetBitInt(days, 4, 13);
         int offset = 0;
@@ -133,10 +125,13 @@ public final class LunarUtils {
             offset += GetBitInt(days, 1, 12 - i) == 1 ? 30 : 29;
         }
         offset += lunar.lunarDay;
+
         int solar11 = solar_1_1[lunar.lunarYear - solar_1_1[0]];
+
         int y = GetBitInt(solar11, 12, 9);
         int m = GetBitInt(solar11, 4, 5);
         int d = GetBitInt(solar11, 5, 0);
+
         return SolarFromInt(SolarToInt(y, m, d) + offset - 1);
     }
 
@@ -146,7 +141,7 @@ public final class LunarUtils {
      * @param solar 公历
      * @return 阴历
      */
-    public Lunar SolarToLunar(Solar solar) {
+    public static Lunar SolarToLunar(Solar solar) {
         Lunar lunar = new Lunar();
         int index = solar.solarYear - solar_1_1[0];
         int data = (solar.solarYear << 9) | (solar.solarMonth << 5) | (solar.solarDay);
@@ -159,12 +154,15 @@ public final class LunarUtils {
         int m = GetBitInt(solar11, 4, 5);
         int d = GetBitInt(solar11, 5, 0);
         long offset = SolarToInt(solar.solarYear, solar.solarMonth, solar.solarDay) - SolarToInt(y, m, d);
+
         int days = lunar_month_days[index];
         int leap = GetBitInt(days, 4, 13);
+
         int lunarY = index + solar_1_1[0];
         int lunarM = 1;
         int lunarD = 1;
         offset += 1;
+
         for (int i = 0; i < 13; i++) {
             int dm = GetBitInt(days, 1, 12 - i) == 1 ? 30 : 29;
             if (offset > dm) {
@@ -189,14 +187,14 @@ public final class LunarUtils {
         return lunar;
     }
 
-    public class Lunar {
+    public static class Lunar {
         public boolean isLeap;
         public int lunarDay;
         public int lunarMonth;
         public int lunarYear;
     }
 
-    public class Solar {
+    public static class Solar {
         public int solarDay;
         public int solarMonth;
         public int solarYear;
