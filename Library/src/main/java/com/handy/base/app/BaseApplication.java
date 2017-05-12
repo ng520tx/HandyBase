@@ -24,9 +24,10 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         try {
+            Utils.init(getApplicationContext());
+
             /* 初始化工具类功能 */
             if (isInitUtils) {
-                Utils.init(getApplicationContext());
                 CrashUtils.getInstance().init(); //初始化崩溃捕获工具
 
                 LogUtils.Builder builder = new LogUtils.Builder()
