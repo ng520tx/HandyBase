@@ -1,13 +1,9 @@
 package com.handy.base.utils;
 
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,14 +24,14 @@ import java.util.Locale;
  */
 public final class CrashUtils implements UncaughtExceptionHandler {
 
-    private volatile static CrashUtils instance;
+    private volatile static CrashUtils mInstance;
 
-    private Context context;
-    private int versionCode;
+    private UncaughtExceptionHandler mHandler;
+
+    private boolean mInitialized;
     private String crashDir;
     private String versionName;
-    private boolean mInitialized;
-    private UncaughtExceptionHandler mHandler;
+    private int versionCode;
 
     private CrashUtils() {
     }
@@ -48,14 +44,44 @@ public final class CrashUtils implements UncaughtExceptionHandler {
      * @return 单例
      */
     public static CrashUtils getInstance() {
-        if (instance == null) {
+        if (mInstance == null) {
             synchronized (CrashUtils.class) {
-                if (instance == null) {
-                    instance = new CrashUtils();
+                if (mInstance == null) {
+                    mInstance = new CrashUtils();
                 }
             }
         }
-        return instance;
+        return mInstance;
+    }
+
+    /**
+     * 判断文件是否存在，不存在则判断是否创建成功
+     *
+     * @param filePath 文件路径
+     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
+     */
+    private static boolean createOrExistsFile(String filePath) {
+        File file = new File(filePath);
+        // 如果存在，是文件则返回true，是目录则返回false
+        if (file.exists()) return file.isFile();
+        if (!createOrExistsDir(file.getParentFile())) return false;
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 判断目录是否存在，不存在则判断是否创建成功
+     *
+     * @param file 文件
+     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
+     */
+    private static boolean createOrExistsDir(File file) {
+        // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
+        return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
     }
 
     /**
@@ -63,20 +89,19 @@ public final class CrashUtils implements UncaughtExceptionHandler {
      *
      * @return {@code true}: 成功<br>{@code false}: 失败
      */
-    public boolean init(Context context) {
-        this.context = context;
+    public boolean init() {
         if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            File baseCache = context.getExternalCacheDir();
+            File baseCache = Utils.getActivity().getExternalCacheDir();
             if (baseCache == null) return false;
             crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         } else {
-            File baseCache = context.getCacheDir();
+            File baseCache = Utils.getActivity().getCacheDir();
             if (baseCache == null) return false;
             crashDir = baseCache.getPath() + File.separator + "crash" + File.separator;
         }
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            PackageInfo pi = Utils.getActivity().getPackageManager().getPackageInfo(Utils.getActivity().getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -90,17 +115,7 @@ public final class CrashUtils implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, final Throwable throwable) {
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                LogUtils.getInstance().e(Log.getStackTraceString(throwable));
-                Toast.makeText(context, "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
-        }.start();
-
-        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        String now = new SimpleDateFormat("yyMMdd HH-mm-ss", Locale.getDefault()).format(new Date());
         final String fullPath = crashDir + now + ".txt";
         if (!createOrExistsFile(fullPath)) return;
         new Thread(new Runnable() {
@@ -119,16 +134,12 @@ public final class CrashUtils implements UncaughtExceptionHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    CloseUtils.getInstance().closeIO(pw);
+                    CloseUtils.closeIO(pw);
                 }
             }
         }).start();
-
-        try {
-            Thread.sleep(2000);
-            //退出程序
-            ActivityStackUtils.getInstance().AppExit(context);
-        } catch (InterruptedException ignored) {
+        if (mHandler != null) {
+            mHandler.uncaughtException(thread, throwable);
         }
     }
 
@@ -146,36 +157,5 @@ public final class CrashUtils implements UncaughtExceptionHandler {
                 "\nApp VersionName    : " + versionName +
                 "\nApp VersionCode    : " + versionCode +
                 "\n************* Crash Log Head ****************\n\n";
-    }
-
-    /**
-     * 判断文件是否存在，不存在则判断是否创建成功
-     *
-     * @param filePath 文件路径
-     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
-     */
-    private boolean createOrExistsFile(String filePath) {
-        File file = new File(filePath);
-        // 如果存在，是文件则返回true，是目录则返回false
-        if (file.exists()) return file.isFile();
-        if (!createOrExistsDir(file.getParentFile())) return false;
-        try {
-            return file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-    /**
-     * 判断目录是否存在，不存在则判断是否创建成功
-     *
-     * @param file 文件
-     * @return {@code true}: 存在或创建成功<br>{@code false}: 不存在或创建失败
-     */
-    private boolean createOrExistsDir(File file) {
-        // 如果存在，是目录则返回true，是文件则返回false，不存在则返回是否创建成功
-        return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
     }
 }
