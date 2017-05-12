@@ -2,7 +2,6 @@ package com.handy.base.utils;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -25,17 +24,8 @@ import java.util.Map;
  */
 public final class ActivityUtils {
 
-    private volatile static ActivityUtils instance;
-
-    public static ActivityUtils getInstance() {
-        if (instance == null) {
-            synchronized (ActivityUtils.class) {
-                if (instance == null) {
-                    instance = new ActivityUtils();
-                }
-            }
-        }
-        return instance;
+    private ActivityUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
@@ -45,10 +35,12 @@ public final class ActivityUtils {
      * @param className   activity全路径类名
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public boolean isActivityExists(Context context, String packageName, String className) {
+    public static boolean isActivityExists(String packageName, String className) {
         Intent intent = new Intent();
         intent.setClassName(packageName, className);
-        return !(context.getPackageManager().resolveActivity(intent, 0) == null || intent.resolveActivity(context.getPackageManager()) == null || context.getPackageManager().queryIntentActivities(intent, 0).size() == 0);
+        return !(Utils.getActivity().getPackageManager().resolveActivity(intent, 0) == null ||
+                intent.resolveActivity(Utils.getActivity().getPackageManager()) == null ||
+                Utils.getActivity().getPackageManager().queryIntentActivities(intent, 0).size() == 0);
     }
 
     /**
@@ -57,8 +49,8 @@ public final class ActivityUtils {
      * @param packageName 包名
      * @param className   全类名
      */
-    public void launchActivity(Context context, String packageName, String className) {
-        launchActivity(context, packageName, className, null);
+    public static void launchActivity(String packageName, String className) {
+        launchActivity(packageName, className, null);
     }
 
     /**
@@ -68,8 +60,8 @@ public final class ActivityUtils {
      * @param className   全类名
      * @param bundle      bundle
      */
-    public void launchActivity(Context context, String packageName, String className, Bundle bundle) {
-        context.startActivity(getComponentIntent(packageName, className, bundle));
+    public static void launchActivity(String packageName, String className, Bundle bundle) {
+        Utils.getActivity().startActivity(getComponentIntent(packageName, className, bundle));
     }
 
     /**
@@ -78,11 +70,11 @@ public final class ActivityUtils {
      * @param packageName 包名
      * @return launcher activity
      */
-    public String getLauncherActivity(Context context, String packageName) {
+    public static String getLauncherActivity(String packageName) {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = Utils.getActivity().getPackageManager();
         List<ResolveInfo> infos = pm.queryIntentActivities(intent, 0);
         for (ResolveInfo info : infos) {
             if (info.activityInfo.packageName.equals(packageName)) {
@@ -98,9 +90,10 @@ public final class ActivityUtils {
      *
      * @return 栈顶Activity
      */
-    public Activity getTopActivity() {
+    public static Activity getTopActivity() {
         try {
             Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            @SuppressWarnings("unchecked")
             Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
             Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
             activitiesField.setAccessible(true);
@@ -126,7 +119,7 @@ public final class ActivityUtils {
         return null;
     }
 
-    private Intent getComponentIntent(String packageName, String className, Bundle bundle) {
+    private static Intent getComponentIntent(String packageName, String className, Bundle bundle) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         if (bundle != null) intent.putExtras(bundle);
         ComponentName cn = new ComponentName(packageName, className);
