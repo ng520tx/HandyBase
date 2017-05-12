@@ -39,10 +39,13 @@ public abstract class BaseApplication extends Application {
                         .setLogFilter(LogUtils.V);// log过滤器，和logcat过滤器同理，默认Verbose
                 LogUtils.d(builder.toString());
             }
+
             /* 初始化蒲公英内测功能 */
             if (isInitPgyCrashManager) {
                 PgyCrashManager.register(getApplicationContext());
                 LogUtils.d("蒲公英内测功能已注册");
+            } else {
+                LogUtils.d("蒲公英内测功能未注册");
             }
         } catch (Exception e) {
             e.printStackTrace();
