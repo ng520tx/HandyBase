@@ -57,8 +57,8 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
 
         this.isAlive = true;
         this.application = activity.getApplication();
-        this.screenWidth = ScreenUtils.getInstance().getScreenWidth(context);
-        this.screenHeight = ScreenUtils.getInstance().getScreenHeight(context);
+        this.screenWidth = ScreenUtils.getScreenWidth();
+        this.screenHeight = ScreenUtils.getScreenHeight();
     }
 
     @Nullable
