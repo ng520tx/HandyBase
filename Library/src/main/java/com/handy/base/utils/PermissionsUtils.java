@@ -23,9 +23,7 @@ public final class PermissionsUtils {
     private static ArrayList<String> Permissions = new ArrayList<>();
 
     private PermissionsUtils() {
-        if (Permissions == null || Permissions.size() == 0) {
-            initPermissions();
-        }
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
     /**
