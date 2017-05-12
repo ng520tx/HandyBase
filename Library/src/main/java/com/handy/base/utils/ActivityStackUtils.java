@@ -190,7 +190,7 @@ public final class ActivityStackUtils {
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(Activity activity) {
+    public static void addActivity(Activity activity) {
         if (activityStack == null) {
             activityStack = new Stack<>();
         }
