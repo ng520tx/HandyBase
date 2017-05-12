@@ -15,7 +15,6 @@ import android.view.View;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
 import com.handy.base.utils.ScreenUtils;
-import com.handy.base.utils.Utils;
 
 /**
  * <pre>
@@ -56,7 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
             this.screenWidth = ScreenUtils.getScreenWidth();
             this.screenHeight = ScreenUtils.getScreenHeight();
 
-            Utils.init(this);
             ActivityStackUtils.addActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
