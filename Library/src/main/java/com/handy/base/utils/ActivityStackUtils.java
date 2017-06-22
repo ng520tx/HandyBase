@@ -1,8 +1,6 @@
 package com.handy.base.utils;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -172,9 +170,8 @@ public final class ActivityStackUtils {
     public static void AppExit() {
         try {
             finishAll();
-            ActivityManager activityMgr = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.killBackgroundProcesses(Utils.getApplicationContext().getPackageName());
-            System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
         } catch (Exception e) {
         }
     }
