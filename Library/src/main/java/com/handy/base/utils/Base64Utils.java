@@ -3,7 +3,7 @@ package com.handy.base.utils;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : Base64可逆加密算法工具类
  * </pre>
