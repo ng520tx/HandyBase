@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 关闭相关工具类
  * </pre>
@@ -22,7 +22,7 @@ public final class CloseUtils {
      *
      * @param closeables closeables
      */
-    public static void closeIO(Closeable... closeables) {
+    public static void closeIO(final Closeable... closeables) {
         if (closeables == null) return;
         for (Closeable closeable : closeables) {
             if (closeable != null) {
@@ -40,7 +40,7 @@ public final class CloseUtils {
      *
      * @param closeables closeables
      */
-    public static void closeIOQuietly(Closeable... closeables) {
+    public static void closeIOQuietly(final Closeable... closeables) {
         if (closeables == null) return;
         for (Closeable closeable : closeables) {
             if (closeable != null) {

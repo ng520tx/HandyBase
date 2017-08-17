@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 相机相关工具类
  * </pre>
@@ -44,14 +44,16 @@ public final class CameraUtils {
     /**
      * 获取[跳转至相册选择界面,并跳转至裁剪界面，默认可缩放裁剪区域]的Intent
      */
-    public static Intent getImagePickerIntent(int outputX, int outputY, Uri fromFileURI, Uri saveFileURI) {
+    public static Intent getImagePickerIntent(int outputX, int outputY, Uri fromFileURI,
+                                              Uri saveFileURI) {
         return getImagePickerIntent(1, 1, outputX, outputY, true, fromFileURI, saveFileURI);
     }
 
     /**
      * 获取[跳转至相册选择界面,并跳转至裁剪界面，默认可缩放裁剪区域]的Intent
      */
-    public static Intent getImagePickerIntent(int aspectX, int aspectY, int outputX, int outputY, Uri fromFileURI, Uri saveFileURI) {
+    public static Intent getImagePickerIntent(int aspectX, int aspectY, int outputX, int outputY, Uri fromFileURI,
+                                              Uri saveFileURI) {
         return getImagePickerIntent(aspectX, aspectY, outputX, outputY, true, fromFileURI, saveFileURI);
     }
 
@@ -66,7 +68,8 @@ public final class CameraUtils {
      * @param fromFileURI 文件来源路径URI
      * @param saveFileURI 输出文件路径URI
      */
-    public static Intent getImagePickerIntent(int aspectX, int aspectY, int outputX, int outputY, boolean canScale, Uri fromFileURI, Uri saveFileURI) {
+    public static Intent getImagePickerIntent(int aspectX, int aspectY, int outputX, int outputY, boolean canScale,
+                                              Uri fromFileURI, Uri saveFileURI) {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setDataAndType(fromFileURI, "image/*");
         intent.putExtra("crop", "true");
@@ -87,7 +90,7 @@ public final class CameraUtils {
     /**
      * 获取[跳转至相册选择界面,并跳转至裁剪界面，默认可缩放裁剪区域]的Intent
      */
-    public static Intent getCameraIntent(Uri saveFileURI) {
+    public static Intent getCameraIntent(final Uri saveFileURI) {
         Intent mIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         return mIntent.putExtra(MediaStore.EXTRA_OUTPUT, saveFileURI);
     }
@@ -95,14 +98,16 @@ public final class CameraUtils {
     /**
      * 获取[跳转至裁剪界面,默认可缩放]的Intent
      */
-    public static Intent getCropImageIntent(int outputX, int outputY, Uri fromFileURI, Uri saveFileURI) {
+    public static Intent getCropImageIntent(int outputX, int outputY, Uri fromFileURI,
+                                            Uri saveFileURI) {
         return getCropImageIntent(1, 1, outputX, outputY, true, fromFileURI, saveFileURI);
     }
 
     /**
      * 获取[跳转至裁剪界面,默认可缩放]的Intent
      */
-    public static Intent getCropImageIntent(int aspectX, int aspectY, int outputX, int outputY, Uri fromFileURI, Uri saveFileURI) {
+    public static Intent getCropImageIntent(int aspectX, int aspectY, int outputX, int outputY, Uri fromFileURI,
+                                            Uri saveFileURI) {
         return getCropImageIntent(aspectX, aspectY, outputX, outputY, true, fromFileURI, saveFileURI);
     }
 
@@ -110,7 +115,8 @@ public final class CameraUtils {
     /**
      * 获取[跳转至裁剪界面]的Intent
      */
-    public static Intent getCropImageIntent(int aspectX, int aspectY, int outputX, int outputY, boolean canScale, Uri fromFileURI, Uri saveFileURI) {
+    public static Intent getCropImageIntent(int aspectX, int aspectY, int outputX, int outputY, boolean canScale,
+                                            Uri fromFileURI, Uri saveFileURI) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(fromFileURI, "image/*");
         intent.putExtra("crop", "true");
@@ -140,7 +146,7 @@ public final class CameraUtils {
      * @param data    onActivityResult返回的Intent
      * @return bitmap
      */
-    public static Bitmap getChoosedImage(Activity context, Intent data) {
+    public static Bitmap getChoosedImage(final Activity context, final Intent data) {
         if (data == null) return null;
         Bitmap bm = null;
         ContentResolver cr = context.getContentResolver();
@@ -160,7 +166,7 @@ public final class CameraUtils {
      * @param data    onActivityResult返回的Intent
      * @return
      */
-    public static String getChoosedImagePath(Activity context, Intent data) {
+    public static String getChoosedImagePath(final Activity context, final Intent data) {
         if (data == null) return null;
         String path = "";
         ContentResolver resolver = context.getContentResolver();
@@ -195,7 +201,7 @@ public final class CameraUtils {
      * @param filePath 文件路径
      * @return 文件
      */
-    public static File getTakePictureFile(Intent data, String filePath) {
+    public static File getTakePictureFile(final Intent data, final String filePath) {
         if (data == null) return null;
         Bundle extras = data.getExtras();
         if (extras == null) return null;
