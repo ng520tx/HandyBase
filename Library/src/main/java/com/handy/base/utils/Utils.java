@@ -3,7 +3,7 @@ package com.handy.base.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
@@ -20,45 +20,7 @@ public final class Utils {
 
     @SuppressLint("StaticFieldLeak")
     private static Application sApplication;
-
     private static WeakReference<Activity> sCurrentActivityWeakRef;
-
-    protected static Application.ActivityLifecycleCallbacks mCallbacks = new Application.ActivityLifecycleCallbacks() {
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-            sCurrentActivityWeakRef = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-
-        }
-    };
 
     private Utils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -71,7 +33,10 @@ public final class Utils {
      */
     public static void init(@NonNull final Application app) {
         Utils.sApplication = app;
-        app.registerActivityLifecycleCallbacks(mCallbacks);
+    }
+
+    public static void setActivity(@NonNull Activity activity) {
+        sCurrentActivityWeakRef = new WeakReference<>(activity);
     }
 
     /**
@@ -82,5 +47,25 @@ public final class Utils {
     public static Application getApp() {
         if (sApplication != null) return sApplication;
         throw new NullPointerException("u should init first");
+    }
+
+    /**
+     * 获取ApplicationContext
+     *
+     * @return ApplicationContext
+     */
+    public static Context getAppContext() {
+        if (sApplication != null) return sApplication.getApplicationContext();
+        throw new NullPointerException("u should init first");
+    }
+
+    /**
+     * 获取Activity
+     *
+     * @return Activity
+     */
+    public static Activity getCurrentActivity() {
+        if (sCurrentActivityWeakRef != null) return sCurrentActivityWeakRef.get();
+        throw new NullPointerException("u should setActivity first");
     }
 }
