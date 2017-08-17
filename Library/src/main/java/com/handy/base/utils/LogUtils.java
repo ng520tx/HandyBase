@@ -328,7 +328,6 @@ public final class LogUtils {
         String time = format.substring(6);
         final String fullPath = (dir == null ? defaultDir : dir) + date + ".txt";
         if (!createOrExistsFile(fullPath)) {
-            Log.e(tag, "log to " + fullPath + " failed!");
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -349,10 +348,8 @@ public final class LogUtils {
                 try {
                     bw = new BufferedWriter(new FileWriter(fullPath, true));
                     bw.write(content);
-                    Log.d(tag, "log to " + fullPath + " success!");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(tag, "log to " + fullPath + " failed!");
                 } finally {
                     try {
                         if (bw != null) {
