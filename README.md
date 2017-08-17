@@ -52,7 +52,8 @@
     dependencies {
         ...
         compile 'com.github.liujie045:HandyBase:最新版本'
-        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
         annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     }
 ```
@@ -284,7 +285,7 @@
 * 更新Library的build.gradle配置文件
 * 更新了PermissionsUtils中默认的扫描权限
 * 在ImageUtils中新增了按质量压缩图片的方法
-* 新接入[蒲公英内测](https://www.pgyer.com/)2.5.6
+* 新接入[蒲公英内测](https://www.pgyer.com/)2.7.0
 
 ***2017年3月24日 v1.1.1***
 
@@ -304,15 +305,15 @@
 
 * 更新build.gradle配置
 * 更新utils中部分变量的访问权限为public
-* 新接入[Litepal](https://github.com/LitePalFramework/LitePal#latest-downloads/):1.5.1
-* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.5.1
-* 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.6
+* 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.0
+* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.8.1
+* 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.7
 
 ***2017年3月21日 v1.0.1***
 
 * 更新BaseAppApi注释
-* 新接入[Glide](https://github.com/bumptech/glide):3.7.0
-* 新接入[Retrofit](https://github.com/square/retrofit):2.2.0
+* 新接入[Glide](https://github.com/bumptech/glide):4.0.0
+* 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
 * 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 
 ***2017年3月20日 v1.0.0***
@@ -323,5 +324,5 @@
 * 新增simplemvp和strongmvp包，含有Mvp模式的基类
 * 新增base包，含有Activity、Fragment、Application的基类
 * 新增utils包，引用自[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 的工具类开源项目
-* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.0.7
+* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.3
 * 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
