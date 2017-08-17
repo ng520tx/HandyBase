@@ -9,7 +9,7 @@ import java.util.Stack;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : Activity栈管理
  * </pre>
@@ -31,6 +31,16 @@ public final class ActivityStackUtils {
             return activity;
         }
         return null;
+    }
+
+    /**
+     * 添加Activity到堆栈
+     */
+    public static void addActivity(Activity activity) {
+        if (activityStack == null) {
+            activityStack = new Stack<>();
+        }
+        activityStack.add(activity);
     }
 
     /**
@@ -182,15 +192,5 @@ public final class ActivityStackUtils {
 
     public static void setActivityStack(Stack<Activity> activityStack) {
         ActivityStackUtils.activityStack = activityStack;
-    }
-
-    /**
-     * 添加Activity到堆栈
-     */
-    public static void addActivity(Activity activity) {
-        if (activityStack == null) {
-            activityStack = new Stack<>();
-        }
-        activityStack.add(activity);
     }
 }
