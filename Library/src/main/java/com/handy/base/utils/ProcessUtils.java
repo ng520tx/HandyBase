@@ -21,10 +21,10 @@ import java.util.Set;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/10/18
- *     desc  : 进程相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 2016/10/18
+ *  desc  : 进程相关工具类
  * </pre>
  */
 public final class ProcessUtils {

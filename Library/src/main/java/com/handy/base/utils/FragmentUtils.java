@@ -18,10 +18,10 @@ import java.util.List;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2017/01/17
- *     desc  : Fragment相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 2017/01/17
+ *  desc  : Fragment相关工具类
  * </pre>
  */
 public final class FragmentUtils {

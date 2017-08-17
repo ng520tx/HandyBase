@@ -14,10 +14,10 @@ import java.util.Map;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/09/28
- *     desc  : 判空相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 2016/09/28
+ *  desc  : 判空相关工具类
  * </pre>
  */
 public final class EmptyUtils {

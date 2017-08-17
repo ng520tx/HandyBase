@@ -61,10 +61,10 @@ import static android.graphics.BlurMaskFilter.Blur;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/12/13
- *     desc  : SpannableString相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 16/12/13
+ *  desc  : SpannableString相关工具类
  * </pre>
  */
 public final class SpanUtils {

@@ -15,10 +15,10 @@ import java.util.List;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/09/23
- *     desc  : Activity相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 2016/09/23
+ *  desc  : Activity相关工具类
  * </pre>
  */
 public final class ActivityUtils {

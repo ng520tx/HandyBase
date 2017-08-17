@@ -10,10 +10,10 @@ import java.lang.ref.WeakReference;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/12/08
- *     desc  : Utils初始化相关
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 16/12/08
+ *  desc  : Utils初始化相关
  * </pre>
  */
 public final class Utils {

@@ -45,10 +45,10 @@ import java.io.OutputStream;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/08/12
- *     desc  : 图片相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 2016/08/12
+ *  desc  : 图片相关工具类
  * </pre>
  */
 public final class ImageUtils {

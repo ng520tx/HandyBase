@@ -20,10 +20,10 @@ import java.lang.ref.WeakReference;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/10/16
- *     desc  : Snackbar相关工具类
+ *  author: Handy
+ *  blog  : https://github.com/handy045
+ *  time  : 2016/10/16
+ *  desc  : Snackbar相关工具类
  * </pre>
  */
 public final class SnackbarUtils {
