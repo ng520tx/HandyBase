@@ -32,7 +32,7 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
 
-    compile 'com.pgyersdk:sdk:2.7.0' //蒲公英SDK
+    compile 'com.pgyersdk:sdk:2.5.6' //蒲公英SDK
     compile 'org.greenrobot:eventbus:3.0.0' //EventBus
     compile 'org.litepal.android:core:1.6.0' //郭霖Litepal数据库
     compile 'com.jakewharton:butterknife:8.8.1' //ButterKnife
