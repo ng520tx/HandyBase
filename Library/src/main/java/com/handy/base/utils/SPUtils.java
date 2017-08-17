@@ -68,7 +68,7 @@ public final class SPUtils {
      * @param value 值
      */
     public void put(@NonNull final String key, @NonNull final String value) {
-        sp.edit().putString(key, value).apply();
+        sp.edit().putString(key, AesUtils.encrypt(value)).apply();
     }
 
     /**
@@ -89,7 +89,7 @@ public final class SPUtils {
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
     public String getString(@NonNull final String key, @NonNull final String defaultValue) {
-        return sp.getString(key, defaultValue);
+        return AesUtils.decrypt(sp.getString(key, defaultValue));
     }
 
     /**
