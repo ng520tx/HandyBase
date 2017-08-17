@@ -5,7 +5,7 @@ import android.support.v4.util.SimpleArrayMap;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 拼音相关工具类
  * </pre>
@@ -105,7 +105,7 @@ public final class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 拼音
      */
-    public static String ccs2Pinyin(CharSequence ccs) {
+    public static String ccs2Pinyin(final CharSequence ccs) {
         return ccs2Pinyin(ccs, "");
     }
 
@@ -116,7 +116,7 @@ public final class PinyinUtils {
      * @param split 汉字拼音之间的分隔符
      * @return 拼音
      */
-    public static String ccs2Pinyin(CharSequence ccs, CharSequence split) {
+    public static String ccs2Pinyin(final CharSequence ccs, final CharSequence split) {
         if (ccs == null || ccs.length() == 0) return null;
         StringBuilder sb = new StringBuilder();
         for (int i = 0, len = ccs.length(); i < len; i++) {
@@ -138,7 +138,7 @@ public final class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 拼音
      */
-    public static String getPinyinFirstLetter(CharSequence ccs) {
+    public static String getPinyinFirstLetter(final CharSequence ccs) {
         if (ccs == null || ccs.length() == 0) return null;
         return ccs2Pinyin(String.valueOf(ccs.charAt(0))).substring(0, 1);
     }
@@ -149,7 +149,7 @@ public final class PinyinUtils {
      * @param ccs 汉字字符串(Chinese characters)
      * @return 所有汉字的首字母
      */
-    public static String getPinyinFirstLetters(CharSequence ccs) {
+    public static String getPinyinFirstLetters(final CharSequence ccs) {
         return getPinyinFirstLetters(ccs, "");
     }
 
@@ -160,7 +160,7 @@ public final class PinyinUtils {
      * @param split 首字母之间的分隔符
      * @return 所有汉字的首字母
      */
-    public static String getPinyinFirstLetters(CharSequence ccs, CharSequence split) {
+    public static String getPinyinFirstLetters(final CharSequence ccs, final CharSequence split) {
         if (ccs == null || ccs.length() == 0) return null;
         int len = ccs.length();
         StringBuilder sb = new StringBuilder(len);
@@ -176,7 +176,7 @@ public final class PinyinUtils {
      * @param name 名字
      * @return 姓氏的拼音
      */
-    public static String getSurnamePinyin(CharSequence name) {
+    public static String getSurnamePinyin(final CharSequence name) {
         if (name == null || name.length() == 0) return null;
         if (name.length() >= 2) {
             CharSequence str = name.subSequence(0, 2);
@@ -203,7 +203,7 @@ public final class PinyinUtils {
      * @param name 名字
      * @return 姓氏的首字母
      */
-    public static String getSurnameFirstLetter(CharSequence name) {
+    public static String getSurnameFirstLetter(final CharSequence name) {
         String surname = getSurnamePinyin(name);
         if (surname == null || surname.length() == 0) return null;
         return String.valueOf(surname.charAt(0));

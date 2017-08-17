@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import java.util.Set;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 进程相关工具类
  * </pre>
@@ -40,32 +41,32 @@ public final class ProcessUtils {
      * @return 前台应用包名
      */
     public static String getForegroundProcessName() {
-        ActivityManager manager = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> infos = manager.getRunningAppProcesses();
-        if (infos != null && infos.size() != 0) {
-            for (ActivityManager.RunningAppProcessInfo info : infos) {
-                if (info.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    return info.processName;
+        ActivityManager manager = (ActivityManager) Utils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> pInfo = manager.getRunningAppProcesses();
+        if (pInfo != null && pInfo.size() != 0) {
+            for (ActivityManager.RunningAppProcessInfo aInfo : pInfo) {
+                if (aInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    return aInfo.processName;
                 }
             }
         }
         if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.LOLLIPOP) {
-            PackageManager packageManager = Utils.getApplicationContext().getPackageManager();
+            PackageManager packageManager = Utils.getApp().getPackageManager();
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             System.out.println(list);
             if (list.size() > 0) {// 有"有权查看使用权限的应用"选项
                 try {
-                    ApplicationInfo info = packageManager.getApplicationInfo(Utils.getApplicationContext().getPackageName(), 0);
-                    AppOpsManager aom = (AppOpsManager) Utils.getApplicationContext().getSystemService(Context.APP_OPS_SERVICE);
+                    ApplicationInfo info = packageManager.getApplicationInfo(Utils.getApp().getPackageName(), 0);
+                    AppOpsManager aom = (AppOpsManager) Utils.getApp().getSystemService(Context.APP_OPS_SERVICE);
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
-                        Utils.getApplicationContext().startActivity(intent);
+                        Utils.getApp().startActivity(intent);
                     }
                     if (aom.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED) {
                         LogUtils.d("getForegroundApp", "没有打开\"有权查看使用权限的应用\"选项");
                         return null;
                     }
-                    UsageStatsManager usageStatsManager = (UsageStatsManager) Utils.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
+                    UsageStatsManager usageStatsManager = (UsageStatsManager) Utils.getApp().getSystemService(Context.USAGE_STATS_SERVICE);
                     long endTime = System.currentTimeMillis();
                     long beginTime = endTime - 86400000 * 7;
                     List<UsageStats> usageStatses = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, beginTime, endTime);
@@ -81,7 +82,7 @@ public final class ProcessUtils {
                     e.printStackTrace();
                 }
             } else {
-                LogUtils.d("getForegroundApp", "无\"有权查看使用权限的应用\"选项");
+                Log.d("ProcessUtils", "getForegroundProcessName() called" + ": 无\"有权查看使用权限的应用\"选项");
             }
         }
         return null;
@@ -94,11 +95,11 @@ public final class ProcessUtils {
      * @return 后台服务进程
      */
     public static Set<String> getAllBackgroundProcesses() {
-        ActivityManager am = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
+        ActivityManager am = (ActivityManager) Utils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> info = am.getRunningAppProcesses();
         Set<String> set = new HashSet<>();
-        for (ActivityManager.RunningAppProcessInfo info : infos) {
-            Collections.addAll(set, info.pkgList);
+        for (ActivityManager.RunningAppProcessInfo aInfo : info) {
+            Collections.addAll(set, aInfo.pkgList);
         }
         return set;
     }
@@ -110,18 +111,18 @@ public final class ProcessUtils {
      * @return 被暂时杀死的服务集合
      */
     public static Set<String> killAllBackgroundProcesses() {
-        ActivityManager am = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
+        ActivityManager am = (ActivityManager) Utils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> info = am.getRunningAppProcesses();
         Set<String> set = new HashSet<>();
-        for (ActivityManager.RunningAppProcessInfo info : infos) {
-            for (String pkg : info.pkgList) {
+        for (ActivityManager.RunningAppProcessInfo aInfo : info) {
+            for (String pkg : aInfo.pkgList) {
                 am.killBackgroundProcesses(pkg);
                 set.add(pkg);
             }
         }
-        infos = am.getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo info : infos) {
-            for (String pkg : info.pkgList) {
+        info = am.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo aInfo : info) {
+            for (String pkg : aInfo.pkgList) {
                 set.remove(pkg);
             }
         }
@@ -135,19 +136,19 @@ public final class ProcessUtils {
      * @param packageName 包名
      * @return {@code true}: 杀死成功<br>{@code false}: 杀死失败
      */
-    public static boolean killBackgroundProcesses(@NonNull String packageName) {
-        ActivityManager am = (ActivityManager) Utils.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> infos = am.getRunningAppProcesses();
-        if (infos == null || infos.size() == 0) return true;
-        for (ActivityManager.RunningAppProcessInfo info : infos) {
-            if (Arrays.asList(info.pkgList).contains(packageName)) {
+    public static boolean killBackgroundProcesses(@NonNull final String packageName) {
+        ActivityManager am = (ActivityManager) Utils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> info = am.getRunningAppProcesses();
+        if (info == null || info.size() == 0) return true;
+        for (ActivityManager.RunningAppProcessInfo aInfo : info) {
+            if (Arrays.asList(aInfo.pkgList).contains(packageName)) {
                 am.killBackgroundProcesses(packageName);
             }
         }
-        infos = am.getRunningAppProcesses();
-        if (infos == null || infos.size() == 0) return true;
-        for (ActivityManager.RunningAppProcessInfo info : infos) {
-            if (Arrays.asList(info.pkgList).contains(packageName)) {
+        info = am.getRunningAppProcesses();
+        if (info == null || info.size() == 0) return true;
+        for (ActivityManager.RunningAppProcessInfo aInfo : info) {
+            if (Arrays.asList(aInfo.pkgList).contains(packageName)) {
                 return false;
             }
         }

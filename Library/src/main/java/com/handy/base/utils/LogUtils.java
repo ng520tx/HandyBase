@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +24,9 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -34,22 +38,24 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : Log相关工具类
  * </pre>
  */
 public final class LogUtils {
 
-    public static final int V = 0x01;
-    public static final int D = 0x02;
-    public static final int I = 0x04;
-    public static final int W = 0x08;
-    public static final int E = 0x10;
-    public static final int A = 0x20;
-    private static final int FILE = 0xF1;
-    private static final int JSON = 0xF2;
-    private static final int XML = 0xF4;
+    public static final int V = Log.VERBOSE;
+    public static final int D = Log.DEBUG;
+    public static final int I = Log.INFO;
+    public static final int W = Log.WARN;
+    public static final int E = Log.ERROR;
+    public static final int A = Log.ASSERT;
+    private static final char[] T = new char[]{'V', 'D', 'I', 'W', 'E', 'A'};
+    private static final int FILE = 0x10;
+    private static final int JSON = 0x20;
+    private static final int XML = 0x30;
+    private static final Config CONFIG = new Config();
     private static final String FILE_SEP = System.getProperty("file.separator");
     private static final String LINE_SEP = System.getProperty("line.separator");
     private static final String TOP_BORDER = "╔═══════════════════════════════════════════════════════════════════════════════════════════════════";
@@ -64,126 +70,137 @@ public final class LogUtils {
     private static String defaultDir;// log默认存储目录
     private static String dir;       // log存储目录
     private static boolean sLogSwitch = true; // log总开关，默认开
+    private static boolean sLog2ConsoleSwitch = true; // logcat是否打印，默认打印
     private static String sGlobalTag = null; // log标签
     private static boolean sTagIsSpace = true; // log标签是否为空白
     private static boolean sLogHeadSwitch = true; // log头部开关，默认开
     private static boolean sLog2FileSwitch = false;// log写入文件开关，默认关
     private static boolean sLogBorderSwitch = true; // log边框开关，默认开
-    private static int sLogFilter = V;    // log过滤器
-
+    private static int sConsoleFilter = V;    // log控制台过滤器
+    private static int sFileFilter = V;    // log文件过滤器
     private LogUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    public static void v(Object contents) {
+    public static Config getConfig() {
+        return CONFIG;
+    }
+
+    public static void v(final Object contents) {
         log(V, sGlobalTag, contents);
     }
 
-    public static void v(String tag, Object... contents) {
+    public static void v(final String tag, final Object... contents) {
         log(V, tag, contents);
     }
 
-    public static void d(Object contents) {
+    public static void d(final Object contents) {
         log(D, sGlobalTag, contents);
     }
 
-    public static void d(String tag, Object... contents) {
+    public static void d(final String tag, final Object... contents) {
         log(D, tag, contents);
     }
 
-    public static void i(Object contents) {
+    public static void i(final Object contents) {
         log(I, sGlobalTag, contents);
     }
 
-    public static void i(String tag, Object... contents) {
+    public static void i(final String tag, final Object... contents) {
         log(I, tag, contents);
     }
 
-    public static void w(Object contents) {
+    public static void w(final Object contents) {
         log(W, sGlobalTag, contents);
     }
 
-    public static void w(String tag, Object... contents) {
+    public static void w(final String tag, final Object... contents) {
         log(W, tag, contents);
     }
 
-    public static void e(Object contents) {
+    public static void e(final Object contents) {
         log(E, sGlobalTag, contents);
     }
 
-    public static void e(String tag, Object... contents) {
+    public static void e(final String tag, final Object... contents) {
         log(E, tag, contents);
     }
 
-    public static void a(Object contents) {
+    public static void a(final Object contents) {
         log(A, sGlobalTag, contents);
     }
 
-    public static void a(String tag, Object... contents) {
+    public static void a(final String tag, final Object... contents) {
         log(A, tag, contents);
     }
 
-    public static void file(Object contents) {
-        log(FILE, sGlobalTag, contents);
+    public static void file(final Object contents) {
+        log(FILE | D, sGlobalTag, contents);
     }
 
-    public static void file(String tag, Object contents) {
-        log(FILE, tag, contents);
+    public static void file(@TYPE final int type, final Object contents) {
+        log(FILE | type, sGlobalTag, contents);
     }
 
-    public static void json(String contents) {
-        log(JSON, sGlobalTag, contents);
+    public static void file(final String tag, final Object contents) {
+        log(FILE | D, tag, contents);
     }
 
-    public static void json(String tag, String contents) {
-        log(JSON, tag, contents);
+    public static void file(@TYPE final int type, final String tag, final Object contents) {
+        log(FILE | type, tag, contents);
     }
 
-    public static void xml(String contents) {
-        log(XML, sGlobalTag, contents);
+    public static void json(final String contents) {
+        log(JSON | D, sGlobalTag, contents);
     }
 
-    public static void xml(String tag, String contents) {
-        log(XML, tag, contents);
+    public static void json(@TYPE final int type, final String contents) {
+        log(JSON | type, sGlobalTag, contents);
     }
 
-    private static void log(int type, String tag, Object... contents) {
-        if (!sLogSwitch) return;
-        final String[] processContents = processContents(type, tag, contents);
-        tag = processContents[0];
-        String msg = processContents[1];
-        switch (type) {
-            case V:
-            case D:
-            case I:
-            case W:
-            case E:
-            case A:
-                if (type >= sLogFilter) {
-                    printLog(type, tag, msg);
-                    if (sLog2FileSwitch) {
-                        print2File(tag, msg);
-                    }
-                }
-                break;
-            case FILE:
-                print2File(tag, msg);
-                break;
-            case JSON:
-                printLog(D, tag, msg);
-                break;
-            case XML:
-                printLog(D, tag, msg);
-                break;
+    public static void json(final String tag, final String contents) {
+        log(JSON | D, tag, contents);
+    }
+
+    public static void json(@TYPE final int type, final String tag, final String contents) {
+        log(JSON | type, tag, contents);
+    }
+
+    public static void xml(final String contents) {
+        log(XML | D, sGlobalTag, contents);
+    }
+
+    public static void xml(@TYPE final int type, final String contents) {
+        log(XML | type, sGlobalTag, contents);
+    }
+
+    public static void xml(final String tag, final String contents) {
+        log(XML | D, tag, contents);
+    }
+
+    public static void xml(@TYPE final int type, final String tag, final String contents) {
+        log(XML | type, tag, contents);
+    }
+
+    private static void log(final int type, final String tag, final Object... contents) {
+        if (!sLogSwitch || (!sLog2ConsoleSwitch && !sLog2FileSwitch)) return;
+        int type_low = type & 0x0f, type_high = type & 0xf0;
+        if (type_low < sConsoleFilter && type_low < sFileFilter) return;
+        final String[] tagAndHead = processTagAndHead(tag);
+        String body = processBody(type_high, contents);
+        if (sLog2ConsoleSwitch && type_low >= sConsoleFilter) {
+            print2Console(type_low, tagAndHead[0], tagAndHead[1] + body);
+        }
+        if (sLog2FileSwitch || type_high == FILE) {
+            if (type_low >= sFileFilter) print2File(type_low, tagAndHead[0], tagAndHead[2] + body);
         }
     }
 
-    private static String[] processContents(int type, String tag, Object... contents) {
-        String head = "";
+    private static String[] processTagAndHead(String tag) {
         if (!sTagIsSpace && !sLogHeadSwitch) {
             tag = sGlobalTag;
         } else {
-            StackTraceElement targetElement = Thread.currentThread().getStackTrace()[5];
+            StackTraceElement targetElement = new Throwable().getStackTrace()[3];
             String className = targetElement.getClassName();
             String[] classNameInfo = className.split("\\.");
             if (classNameInfo.length > 0) {
@@ -196,9 +213,20 @@ public final class LogUtils {
                 tag = isSpace(tag) ? className : tag;
             }
             if (sLogHeadSwitch) {
-                head = new Formatter().format("Thread: %s, %s(%s.java:%d)" + LINE_SEP, Thread.currentThread().getName(), targetElement.getMethodName(), className, targetElement.getLineNumber()).toString();
+                String head = new Formatter()
+                        .format("%s, %s(%s.java:%d)",
+                                Thread.currentThread().getName(),
+                                targetElement.getMethodName(),
+                                className,
+                                targetElement.getLineNumber())
+                        .toString();
+                return new String[]{tag, head + LINE_SEP, " [" + head + "]: "};
             }
         }
+        return new String[]{tag, "", ": "};
+    }
+
+    private static String processBody(final int type, final Object... contents) {
         String body = NULL_TIPS;
         if (contents != null) {
             if (contents.length == 1) {
@@ -213,21 +241,18 @@ public final class LogUtils {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0, len = contents.length; i < len; ++i) {
                     Object content = contents[i];
-                    sb.append(ARGS).append("[").append(i).append("]").append(" = ").append(content == null ? NULL : content.toString()).append(LINE_SEP);
+                    sb.append(ARGS)
+                            .append("[")
+                            .append(i)
+                            .append("]")
+                            .append(" = ")
+                            .append(content == null ? NULL : content.toString())
+                            .append(LINE_SEP);
                 }
                 body = sb.toString();
             }
         }
-        String msg = head + body;
-        if (sLogBorderSwitch) {
-            StringBuilder sb = new StringBuilder();
-            String[] lines = msg.split(LINE_SEP);
-            for (String line : lines) {
-                sb.append(LEFT_BORDER).append(line).append(LINE_SEP);
-            }
-            msg = sb.toString();
-        }
-        return new String[]{tag, msg};
+        return body;
     }
 
     private static String formatJson(String json) {
@@ -258,8 +283,11 @@ public final class LogUtils {
         return xml;
     }
 
-    private static void printLog(int type, String tag, String msg) {
-        if (sLogBorderSwitch) print(type, tag, TOP_BORDER);
+    private static void print2Console(final int type, final String tag, String msg) {
+        if (sLogBorderSwitch) {
+            print(type, tag, TOP_BORDER);
+            msg = addLeftBorder(msg);
+        }
         int len = msg.length();
         int countOfSub = len / MAX_LEN;
         if (countOfSub > 0) {
@@ -279,49 +307,36 @@ public final class LogUtils {
         if (sLogBorderSwitch) print(type, tag, BOTTOM_BORDER);
     }
 
-    private static void print(final int type, final String tag, String msg) {
-        switch (type) {
-            case V:
-                Log.v(tag, msg);
-                break;
-            case D:
-                Log.d(tag, msg);
-                break;
-            case I:
-                Log.i(tag, msg);
-                break;
-            case W:
-                Log.w(tag, msg);
-                break;
-            case E:
-                Log.e(tag, msg);
-                break;
-            case A:
-                Log.wtf(tag, msg);
-                break;
-        }
+    private static void print(final int type, final String tag, final String msg) {
     }
 
-    private static void print2File(final String tag, final String msg) {
+    private static String addLeftBorder(final String msg) {
+        if (!sLogBorderSwitch) return msg;
+        StringBuilder sb = new StringBuilder();
+        String[] lines = msg.split(LINE_SEP);
+        for (String line : lines) {
+            sb.append(LEFT_BORDER).append(line).append(LINE_SEP);
+        }
+        return sb.toString();
+    }
+
+    private static void print2File(final int type, final String tag, final String msg) {
         Date now = new Date(System.currentTimeMillis());
         String format = FORMAT.format(now);
         String date = format.substring(0, 5);
         String time = format.substring(6);
         final String fullPath = (dir == null ? defaultDir : dir) + date + ".txt";
         if (!createOrExistsFile(fullPath)) {
-            Log.e(tag, "log to " + fullPath + " failed!");
             return;
         }
         StringBuilder sb = new StringBuilder();
-        if (sLogBorderSwitch) {
-            sb.append(TOP_BORDER).append(LINE_SEP);
-            sb.append(LEFT_BORDER).append(time).append(tag).append(LINE_SEP).append(msg);
-            sb.append(BOTTOM_BORDER).append(LINE_SEP);
-        } else {
-            sb.append(time).append(tag).append(LINE_SEP).append(msg).append(LINE_SEP);
-        }
-        sb.append(LINE_SEP);
-        final String dateLogContent = sb.toString();
+        sb.append(time)
+                .append(T[type - V])
+                .append("/")
+                .append(tag)
+                .append(msg)
+                .append(LINE_SEP);
+        final String content = sb.toString();
         if (executor == null) {
             executor = Executors.newSingleThreadExecutor();
         }
@@ -331,11 +346,9 @@ public final class LogUtils {
                 BufferedWriter bw = null;
                 try {
                     bw = new BufferedWriter(new FileWriter(fullPath, true));
-                    bw.write(dateLogContent);
-                    Log.d(tag, "log to " + fullPath + " success!");
+                    bw.write(content);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(tag, "log to " + fullPath + " failed!");
                 } finally {
                     try {
                         if (bw != null) {
@@ -349,7 +362,7 @@ public final class LogUtils {
         });
     }
 
-    private static boolean createOrExistsFile(String filePath) {
+    private static boolean createOrExistsFile(final String filePath) {
         File file = new File(filePath);
         if (file.exists()) return file.isFile();
         if (!createOrExistsDir(file.getParentFile())) return false;
@@ -361,11 +374,11 @@ public final class LogUtils {
         }
     }
 
-    private static boolean createOrExistsDir(File file) {
+    private static boolean createOrExistsDir(final File file) {
         return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
     }
 
-    private static boolean isSpace(String s) {
+    private static boolean isSpace(final String s) {
         if (s == null) return true;
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
@@ -375,28 +388,71 @@ public final class LogUtils {
         return true;
     }
 
+    public static byte[] compress(final byte input[]) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Deflater compressor = new Deflater(1);
+        try {
+            compressor.setInput(input);
+            compressor.finish();
+            final byte[] buf = new byte[2048];
+            while (!compressor.finished()) {
+                int count = compressor.deflate(buf);
+                bos.write(buf, 0, count);
+            }
+        } finally {
+            compressor.end();
+        }
+        return bos.toByteArray();
+    }
+
+    public static byte[] uncompress(final byte[] input) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Inflater decompressor = new Inflater();
+        try {
+            decompressor.setInput(input);
+            final byte[] buf = new byte[2048];
+            while (!decompressor.finished()) {
+                int count = 0;
+                try {
+                    count = decompressor.inflate(buf);
+                } catch (DataFormatException e) {
+                    e.printStackTrace();
+                }
+                bos.write(buf, 0, count);
+            }
+        } finally {
+            decompressor.end();
+        }
+        return bos.toByteArray();
+    }
+
     @IntDef({V, D, I, W, E, A})
     @Retention(RetentionPolicy.SOURCE)
     private @interface TYPE {
     }
 
-    public static class Builder {
-        public Builder() {
+    public static class Config {
+        private Config() {
             if (defaultDir != null) return;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                    && Utils.getApplicationContext().getExternalCacheDir() != null)
-                defaultDir = Utils.getApplicationContext().getExternalCacheDir() + FILE_SEP + "log" + FILE_SEP;
+                    && Utils.getApp().getExternalCacheDir() != null)
+                defaultDir = Utils.getApp().getExternalCacheDir() + FILE_SEP + "log" + FILE_SEP;
             else {
-                defaultDir = Utils.getApplicationContext().getCacheDir() + FILE_SEP + "log" + FILE_SEP;
+                defaultDir = Utils.getApp().getCacheDir() + FILE_SEP + "log" + FILE_SEP;
             }
         }
 
-        public Builder setLogSwitch(boolean logSwitch) {
+        public Config setLogSwitch(final boolean logSwitch) {
             LogUtils.sLogSwitch = logSwitch;
             return this;
         }
 
-        public Builder setGlobalTag(final String tag) {
+        public Config setConsoleSwitch(final boolean consoleSwitch) {
+            LogUtils.sLog2ConsoleSwitch = consoleSwitch;
+            return this;
+        }
+
+        public Config setGlobalTag(final String tag) {
             if (isSpace(tag)) {
                 LogUtils.sGlobalTag = "";
                 sTagIsSpace = true;
@@ -407,17 +463,17 @@ public final class LogUtils {
             return this;
         }
 
-        public Builder setLogHeadSwitch(boolean logHeadSwitch) {
+        public Config setLogHeadSwitch(final boolean logHeadSwitch) {
             LogUtils.sLogHeadSwitch = logHeadSwitch;
             return this;
         }
 
-        public Builder setLog2FileSwitch(boolean log2FileSwitch) {
+        public Config setLog2FileSwitch(final boolean log2FileSwitch) {
             LogUtils.sLog2FileSwitch = log2FileSwitch;
             return this;
         }
 
-        public Builder setDir(final String dir) {
+        public Config setDir(final String dir) {
             if (isSpace(dir)) {
                 LogUtils.dir = null;
             } else {
@@ -426,30 +482,37 @@ public final class LogUtils {
             return this;
         }
 
-        public Builder setDir(final File dir) {
+        public Config setDir(final File dir) {
             LogUtils.dir = dir == null ? null : dir.getAbsolutePath() + FILE_SEP;
             return this;
         }
 
-        public Builder setBorderSwitch(boolean borderSwitch) {
+        public Config setBorderSwitch(final boolean borderSwitch) {
             LogUtils.sLogBorderSwitch = borderSwitch;
             return this;
         }
 
-        public Builder setLogFilter(@TYPE int logFilter) {
-            LogUtils.sLogFilter = logFilter;
+        public Config setConsoleFilter(@TYPE final int consoleFilter) {
+            LogUtils.sConsoleFilter = consoleFilter;
+            return this;
+        }
+
+        public Config setFileFilter(@TYPE final int fileFilter) {
+            LogUtils.sFileFilter = fileFilter;
             return this;
         }
 
         @Override
         public String toString() {
             return "switch: " + sLogSwitch
-                    + LINE_SEP + "tag: " + (sGlobalTag.equals("") ? "null" : sGlobalTag)
+                    + LINE_SEP + "console: " + sLog2ConsoleSwitch
+                    + LINE_SEP + "tag: " + (sTagIsSpace ? "null" : sGlobalTag)
                     + LINE_SEP + "head: " + sLogHeadSwitch
                     + LINE_SEP + "file: " + sLog2FileSwitch
                     + LINE_SEP + "dir: " + (dir == null ? defaultDir : dir)
                     + LINE_SEP + "border: " + sLogBorderSwitch
-                    + LINE_SEP + "filter: " + (sLogFilter == V ? "verbose" : "not verbose");
+                    + LINE_SEP + "consoleFilter: " + T[sConsoleFilter - V]
+                    + LINE_SEP + "fileFilter: " + T[sFileFilter - V];
         }
     }
 }

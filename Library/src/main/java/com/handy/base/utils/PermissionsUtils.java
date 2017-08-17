@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 权限处理工具类，检查是否有未启用权限
  * </pre>

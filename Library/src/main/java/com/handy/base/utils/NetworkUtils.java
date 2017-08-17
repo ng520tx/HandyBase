@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -14,16 +15,11 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 网络相关工具类
  * </pre>
@@ -40,14 +36,9 @@ public final class NetworkUtils {
 
     /**
      * 打开网络设置界面
-     * <p>3.0以下打开设置界面</p>
      */
     public static void openWirelessSettings() {
-        if (android.os.Build.VERSION.SDK_INT > 10) {
-            Utils.getApplicationContext().startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        } else {
-            Utils.getApplicationContext().startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        }
+        Utils.getApp().startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     /**
@@ -57,7 +48,7 @@ public final class NetworkUtils {
      * @return NetworkInfo
      */
     private static NetworkInfo getActiveNetworkInfo() {
-        return ((ConnectivityManager) Utils.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        return ((ConnectivityManager) Utils.getApp().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
     }
 
     /**
@@ -74,17 +65,34 @@ public final class NetworkUtils {
     /**
      * 判断网络是否可用
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
+     * <p>需要异步ping，如果ping不通就说明网络不可用</p>
+     * <p>ping的ip为阿里巴巴公共ip：223.5.5.5</p>
      *
      * @return {@code true}: 可用<br>{@code false}: 不可用
      */
     public static boolean isAvailableByPing() {
-        ShellUtils.CommandResult result = ShellUtils.execCmd("ping -c 1 -w 1 223.5.5.5", false);
+        return isAvailableByPing(null);
+    }
+
+    /**
+     * 判断网络是否可用
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
+     * <p>需要异步ping，如果ping不通就说明网络不可用</p>
+     *
+     * @param ip ip地址（自己服务器ip），如果为空，ip为阿里巴巴公共ip
+     * @return {@code true}: 可用<br>{@code false}: 不可用
+     */
+    public static boolean isAvailableByPing(String ip) {
+        if (ip == null || ip.length() <= 0) {
+            ip = "223.5.5.5";// 阿里巴巴公共ip
+        }
+        ShellUtils.CommandResult result = ShellUtils.execCmd(String.format("ping -c 1 %s", ip), false);
         boolean ret = result.result == 0;
         if (result.errorMsg != null) {
-            LogUtils.d("isAvailableByPing errorMsg", result.errorMsg);
+            Log.d("NetworkUtils", "isAvailableByPing() called" + result.errorMsg);
         }
         if (result.successMsg != null) {
-            LogUtils.d("isAvailableByPing successMsg", result.successMsg);
+            Log.d("NetworkUtils", "isAvailableByPing() called" + result.successMsg);
         }
         return ret;
     }
@@ -96,7 +104,7 @@ public final class NetworkUtils {
      */
     public static boolean getDataEnabled() {
         try {
-            TelephonyManager tm = (TelephonyManager) Utils.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) Utils.getApp().getSystemService(Context.TELEPHONY_SERVICE);
             Method getMobileDataEnabledMethod = tm.getClass().getDeclaredMethod("getDataEnabled");
             if (null != getMobileDataEnabledMethod) {
                 return (boolean) getMobileDataEnabledMethod.invoke(tm);
@@ -113,9 +121,9 @@ public final class NetworkUtils {
      *
      * @param enabled {@code true}: 打开<br>{@code false}: 关闭
      */
-    public static void setDataEnabled(boolean enabled) {
+    public static void setDataEnabled(final boolean enabled) {
         try {
-            TelephonyManager tm = (TelephonyManager) Utils.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) Utils.getApp().getSystemService(Context.TELEPHONY_SERVICE);
             Method setMobileDataEnabledMethod = tm.getClass().getDeclaredMethod("setDataEnabled", boolean.class);
             if (null != setMobileDataEnabledMethod) {
                 setMobileDataEnabledMethod.invoke(tm, enabled);
@@ -144,7 +152,7 @@ public final class NetworkUtils {
      */
     public static boolean getWifiEnabled() {
         @SuppressLint("WifiManagerLeak")
-        WifiManager wifiManager = (WifiManager) Utils.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) Utils.getApp().getSystemService(Context.WIFI_SERVICE);
         return wifiManager.isWifiEnabled();
     }
 
@@ -154,9 +162,9 @@ public final class NetworkUtils {
      *
      * @param enabled {@code true}: 打开<br>{@code false}: 关闭
      */
-    public static void setWifiEnabled(boolean enabled) {
+    public static void setWifiEnabled(final boolean enabled) {
         @SuppressLint("WifiManagerLeak")
-        WifiManager wifiManager = (WifiManager) Utils.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) Utils.getApp().getSystemService(Context.WIFI_SERVICE);
         if (enabled) {
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
@@ -175,8 +183,10 @@ public final class NetworkUtils {
      * @return {@code true}: 连接<br>{@code false}: 未连接
      */
     public static boolean isWifiConnected() {
-        ConnectivityManager cm = (ConnectivityManager) Utils.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm != null && cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
+        ConnectivityManager cm = (ConnectivityManager) Utils.getApp()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm != null && cm.getActiveNetworkInfo() != null
+                && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
 
     /**
@@ -197,7 +207,7 @@ public final class NetworkUtils {
      * @return 运营商名称
      */
     public static String getNetworkOperatorName() {
-        TelephonyManager tm = (TelephonyManager) Utils.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) Utils.getApp().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getNetworkOperatorName() : null;
     }
 
@@ -254,7 +264,9 @@ public final class NetworkUtils {
                     default:
 
                         String subtypeName = info.getSubtypeName();
-                        if (subtypeName.equalsIgnoreCase("TD-SCDMA") || subtypeName.equalsIgnoreCase("WCDMA") || subtypeName.equalsIgnoreCase("CDMA2000")) {
+                        if (subtypeName.equalsIgnoreCase("TD-SCDMA")
+                                || subtypeName.equalsIgnoreCase("WCDMA")
+                                || subtypeName.equalsIgnoreCase("CDMA2000")) {
                             netType = NetworkType.NETWORK_3G;
                         } else {
                             netType = NetworkType.NETWORK_UNKNOWN;
@@ -275,7 +287,7 @@ public final class NetworkUtils {
      * @param useIPv4 是否用IPv4
      * @return IP地址
      */
-    public static String getIPAddress(boolean useIPv4) {
+    public static String getIPAddress(final boolean useIPv4) {
         try {
             for (Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces(); nis.hasMoreElements(); ) {
                 NetworkInterface ni = nis.nextElement();
@@ -311,26 +323,14 @@ public final class NetworkUtils {
      * @return ip地址
      */
     public static String getDomainAddress(final String domain) {
+        InetAddress inetAddress;
         try {
-            ExecutorService exec = Executors.newCachedThreadPool();
-            Future<String> fs = exec.submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    InetAddress inetAddress;
-                    try {
-                        inetAddress = InetAddress.getByName(domain);
-                        return inetAddress.getHostAddress();
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            });
-            return fs.get();
-        } catch (InterruptedException | ExecutionException e) {
+            inetAddress = InetAddress.getByName(domain);
+            return inetAddress.getHostAddress();
+        } catch (UnknownHostException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public enum NetworkType {

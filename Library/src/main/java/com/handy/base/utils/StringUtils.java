@@ -1,14 +1,9 @@
 package com.handy.base.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 字符串相关工具类
  * </pre>
@@ -25,7 +20,7 @@ public final class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: 空<br> {@code false}: 不为空
      */
-    public static boolean isEmpty(CharSequence s) {
+    public static boolean isEmpty(final CharSequence s) {
         return s == null || s.length() == 0;
     }
 
@@ -35,7 +30,7 @@ public final class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: null或全空格<br> {@code false}: 不为null且不全空格
      */
-    public static boolean isTrimEmpty(String s) {
+    public static boolean isTrimEmpty(final String s) {
         return (s == null || s.trim().length() == 0);
     }
 
@@ -45,7 +40,7 @@ public final class StringUtils {
      * @param s 待校验字符串
      * @return {@code true}: null或全空白字符<br> {@code false}: 不为null且不全空白字符
      */
-    public static boolean isSpace(String s) {
+    public static boolean isSpace(final String s) {
         if (s == null) return true;
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
@@ -62,7 +57,7 @@ public final class StringUtils {
      * @param b 待校验字符串b
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
-    public static boolean equals(CharSequence a, CharSequence b) {
+    public static boolean equals(final CharSequence a, final CharSequence b) {
         if (a == b) return true;
         int length;
         if (a != null && b != null && (length = a.length()) == b.length()) {
@@ -85,7 +80,7 @@ public final class StringUtils {
      * @param b 待校验字符串b
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
-    public static boolean equalsIgnoreCase(String a, String b) {
+    public static boolean equalsIgnoreCase(final String a, final String b) {
         return a == null ? b == null : a.equalsIgnoreCase(b);
     }
 
@@ -95,7 +90,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return s为null转为长度为0字符串，否则不改变
      */
-    public static String null2Length0(String s) {
+    public static String null2Length0(final String s) {
         return s == null ? "" : s;
     }
 
@@ -105,7 +100,7 @@ public final class StringUtils {
      * @param s 字符串
      * @return null返回0，其他返回自身长度
      */
-    public static int length(CharSequence s) {
+    public static int length(final CharSequence s) {
         return s == null ? 0 : s.length();
     }
 
@@ -115,7 +110,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 首字母大写字符串
      */
-    public static String upperFirstLetter(String s) {
+    public static String upperFirstLetter(final String s) {
         if (isEmpty(s) || !Character.isLowerCase(s.charAt(0))) return s;
         return String.valueOf((char) (s.charAt(0) - 32)) + s.substring(1);
     }
@@ -126,7 +121,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 首字母小写字符串
      */
-    public static String lowerFirstLetter(String s) {
+    public static String lowerFirstLetter(final String s) {
         if (isEmpty(s) || !Character.isUpperCase(s.charAt(0))) return s;
         return String.valueOf((char) (s.charAt(0) + 32)) + s.substring(1);
     }
@@ -137,7 +132,7 @@ public final class StringUtils {
      * @param s 待反转字符串
      * @return 反转字符串
      */
-    public static String reverse(String s) {
+    public static String reverse(final String s) {
         int len = length(s);
         if (len <= 1) return s;
         int mid = len >> 1;
@@ -157,7 +152,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 半角字符串
      */
-    public static String toDBC(String s) {
+    public static String toDBC(final String s) {
         if (isEmpty(s)) return s;
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
@@ -178,7 +173,7 @@ public final class StringUtils {
      * @param s 待转字符串
      * @return 全角字符串
      */
-    public static String toSBC(String s) {
+    public static String toSBC(final String s) {
         if (isEmpty(s)) return s;
         char[] chars = s.toCharArray();
         for (int i = 0, len = chars.length; i < len; i++) {
@@ -191,55 +186,5 @@ public final class StringUtils {
             }
         }
         return new String(chars);
-    }
-
-    /**
-     * 获取异常内容
-     *
-     * @param e 异常类
-     * @return 异常堆栈内容
-     */
-    public static String getExceptionInfoByStackTraceElement(Exception e) {
-        String sOut = "";
-        StackTraceElement[] trace = e.getStackTrace();
-        for (StackTraceElement s : trace) {
-            sOut += "\tat " + s + "\r\n";
-        }
-        return sOut;
-    }
-
-    /**
-     * 获取异常内容
-     *
-     * @param e 异常类
-     * @return 异常堆栈内容
-     */
-    public static String getExceptionInfoByPrintStream(Exception e) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PrintStream pout = new PrintStream(out);
-        e.printStackTrace(pout);
-        String ret = new String(out.toByteArray());
-        pout.close();
-        try {
-            out.close();
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-        return ret;
-    }
-
-    /**
-     * 获取异常内容
-     *
-     * @param e 异常类
-     * @return 异常堆栈内容
-     */
-    public static String getExceptionInfoByPrintWriter(Throwable e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        e.printStackTrace(pw);
-        pw.flush();
-        sw.flush();
-        return sw.toString();
     }
 }

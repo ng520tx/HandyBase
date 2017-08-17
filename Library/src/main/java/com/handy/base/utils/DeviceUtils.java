@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 设备相关工具类
  * </pre>
@@ -35,7 +35,8 @@ public final class DeviceUtils {
      */
     public static boolean isDeviceRooted() {
         String su = "su";
-        String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
+        String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/", "/system/bin/failsafe/",
+                "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
         for (String location : locations) {
             if (new File(location + su).exists()) {
                 return true;
@@ -50,7 +51,7 @@ public final class DeviceUtils {
      * @return 设备系统版本号
      */
     public static int getSDKVersion() {
-        return Build.VERSION.SDK_INT;
+        return android.os.Build.VERSION.SDK_INT;
     }
 
 
@@ -61,7 +62,7 @@ public final class DeviceUtils {
      */
     @SuppressLint("HardwareIds")
     public static String getAndroidID() {
-        return Settings.Secure.getString(Utils.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(Utils.getApp().getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     /**
@@ -97,7 +98,7 @@ public final class DeviceUtils {
     private static String getMacAddressByWifiInfo() {
         try {
             @SuppressLint("WifiManagerLeak")
-            WifiManager wifi = (WifiManager) Utils.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) Utils.getApp().getSystemService(Context.WIFI_SERVICE);
             if (wifi != null) {
                 WifiInfo info = wifi.getConnectionInfo();
                 if (info != null) return info.getMacAddress();
@@ -191,7 +192,7 @@ public final class DeviceUtils {
         Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Utils.getApplicationContext().startActivity(intent);
+        Utils.getApp().startActivity(intent);
     }
 
     /**
@@ -204,7 +205,7 @@ public final class DeviceUtils {
         intent.putExtra("nowait", 1);
         intent.putExtra("interval", 1);
         intent.putExtra("window", 0);
-        Utils.getApplicationContext().sendBroadcast(intent);
+        Utils.getApp().sendBroadcast(intent);
     }
 
     /**
@@ -213,8 +214,8 @@ public final class DeviceUtils {
      *
      * @param reason 传递给内核来请求特殊的引导模式，如"recovery"
      */
-    public static void reboot(String reason) {
-        PowerManager mPowerManager = (PowerManager) Utils.getApplicationContext().getSystemService(Context.POWER_SERVICE);
+    public static void reboot(final String reason) {
+        PowerManager mPowerManager = (PowerManager) Utils.getApp().getSystemService(Context.POWER_SERVICE);
         try {
             mPowerManager.reboot(reason);
         } catch (Exception e) {

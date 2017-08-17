@@ -1,6 +1,5 @@
 package com.handy.base.utils;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Criteria;
@@ -11,22 +10,27 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : 定位相关工具类
  * </pre>
  */
 public final class LocationUtils {
 
+    private static final String TAG = "LocationUtils";
     private static final int TWO_MINUTES = 1000 * 60 * 2;
+
     private static OnLocationChangeListener mListener;
     private static MyLocationListener myLocationListener;
     private static LocationManager mLocationManager;
@@ -35,13 +39,78 @@ public final class LocationUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+
+//    /**
+//     * you have to chech for Location Permission before use this method
+//     * add this code <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> to your Manifest file.
+//     * you have also implement LocationListener and passed it to the method.
+//     *
+//     * @param Context
+//     * @param LocationListener
+//     * @return {@code Location}
+//     */
+//
+//    public static Location getLocation(Context context, LocationListener listener) {
+//        Location location = null;
+//        try {
+//            mLocationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+//            if (!isLocationEnabled()) {
+//                //no Network and GPS providers is enabled
+//                Toast.makeText(context
+//                        , " you have to open GPS or INTERNET"
+//                        , Toast.LENGTH_LONG)
+//                        .show();
+//            } else {
+//                if (isLocationEnabled()) {
+//                    mLocationManager.requestLocationUpdates(
+//                            LocationManager.NETWORK_PROVIDER,
+//                            MIN_TIME_BETWEEN_UPDATES,
+//                            MIN_DISTANCE_CHANGE_FOR_UPDATES,
+//                            listener);
+//
+//                    if (mLocationManager != null) {
+//                        location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//                        if (location != null) {
+//                            mLocationManager.removeUpdates(listener);
+//                            return location;
+//                        }
+//                    }
+//                }
+//                //when GPS is enabled.
+//                if (isGpsEnabled()) {
+//                    if (location == null) {
+//                        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+//                                MIN_TIME_BETWEEN_UPDATES,
+//                                MIN_DISTANCE_CHANGE_FOR_UPDATES,
+//                                listener);
+//
+//                        if (mLocationManager != null) {
+//                            location =
+//                                    mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                            if (location != null) {
+//                                mLocationManager.removeUpdates(listener);
+//                                return location;
+//                            }
+//                        }
+//                    }
+//                }
+//
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return location;
+//    }
+
+
     /**
      * 判断Gps是否可用
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isGpsEnabled() {
-        LocationManager lm = (LocationManager) Utils.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -51,7 +120,7 @@ public final class LocationUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isLocationEnabled() {
-        LocationManager lm = (LocationManager) Utils.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -61,7 +130,7 @@ public final class LocationUtils {
     public static void openGpsSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Utils.getApplicationContext().startActivity(intent);
+        Utils.getAppContext().startActivity(intent);
     }
 
     /**
@@ -81,10 +150,10 @@ public final class LocationUtils {
      */
     public static boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) Utils.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled()) {
-            ToastUtils.showShortSafe("无法定位，请打开定位服务");
+            Log.d(TAG, "无法定位，请打开定位服务");
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
@@ -94,6 +163,7 @@ public final class LocationUtils {
         mLocationManager.requestLocationUpdates(provider, minTime, minDistance, myLocationListener);
         return true;
     }
+
 
     /**
      * 注销
@@ -138,7 +208,7 @@ public final class LocationUtils {
      * @return {@link Address}
      */
     public static Address getAddress(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(Utils.getApplicationContext(), Locale.getDefault());
+        Geocoder geocoder = new Geocoder(Utils.getAppContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);
@@ -219,8 +289,7 @@ public final class LocationUtils {
         boolean isSignificantlyLessAccurate = accuracyDelta > 200;
 
         // Check if the old and new location are from the same provider
-        boolean isFromSameProvider = isSameProvider(newLocation.getProvider(),
-                currentBestLocation.getProvider());
+        boolean isFromSameProvider = isSameProvider(newLocation.getProvider(), currentBestLocation.getProvider());
 
         // Determine location quality using a combination of timeliness and accuracy
         if (isMoreAccurate) {
@@ -301,13 +370,13 @@ public final class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    LogUtils.d("onStatusChanged", "当前GPS状态为可见状态");
+                    Log.d(TAG, "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    LogUtils.d("onStatusChanged", "当前GPS状态为服务区外状态");
+                    Log.d(TAG, "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    LogUtils.d("onStatusChanged", "当前GPS状态为暂停服务状态");
+                    Log.d(TAG, "当前GPS状态为暂停服务状态");
                     break;
             }
         }
