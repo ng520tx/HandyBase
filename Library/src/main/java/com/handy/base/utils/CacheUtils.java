@@ -37,10 +37,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 缓存相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2017/05/24
+ *     desc  : 缓存相关工具类
  * </pre>
  */
 public class CacheUtils {

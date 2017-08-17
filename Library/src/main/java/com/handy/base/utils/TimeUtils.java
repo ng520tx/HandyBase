@@ -1,7 +1,6 @@
 package com.handy.base.utils;
 
-
-import com.handy.base.utils.constant.TimeConstants;
+import com.blankj.utilcode.constant.TimeConstants;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,10 +11,10 @@ import java.util.Locale;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 时间相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/08/02
+ *     desc  : 时间相关工具类
  * </pre>
  */
 public final class TimeUtils {

@@ -10,19 +10,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.AnimRes;
 import android.support.annotation.NonNull;
-import android.util.ArrayMap;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : Activity相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/09/23
+ *     desc  : Activity相关工具类
  * </pre>
  */
 public final class ActivityUtils {
@@ -374,32 +370,6 @@ public final class ActivityUtils {
      * @return 栈顶Activity
      */
     public static Activity getTopActivity() {
-        try {
-            Class activityThreadClass = Class.forName("android.app.ActivityThread");
-            @SuppressWarnings("unchecked")
-            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
-            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
-            activitiesField.setAccessible(true);
-            Map activities = null;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                activities = (HashMap) activitiesField.get(activityThread);
-            } else {
-                activities = (ArrayMap) activitiesField.get(activityThread);
-            }
-            for (Object activityRecord : activities.values()) {
-                Class activityRecordClass = activityRecord.getClass();
-                Field pausedField = activityRecordClass.getDeclaredField("paused");
-                pausedField.setAccessible(true);
-                if (!pausedField.getBoolean(activityRecord)) {
-                    Field activityField = activityRecordClass.getDeclaredField("activity");
-                    activityField.setAccessible(true);
-                    return (Activity) activityField.get(activityRecord);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return null;
     }
 }
-

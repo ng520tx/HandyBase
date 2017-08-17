@@ -57,12 +57,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 
+import static android.graphics.BlurMaskFilter.Blur;
+
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : SpannableString相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 16/12/13
+ *     desc  : SpannableString相关工具类
  * </pre>
  */
 public final class SpanUtils {
@@ -114,7 +116,7 @@ public final class SpanUtils {
     private ClickableSpan clickSpan;
     private String url;
     private float blurRadius;
-    private BlurMaskFilter.Blur style;
+    private Blur style;
     private Shader shader;
     private float shadowRadius;
     private float shadowDx;
@@ -129,7 +131,6 @@ public final class SpanUtils {
     private int spaceSize;
     private int spaceColor;
     private int mType;
-
     public SpanUtils() {
         mBuilder = new SpannableStringBuilder();
         mText = "";
@@ -621,14 +622,14 @@ public final class SpanUtils {
      *
      * @param radius 模糊半径（需大于0）
      * @param style  模糊样式<ul>
-     *               <li>{@link BlurMaskFilter.Blur#NORMAL}</li>
-     *               <li>{@link BlurMaskFilter.Blur#SOLID}</li>
-     *               <li>{@link BlurMaskFilter.Blur#OUTER}</li>
-     *               <li>{@link BlurMaskFilter.Blur#INNER}</li>
+     *               <li>{@link Blur#NORMAL}</li>
+     *               <li>{@link Blur#SOLID}</li>
+     *               <li>{@link Blur#OUTER}</li>
+     *               <li>{@link Blur#INNER}</li>
      *               </ul>
      * @return {@link SpanUtils}
      */
-    public SpanUtils setBlur(@FloatRange(from = 0, fromInclusive = false) final float radius, final BlurMaskFilter.Blur style) {
+    public SpanUtils setBlur(@FloatRange(from = 0, fromInclusive = false) final float radius, final Blur style) {
         this.blurRadius = radius;
         this.style = style;
         return this;

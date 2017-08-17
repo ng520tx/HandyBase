@@ -20,10 +20,10 @@ import java.lang.ref.WeakReference;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 吐司相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/09/29
+ *     desc  : 吐司相关工具类
  * </pre>
  */
 public final class ToastUtils {

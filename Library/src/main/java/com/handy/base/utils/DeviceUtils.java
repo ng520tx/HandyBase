@@ -16,10 +16,10 @@ import java.util.List;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 设备相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/8/1
+ *     desc  : 设备相关工具类
  * </pre>
  */
 public final class DeviceUtils {
@@ -51,7 +51,7 @@ public final class DeviceUtils {
      * @return 设备系统版本号
      */
     public static int getSDKVersion() {
-        return android.os.Build.VERSION.SDK_INT;
+        return Build.VERSION.SDK_INT;
     }
 
 
@@ -198,6 +198,7 @@ public final class DeviceUtils {
     /**
      * 重启
      * <p>需要root权限或者系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
+     *
      */
     public static void reboot() {
         ShellUtils.execCmd("reboot", true);
@@ -212,7 +213,7 @@ public final class DeviceUtils {
      * 重启
      * <p>需系统权限 {@code <android:sharedUserId="android.uid.system"/>}</p>
      *
-     * @param reason 传递给内核来请求特殊的引导模式，如"recovery"
+     * @param reason  传递给内核来请求特殊的引导模式，如"recovery"
      */
     public static void reboot(final String reason) {
         PowerManager mPowerManager = (PowerManager) Utils.getApp().getSystemService(Context.POWER_SERVICE);

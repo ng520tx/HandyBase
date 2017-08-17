@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,10 +17,10 @@ import java.util.List;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : App相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/08/02
+ *     desc  : App相关工具类
  * </pre>
  */
 public final class AppUtils {
@@ -58,7 +59,7 @@ public final class AppUtils {
      */
     public static void installApp(final File file, final String authority) {
         if (!FileUtils.isFileExists(file)) return;
-        Utils.getAppContext().startActivity(IntentUtils.getInstallAppIntent(file, authority));
+        Utils.getApp().startActivity(IntentUtils.getInstallAppIntent(file, authority));
     }
 
     /**
@@ -152,6 +153,7 @@ public final class AppUtils {
             return true;
         }
         if (result.errorMsg != null) {
+            Log.d("AppUtils", "isAppRoot() called" + result.errorMsg);
         }
         return false;
     }

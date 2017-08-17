@@ -37,10 +37,10 @@ import javax.xml.transform.stream.StreamSource;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : Log相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/09/21
+ *     desc  : Log相关工具类
  * </pre>
  */
 public final class LogUtils {
@@ -308,6 +308,7 @@ public final class LogUtils {
     }
 
     private static void print(final int type, final String tag, final String msg) {
+        Log.println(type, tag, msg);
     }
 
     private static String addLeftBorder(final String msg) {
@@ -327,6 +328,7 @@ public final class LogUtils {
         String time = format.substring(6);
         final String fullPath = (dir == null ? defaultDir : dir) + date + ".txt";
         if (!createOrExistsFile(fullPath)) {
+            Log.e(tag, "log to " + fullPath + " failed!");
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -347,8 +349,10 @@ public final class LogUtils {
                 try {
                     bw = new BufferedWriter(new FileWriter(fullPath, true));
                     bw.write(content);
+                    Log.d(tag, "log to " + fullPath + " success!");
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Log.e(tag, "log to " + fullPath + " failed!");
                 } finally {
                     try {
                         if (bw != null) {

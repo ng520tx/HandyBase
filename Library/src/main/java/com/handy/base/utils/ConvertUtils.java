@@ -10,8 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.handy.base.utils.constant.MemoryConstants;
-import com.handy.base.utils.constant.TimeConstants;
+import com.blankj.utilcode.constant.MemoryConstants;
+import com.blankj.utilcode.constant.TimeConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,10 +22,10 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 转换相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/08/13
+ *     desc  : 转换相关工具类
  * </pre>
  */
 public final class ConvertUtils {

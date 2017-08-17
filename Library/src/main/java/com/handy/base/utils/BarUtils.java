@@ -23,13 +23,17 @@ import java.lang.reflect.Method;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 栏相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/09/23
+ *     desc  : 栏相关工具类
  * </pre>
  */
-public class BarUtils {
+public final class BarUtils {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // status bar
+    ///////////////////////////////////////////////////////////////////////////
 
     private static final int DEFAULT_ALPHA = 112;
     private static final String TAG_COLOR = "TAG_COLOR";
@@ -494,7 +498,7 @@ public class BarUtils {
      * @param activity activity
      */
     public static void hideNavBar(@NonNull final Activity activity) {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) return;
         if (getNavBarHeight() > 0) {
             View decorView = activity.getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
