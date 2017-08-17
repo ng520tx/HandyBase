@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 /**
  * <pre>
  *  author: Handy
- *  blog  : https://github.com/liujie045
+ *  blog  : https://github.com/handy045
  *  time  : 2017-4-18 10:14:23
  *  desc  : Activity基本类接口
  * </pre>
