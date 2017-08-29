@@ -10,7 +10,6 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -153,7 +152,7 @@ public final class LocationUtils {
         mLocationManager = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled()) {
-            Log.d(TAG, "无法定位，请打开定位服务");
+            LogUtils.d(TAG, "无法定位，请打开定位服务");
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
@@ -370,13 +369,13 @@ public final class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    Log.d(TAG, "当前GPS状态为可见状态");
+                    LogUtils.d(TAG, "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    Log.d(TAG, "当前GPS状态为服务区外状态");
+                    LogUtils.d(TAG, "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    Log.d(TAG, "当前GPS状态为暂停服务状态");
+                    LogUtils.d(TAG, "当前GPS状态为暂停服务状态");
                     break;
             }
         }

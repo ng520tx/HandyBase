@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlSerializer;
@@ -302,7 +301,7 @@ public final class PhoneUtils {
      * <p>参照以下注释代码</p>
      */
     public static void getContactNum() {
-        Log.d("tips", "U should copy the following code.");
+        LogUtils.d("tips", "U should copy the following code.");
         /*
         Intent intent = new Intent();
         intent.setAction("android.intent.action.PICK");

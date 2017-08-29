@@ -9,7 +9,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -153,7 +152,7 @@ public final class AppUtils {
             return true;
         }
         if (result.errorMsg != null) {
-            Log.d("AppUtils", "isAppRoot() called" + result.errorMsg);
+            LogUtils.d("AppUtils", "isAppRoot() called" + result.errorMsg);
         }
         return false;
     }

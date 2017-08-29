@@ -49,7 +49,6 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.text.style.UpdateAppearance;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -1435,7 +1434,7 @@ public final class SpanUtils {
                         is.close();
                     }
                 } catch (Exception e) {
-                    Log.e("sms", "Failed to loaded content " + mContentUri, e);
+                    LogUtils.e("sms", "Failed to loaded content " + mContentUri, e);
                 }
             } else {
                 try {
@@ -1443,7 +1442,7 @@ public final class SpanUtils {
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
                             drawable.getIntrinsicHeight());
                 } catch (Exception e) {
-                    Log.e("sms", "Unable to find resource: " + mResourceId);
+                    LogUtils.e("sms", "Unable to find resource: " + mResourceId);
                 }
             }
             return drawable;
