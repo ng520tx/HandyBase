@@ -13,6 +13,7 @@ import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -26,10 +27,6 @@ import javax.crypto.spec.SecretKeySpec;
 public final class EncryptUtils {
 
     private static final String DES_Algorithm = "DES";
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 哈希加密相关
-    ///////////////////////////////////////////////////////////////////////////
     private static final String TripleDES_Algorithm = "DESede";
     private static final String AES_Algorithm = "AES";
     private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -37,23 +34,29 @@ public final class EncryptUtils {
      * DES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
-     * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
+     * <p>填充方式有：NoPadding、PKCS5Padding（ZerosPadding在Java8中无法使用）</p>
      */
-    public static String DES_Transformation = "DES/ECB/NoPadding";
+    public static String DES_Encrypt_Key = "HANDYKEY"; //必须8位
+    public static String DES_Transformation = "DES/CBC/PKCS5Padding";
+    private static byte[] DES_SecureRandom = {'0', '1', '2', '3', '4', '5', '6', '7'};
     /**
      * 3DES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
-     * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
+     * <p>填充方式有：NoPadding、PKCS5Padding（ZerosPadding在Java8中无法使用）</p>
      */
-    public static String TripleDES_Transformation = "DESede/ECB/NoPadding";
+    public static String TripleDES_Encrypt_Key = "HANDYBASE_DES_SECRET_KEY"; //必须24位
+    public static String TripleDES_Transformation = "DESede/CBC/PKCS5Padding";
+    private static byte[] TripleDES_SecureRandom = {'0', '1', '2', '3', '4', '5', '6', '7'};
     /**
      * AES转变
      * <p>法算法名称/加密模式/填充方式</p>
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
-     * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
+     * <p>填充方式有：NoPadding、PKCS5Padding（ZerosPadding在Java8中无法使用）</p>
      */
-    public static String AES_Transformation = "AES/ECB/NoPadding";
+    public static String AES_Encrypt_Key = "HANDY_SECRET_KEY"; //必须16位
+    public static String AES_Transformation = "AES/CBC/PKCS5Padding";
+    private static byte[] AES_SecureRandom = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     private EncryptUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -627,6 +630,16 @@ public final class EncryptUtils {
      * DES加密
      *
      * @param data 明文
+     * @return 密文
+     */
+    public static byte[] encryptDES(final byte[] data) {
+        return desTemplate(data, DES_Encrypt_Key.getBytes(), DES_Algorithm, DES_Transformation, true);
+    }
+
+    /**
+     * DES加密
+     *
+     * @param data 明文
      * @param key  8字节秘钥
      * @return 密文
      */
@@ -660,6 +673,16 @@ public final class EncryptUtils {
      * DES解密
      *
      * @param data 密文
+     * @return 明文
+     */
+    public static byte[] decryptDES(final byte[] data) {
+        return desTemplate(data, DES_Encrypt_Key.getBytes(), DES_Algorithm, DES_Transformation, false);
+    }
+
+    /**
+     * DES解密
+     *
+     * @param data 密文
      * @param key  8字节秘钥
      * @return 明文
      */
@@ -687,6 +710,16 @@ public final class EncryptUtils {
      */
     public static String encrypt3DES2HexString(final byte[] data, final byte[] key) {
         return bytes2HexString(encrypt3DES(data, key));
+    }
+
+    /**
+     * 3DES加密
+     *
+     * @param data 明文
+     * @return 密文
+     */
+    public static byte[] encrypt3DES(final byte[] data) {
+        return desTemplate(data, TripleDES_Encrypt_Key.getBytes(), TripleDES_Algorithm, TripleDES_Transformation, true);
     }
 
     /**
@@ -730,6 +763,16 @@ public final class EncryptUtils {
      * 3DES解密
      *
      * @param data 密文
+     * @return 明文
+     */
+    public static byte[] decrypt3DES(final byte[] data) {
+        return desTemplate(data, TripleDES_Encrypt_Key.getBytes(), TripleDES_Algorithm, TripleDES_Transformation, false);
+    }
+
+    /**
+     * 3DES解密
+     *
+     * @param data 密文
      * @param key  24字节密钥
      * @return 明文
      */
@@ -757,6 +800,16 @@ public final class EncryptUtils {
      */
     public static String encryptAES2HexString(final byte[] data, final byte[] key) {
         return bytes2HexString(encryptAES(data, key));
+    }
+
+    /**
+     * AES加密
+     *
+     * @param data 明文
+     * @return 密文
+     */
+    public static byte[] encryptAES(final byte[] data) {
+        return desTemplate(data, AES_Encrypt_Key.getBytes(), AES_Algorithm, AES_Transformation, true);
     }
 
     /**
@@ -796,6 +849,16 @@ public final class EncryptUtils {
      * AES解密
      *
      * @param data 密文
+     * @return 明文
+     */
+    public static byte[] decryptAES(final byte[] data) {
+        return desTemplate(data, AES_Encrypt_Key.getBytes(), AES_Algorithm, AES_Transformation, false);
+    }
+
+    /**
+     * AES解密
+     *
+     * @param data 密文
      * @param key  16、24、32字节秘钥
      * @return 明文
      */
@@ -816,11 +879,47 @@ public final class EncryptUtils {
     public static byte[] desTemplate(final byte[] data, final byte[] key, final String algorithm, final String transformation, final boolean isEncrypt) {
         if (data == null || data.length == 0 || key == null || key.length == 0) return null;
         try {
-            SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
-            Cipher cipher = Cipher.getInstance(transformation);
-            SecureRandom random = new SecureRandom();
-            cipher.init(isEncrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, random);
-            return cipher.doFinal(data);
+            if (transformation.split("/")[1].equals("ECB")) {
+                SecureRandom random = null;
+                switch (algorithm) {
+                    case DES_Algorithm:
+                        random = new SecureRandom(DES_SecureRandom);
+                        break;
+                    case TripleDES_Algorithm:
+                        random = new SecureRandom(TripleDES_SecureRandom);
+                        break;
+                    case AES_Algorithm:
+                        random = new SecureRandom(AES_SecureRandom);
+                        break;
+                    default:
+                        throw new Exception("algorithm is not found!");
+                }
+                SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
+                Cipher cipher = Cipher.getInstance(transformation);
+                cipher.init(isEncrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, random);
+                byte[] cipherResult = cipher.doFinal(isEncrypt ? data : Base64Utils.decode(new String(data)));
+                return isEncrypt ? Base64Utils.encode(cipherResult).getBytes() : new String(cipherResult).getBytes();
+            } else {
+                IvParameterSpec random = null;
+                switch (algorithm) {
+                    case DES_Algorithm:
+                        random = new IvParameterSpec(DES_SecureRandom);
+                        break;
+                    case TripleDES_Algorithm:
+                        random = new IvParameterSpec(TripleDES_SecureRandom);
+                        break;
+                    case AES_Algorithm:
+                        random = new IvParameterSpec(AES_SecureRandom);
+                        break;
+                    default:
+                        throw new Exception("algorithm is not found!");
+                }
+                SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
+                Cipher cipher = Cipher.getInstance(transformation);
+                cipher.init(isEncrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, random);
+                byte[] cipherResult = cipher.doFinal(isEncrypt ? data : Base64Utils.decode(new String(data)));
+                return isEncrypt ? Base64Utils.encode(cipherResult).getBytes() : new String(cipherResult).getBytes();
+            }
         } catch (Throwable e) {
             e.printStackTrace();
             return null;
