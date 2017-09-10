@@ -29,6 +29,9 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.view.View;
 
 import java.io.BufferedInputStream;
@@ -1081,13 +1084,15 @@ public final class ImageUtils {
                                           final boolean recycle) {
         if (isEmptyBitmap(src) || content == null) return null;
         Bitmap ret = src.copy(src.getConfig(), true);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         Canvas canvas = new Canvas(ret);
         paint.setColor(color);
         paint.setTextSize(textSize);
         Rect bounds = new Rect();
         paint.getTextBounds(content, 0, content.length(), bounds);
-        canvas.drawText(content, x, y + textSize, paint);
+        StaticLayout layout = new StaticLayout(content, paint, (int) (ret.getWidth() - x), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+        canvas.translate(x, y);
+        layout.draw(canvas);
         if (recycle && !src.isRecycled()) src.recycle();
         return ret;
     }
