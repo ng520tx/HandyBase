@@ -1066,6 +1066,26 @@ public final class ImageUtils {
     /**
      * 添加文字水印
      *
+     * @param src       源图片
+     * @param content   水印文本
+     * @param textScale 水印字体比例（字体大小 = 照片高度 / 字体比例）
+     * @param color     水印字体颜色
+     * @param x         起始坐标x
+     * @param y         起始坐标y
+     * @return 带有文字水印的图片
+     */
+    public static Bitmap addTextWatermarkScale(final Bitmap src,
+                                               final String content,
+                                               final int textScale,
+                                               final int color,
+                                               final float x,
+                                               final float y) {
+        return addTextWatermark(src, content, src.getHeight() / textScale, color, x, y, false);
+    }
+
+    /**
+     * 添加文字水印，支持换行
+     *
      * @param src      源图片
      * @param content  水印文本
      * @param textSize 水印字体大小
