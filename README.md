@@ -231,106 +231,21 @@
 </paths>
 ```
 
-##  更新日志
-***2017年8月30日 v2.1.4***
-
-* 更新Log类日志打印方法为LogUtils类中的相关方法
-
-***2017年8月17日 v2.1.3***
-
-* 更新了引用第三方版本库
-
-***2017年5月12日 v2.1.2***
-
-* 权限管理工具类bug修复
-
-***2017年5月12日 v2.1.1***
-
-* Utils工具类框架增加部分方法
-
-***2017年5月12日 v2.1.0***
-
-* 更新Utils工具类框架为2017年5月12日版本
-* 设置Utils全局Context引用方式
-
-***2017年4月27日 v2.0.8***
-
-* 优化了ImageUtils中绘制水印右边距
-* 增加了以照片高度比例配置水印字体大小的绘制方法
-
-***2017年4月27日 v2.0.7***
-
-* 优化了BaseActivity，新增了setContentViewHDB方法
-
-***2017年4月27日 v2.0.6***
-
-* 优化了ActivityStackUtils
-* NetworkUtils中新增网络连接判断方法
-
-***2017年4月24日 v2.0.5***
-
-* 更新了QuickAdapter的版本为1.0.7
-
-***2017年4月24日 v2.0.4***
-
-* 更新了ShareUtils构造函数
-* LogUtils日志打印中增加了加密能力
-
-***2017年4月20日 v2.0.3***
-
-* 修复了BaseFragmet的启动bug
-
-***2017年4月19日 v2.0.1***
-
-* 更新了项目框架
-* 更新了Utils工具类框架
-* 更新了异常处理工具类的捕获异常时的处理
-* 使用retrolambda替换了默认的Lambda表达式功能
-
-***2017年3月29日 v1.1.2***
-
-* 更新BaseAppApi
-* 更新Library的build.gradle配置文件
-* 更新了PermissionsUtils中默认的扫描权限
-* 在ImageUtils中新增了按质量压缩图片的方法
-* 新接入[蒲公英内测](https://www.pgyer.com/)2.7.0
-
-***2017年3月24日 v1.1.1***
-
-* 新增SQLiteUtils数据库工具类
-* 更新Library的build.gradle配置文件
-
-***2017年3月24日 v1.1.0***
-
-* 更新了使用说明
-* 优化了工具类代码，使用单例模式。
-* LogUtils中对文件日志增加了AES内容加密
-* 移除了SPUtils工具类，替换为ShareUtils
-* 配置框架默认权限，及6.0系统中对已配置权限的扫描功能
-* 在BaseActivity和BaseApplication中增加了对HandyBaseUtils的注册
-
-***2017年3月22日 v1.0.2***
-
-* 更新build.gradle配置
-* 更新utils中部分变量的访问权限为public
-* 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.0
-* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.8.1
-* 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.7
-
-***2017年3月21日 v1.0.1***
-
-* 更新BaseAppApi注释
-* 新接入[Glide](https://github.com/bumptech/glide):4.0.0
-* 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
-* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
-
-***2017年3月20日 v1.0.0***
+##  内容目录
 
 * 初始化敏捷开发框架项目
 * 新增mycolor、myvalue颜色及尺寸的资源值
 * 新增drawable-hdpi中图标资源（选中、未选中）
 * 新增simplemvp和strongmvp包，含有Mvp模式的基类
 * 新增base包，含有Activity、Fragment、Application的基类
-* 新增utils包，引用自[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 的工具类开源项目
-* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.3
+* 新增utils包，引用自[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 的工具类开源项目 1.9.6
+* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
+* 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.0
+* 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
+* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.6
 * 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
+* 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.7
+* 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper):2.9.33
+* 新接入[Glide](https://github.com/bumptech/glide):4.3.0
+* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.4.0
+* 新接入[pgyersdk](https://www.pgyer.com/doc/view/sdk_android_guide) 2.7.6
