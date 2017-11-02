@@ -35,16 +35,20 @@ public final class PermissionsUtils {
         Permissions = new ArrayList<String>() {{
             add(Manifest.permission.INTERNET);
             add(Manifest.permission.RECORD_AUDIO);
-            add(Manifest.permission.RESTART_PACKAGES);
             add(Manifest.permission.READ_PHONE_STATE);
             add(Manifest.permission.ACCESS_WIFI_STATE);
             add(Manifest.permission.ACCESS_NETWORK_STATE);
+            add(Manifest.permission.VIBRATE);
             add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }};
     }
 
     public static ArrayList<String> getPermissions() {
         return Permissions;
+    }
+
+    public static void setPermissions(ArrayList<String> permissions) {
+        Permissions = permissions;
     }
 
     /**
@@ -59,6 +63,7 @@ public final class PermissionsUtils {
      * add(Manifest.permission.READ_PHONE_STATE);
      * add(Manifest.permission.ACCESS_WIFI_STATE);
      * add(Manifest.permission.ACCESS_NETWORK_STATE);
+     * add(Manifest.permission.VIBRATE);
      * add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
      * </pre>
      *
