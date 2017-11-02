@@ -1,4 +1,4 @@
-package com.handy.base.utils;
+package com.handy.base.utils.androidutilcode;
 
 import android.support.annotation.NonNull;
 

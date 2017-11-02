@@ -1,4 +1,4 @@
-package com.handy.base.utils;
+package com.handy.base.utils.androidutilcode;
 
 import android.content.Intent;
 import android.location.Address;
