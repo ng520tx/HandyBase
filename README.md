@@ -238,7 +238,9 @@
 * 新增drawable-hdpi中图标资源（选中、未选中）
 * 新增simplemvp和strongmvp包，含有Mvp模式的基类
 * 新增base包，含有Activity、Fragment、Application的基类
-* 新增utils包，引用自[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 的工具类开源项目 1.9.6
+* 新增Util补充工具类
+
+* 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.9.6
 * 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 * 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.0
 * 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
