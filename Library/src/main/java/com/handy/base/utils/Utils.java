@@ -1,26 +1,21 @@
 package com.handy.base.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.lang.ref.WeakReference;
-
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 16/12/08
- *  desc  : Utils初始化相关
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 16/12/08
+ *     desc  : Utils初始化相关
  * </pre>
  */
 public final class Utils {
 
     @SuppressLint("StaticFieldLeak")
-    private static Application sApplication;
-    private static WeakReference<Activity> sCurrentActivityWeakRef;
+    private static Context context;
 
     private Utils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -29,24 +24,10 @@ public final class Utils {
     /**
      * 初始化工具类
      *
-     * @param app 应用
+     * @param context 上下文
      */
-    public static void init(@NonNull final Application app) {
-        Utils.sApplication = app;
-    }
-
-    public static void setActivity(@NonNull Activity activity) {
-        sCurrentActivityWeakRef = new WeakReference<>(activity);
-    }
-
-    /**
-     * 获取Application
-     *
-     * @return Application
-     */
-    public static Application getApp() {
-        if (sApplication != null) return sApplication;
-        throw new NullPointerException("u should init first");
+    public static void init(@NonNull final Context context) {
+        Utils.context = context.getApplicationContext();
     }
 
     /**
@@ -54,18 +35,8 @@ public final class Utils {
      *
      * @return ApplicationContext
      */
-    public static Context getAppContext() {
-        if (sApplication != null) return sApplication.getApplicationContext();
+    public static Context getContext() {
+        if (context != null) return context;
         throw new NullPointerException("u should init first");
-    }
-
-    /**
-     * 获取Activity
-     *
-     * @return Activity
-     */
-    public static Activity getCurrentActivity() {
-        if (sCurrentActivityWeakRef != null) return sCurrentActivityWeakRef.get();
-        throw new NullPointerException("u should setActivity first");
     }
 }
