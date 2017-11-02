@@ -7,6 +7,8 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
