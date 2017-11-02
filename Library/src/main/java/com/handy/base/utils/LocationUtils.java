@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,10 +20,10 @@ import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 定位相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 16/11/13
+ *     desc  : 定位相关工具类
  * </pre>
  */
 public final class LocationUtils {
@@ -109,7 +110,7 @@ public final class LocationUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isGpsEnabled() {
-        LocationManager lm = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) Utils.getContext().getSystemService(LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -119,7 +120,7 @@ public final class LocationUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isLocationEnabled() {
-        LocationManager lm = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) Utils.getContext().getSystemService(LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
@@ -129,7 +130,7 @@ public final class LocationUtils {
     public static void openGpsSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Utils.getAppContext().startActivity(intent);
+        Utils.getContext().startActivity(intent);
     }
 
     /**
@@ -149,10 +150,10 @@ public final class LocationUtils {
      */
     public static boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) Utils.getAppContext().getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) Utils.getContext().getSystemService(LOCATION_SERVICE);
         mListener = listener;
         if (!isLocationEnabled()) {
-            LogUtils.d(TAG, "无法定位，请打开定位服务");
+            Log.d(TAG, "无法定位，请打开定位服务");
             return false;
         }
         String provider = mLocationManager.getBestProvider(getCriteria(), true);
@@ -207,7 +208,7 @@ public final class LocationUtils {
      * @return {@link Address}
      */
     public static Address getAddress(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(Utils.getAppContext(), Locale.getDefault());
+        Geocoder geocoder = new Geocoder(Utils.getContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) return addresses.get(0);
@@ -315,32 +316,6 @@ public final class LocationUtils {
         return provider0.equals(provider1);
     }
 
-    public interface OnLocationChangeListener {
-
-        /**
-         * 获取最后一次保留的坐标
-         *
-         * @param location 坐标
-         */
-        void getLastKnownLocation(Location location);
-
-        /**
-         * 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
-         *
-         * @param location 坐标
-         */
-        void onLocationChanged(Location location);
-
-        /**
-         * provider的在可用、暂时不可用和无服务三个状态直接切换时触发此函数
-         *
-         * @param provider 提供者
-         * @param status   状态
-         * @param extras   provider可选包
-         */
-        void onStatusChanged(String provider, int status, Bundle extras);//位置状态发生改变
-    }
-
     private static class MyLocationListener
             implements LocationListener {
         /**
@@ -369,13 +344,13 @@ public final class LocationUtils {
             }
             switch (status) {
                 case LocationProvider.AVAILABLE:
-                    LogUtils.d(TAG, "当前GPS状态为可见状态");
+                    Log.d(TAG, "当前GPS状态为可见状态");
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
-                    LogUtils.d(TAG, "当前GPS状态为服务区外状态");
+                    Log.d(TAG, "当前GPS状态为服务区外状态");
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    LogUtils.d(TAG, "当前GPS状态为暂停服务状态");
+                    Log.d(TAG, "当前GPS状态为暂停服务状态");
                     break;
             }
         }
@@ -393,5 +368,31 @@ public final class LocationUtils {
         @Override
         public void onProviderDisabled(String provider) {
         }
+    }
+
+    public interface OnLocationChangeListener {
+
+        /**
+         * 获取最后一次保留的坐标
+         *
+         * @param location 坐标
+         */
+        void getLastKnownLocation(Location location);
+
+        /**
+         * 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
+         *
+         * @param location 坐标
+         */
+        void onLocationChanged(Location location);
+
+        /**
+         * provider的在可用、暂时不可用和无服务三个状态直接切换时触发此函数
+         *
+         * @param provider 提供者
+         * @param status   状态
+         * @param extras   provider可选包
+         */
+        void onStatusChanged(String provider, int status, Bundle extras);//位置状态发生改变
     }
 }

@@ -2,15 +2,19 @@ package com.handy.base.utils;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 阴历相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/12/05
+ *     desc  : 阴历相关工具类
  * </pre>
  */
 public final class LunarUtils {
 
-    /*
+    private LunarUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+    /**
      * |----4位闰月|-------------13位1为30天，0为29天|
      */
     private static int[] lunar_month_days = {1887, 0x1694, 0x16aa, 0x4ad5, 0xab6, 0xc4b7, 0x4ae, 0xa56, 0xb52a, 0x1d2a,
@@ -30,6 +34,7 @@ public final class LunarUtils {
             0x1694, 0xd6aa, 0x15aa, 0xab4, 0x94ba, 0x14b6, 0xa56, 0x7527, 0xd26, 0xee53, 0xd54, 0x15aa, 0xa9b5, 0x96c,
             0x14ae, 0x8a4e, 0x1a4c, 0x11d26, 0x1aa4, 0x1b54, 0xcd6a, 0xada, 0x95c, 0x949d, 0x149a, 0x1a2a, 0x5b25,
             0x1aa4, 0xfb52, 0x16b4, 0xaba, 0xa95b, 0x936, 0x1496, 0x9a4b, 0x154a, 0x136a5, 0xda4, 0x15ac};
+
     private static int[] solar_1_1 = {1887, 0xec04c, 0xec23f, 0xec435, 0xec649, 0xec83e, 0xeca51, 0xecc46, 0xece3a,
             0xed04d, 0xed242, 0xed436, 0xed64a, 0xed83f, 0xeda53, 0xedc48, 0xede3d, 0xee050, 0xee244, 0xee439, 0xee64d,
             0xee842, 0xeea36, 0xeec4a, 0xeee3e, 0xef052, 0xef246, 0xef43a, 0xef64e, 0xef843, 0xefa37, 0xefc4b, 0xefe41,
@@ -51,10 +56,6 @@ public final class LunarUtils {
             0x105652, 0x105847, 0x105a3b, 0x105c4f, 0x105e45, 0x106039, 0x10624c, 0x106441, 0x106635, 0x106849,
             0x106a3d, 0x106c51, 0x106e47, 0x10703c, 0x10724f, 0x107444, 0x107638, 0x10784c, 0x107a3f, 0x107c53,
             0x107e48};
-
-    private LunarUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
-    }
 
     private static int GetBitInt(final int data, final int length, final int shift) {
         return (data & (((1 << length) - 1) << shift)) >> shift;
@@ -200,3 +201,4 @@ public final class LunarUtils {
         public int solarYear;
     }
 }
+
