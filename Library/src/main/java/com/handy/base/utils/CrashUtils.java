@@ -6,10 +6,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 
 import java.io.File;
@@ -21,6 +19,8 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * <pre>
@@ -32,16 +32,20 @@ import java.util.Locale;
  */
 public final class CrashUtils {
 
-    private static final String FILE_SEP = System.getProperty("file.separator");
-    private static final Format FORMAT = new SimpleDateFormat("MM-dd HH-mm-ss", Locale.getDefault());
-    private static final String CRASH_HEAD;
-    private static final UncaughtExceptionHandler DEFAULT_UNCAUGHT_EXCEPTION_HANDLER;
-    private static final UncaughtExceptionHandler UNCAUGHT_EXCEPTION_HANDLER;
-    private static boolean mInitialized;
     private static String defaultDir;
     private static String dir;
     private static String versionName;
     private static int versionCode;
+
+    private static ExecutorService sExecutor;
+
+    private static final String FILE_SEP = System.getProperty("file.separator");
+    private static final Format FORMAT = new SimpleDateFormat("MM-dd HH-mm-ss", Locale.getDefault());
+
+    private static final String CRASH_HEAD;
+
+    private static final UncaughtExceptionHandler DEFAULT_UNCAUGHT_EXCEPTION_HANDLER;
+    private static final UncaughtExceptionHandler UNCAUGHT_EXCEPTION_HANDLER;
 
     static {
         try {
@@ -68,19 +72,14 @@ public final class CrashUtils {
         UNCAUGHT_EXCEPTION_HANDLER = new UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(final Thread t, final Throwable e) {
-                try {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            Looper.prepare();
-                            LogUtils.e(Log.getStackTraceString(e));
-                            Toast.makeText(Utils.getApp(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                        }
-                    }.start();
-                    Thread.sleep(2000);
-                } catch (InterruptedException ignored) {
-                }
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        ToastUtils.showShort("很抱歉：程序出现异常即将退出");
+                        Looper.loop();
+                    }
+                }.start();
                 if (e == null) {
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(0);
@@ -90,7 +89,10 @@ public final class CrashUtils {
                 String fileName = FORMAT.format(now) + ".txt";
                 final String fullPath = (dir == null ? defaultDir : dir) + fileName;
                 if (!createOrExistsFile(fullPath)) return;
-                new Thread(new Runnable() {
+                if (sExecutor == null) {
+                    sExecutor = Executors.newSingleThreadExecutor();
+                }
+                sExecutor.execute(new Runnable() {
                     @Override
                     public void run() {
                         PrintWriter pw = null;
@@ -104,9 +106,6 @@ public final class CrashUtils {
                                 cause = cause.getCause();
                             }
 
-                            ActivityStackUtils.finishAll();//退出程序
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                            System.exit(1);
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
@@ -115,7 +114,10 @@ public final class CrashUtils {
                             }
                         }
                     }
-                }).start();
+                });
+                if (DEFAULT_UNCAUGHT_EXCEPTION_HANDLER != null) {
+                    DEFAULT_UNCAUGHT_EXCEPTION_HANDLER.uncaughtException(t, e);
+                }
             }
         };
     }
@@ -127,11 +129,9 @@ public final class CrashUtils {
     /**
      * 初始化
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>}</p>
-     *
-     * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    public static boolean init() {
-        return init("");
+    public static void init() {
+        init("");
     }
 
     /**
@@ -139,10 +139,9 @@ public final class CrashUtils {
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>}</p>
      *
      * @param crashDir 崩溃文件存储目录
-     * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    public static boolean init(@NonNull final File crashDir) {
-        return init(crashDir.getAbsolutePath() + FILE_SEP);
+    public static void init(@NonNull final File crashDir) {
+        init(crashDir.getAbsolutePath());
     }
 
     /**
@@ -150,15 +149,13 @@ public final class CrashUtils {
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>}</p>
      *
      * @param crashDir 崩溃文件存储目录
-     * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    public static boolean init(final String crashDir) {
+    public static void init(final String crashDir) {
         if (isSpace(crashDir)) {
             dir = null;
         } else {
-            dir = crashDir.endsWith(FILE_SEP) ? dir : dir + FILE_SEP;
+            dir = crashDir.endsWith(FILE_SEP) ? crashDir : crashDir + FILE_SEP;
         }
-        if (mInitialized) return true;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 && Utils.getApp().getExternalCacheDir() != null)
             defaultDir = Utils.getApp().getExternalCacheDir() + FILE_SEP + "crash" + FILE_SEP;
@@ -166,7 +163,6 @@ public final class CrashUtils {
             defaultDir = Utils.getApp().getCacheDir() + FILE_SEP + "crash" + FILE_SEP;
         }
         Thread.setDefaultUncaughtExceptionHandler(UNCAUGHT_EXCEPTION_HANDLER);
-        return mInitialized = true;
     }
 
     private static boolean createOrExistsFile(final String filePath) {
