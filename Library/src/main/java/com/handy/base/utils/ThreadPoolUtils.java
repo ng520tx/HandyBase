@@ -18,10 +18,10 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 线程池相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/08/25
+ *     desc  : 线程池相关工具类
  * </pre>
  */
 public final class ThreadPoolUtils {
@@ -29,8 +29,15 @@ public final class ThreadPoolUtils {
     public static final int FixedThread = 0;
     public static final int CachedThread = 1;
     public static final int SingleThread = 2;
+
+    @IntDef({FixedThread, CachedThread, SingleThread})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Type {
+    }
+
     private ExecutorService exec;
     private ScheduledExecutorService scheduleExec;
+
     private ThreadPoolUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
@@ -124,6 +131,7 @@ public final class ThreadPoolUtils {
     public boolean isTerminated() {
         return exec.isTerminated();
     }
+
 
     /**
      * 请求关闭、发生超时或者当前线程中断
@@ -295,10 +303,5 @@ public final class ThreadPoolUtils {
     public ScheduledFuture<?> scheduleWithFixedDelay(final Runnable command, final long initialDelay,
                                                      final long delay, final TimeUnit unit) {
         return scheduleExec.scheduleWithFixedDelay(command, initialDelay, delay, unit);
-    }
-
-    @IntDef({FixedThread, CachedThread, SingleThread})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Type {
     }
 }
