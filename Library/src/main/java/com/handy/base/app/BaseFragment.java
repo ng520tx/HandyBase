@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.handy.base.utils.ScreenUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 
 import java.io.Serializable;
 
@@ -52,8 +52,12 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (context == null) this.context = getContext();
-        if (activity == null) this.activity = getActivity();
+        if (context == null) {
+            this.context = getContext();
+        }
+        if (activity == null) {
+            this.activity = getActivity();
+        }
 
         this.isAlive = true;
         this.application = activity.getApplication();
@@ -73,8 +77,9 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (fragmentView == null)
+        if (fragmentView == null) {
             fragmentView = view;
+        }
 
         if (isInitViewHDB) {
             initViewHDB(view, savedInstanceState);

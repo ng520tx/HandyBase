@@ -12,9 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
-import com.handy.base.utils.ScreenUtils;
 
 /**
  * <pre>
