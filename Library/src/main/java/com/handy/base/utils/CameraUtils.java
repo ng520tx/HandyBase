@@ -9,15 +9,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import com.blankj.utilcode.util.ImageUtils;
+import com.blankj.utilcode.util.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 
 /**
  * <pre>
- *  author: Handy
- *  blog  : https://github.com/handy045
- *  time  : 2017-4-18 10:14:23
- *  desc  : 相机相关工具类
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/09/19
+ *     desc  : 相机相关工具类
  * </pre>
  */
 public final class CameraUtils {
