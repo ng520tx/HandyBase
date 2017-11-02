@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.Utils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -65,15 +68,19 @@ public final class CrashUtils {
         UNCAUGHT_EXCEPTION_HANDLER = new UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(final Thread t, final Throwable e) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        LogUtils.e(Log.getStackTraceString(e));
-                        Toast.makeText(Utils.getApp(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
-                        Looper.loop();
-                    }
-                }.start();
+                try {
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            Looper.prepare();
+                            LogUtils.e(Log.getStackTraceString(e));
+                            Toast.makeText(Utils.getApp(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_LONG).show();
+                            Looper.loop();
+                        }
+                    }.start();
+                    Thread.sleep(2000);
+                } catch (InterruptedException ignored) {
+                }
                 if (e == null) {
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(0);
@@ -96,6 +103,10 @@ public final class CrashUtils {
                                 cause.printStackTrace(pw);
                                 cause = cause.getCause();
                             }
+
+                            ActivityStackUtils.finishAll();//退出程序
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                            System.exit(1);
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
@@ -105,13 +116,6 @@ public final class CrashUtils {
                         }
                     }
                 }).start();
-                try {
-                    Thread.sleep(2000);
-                    ActivityStackUtils.finishAll();//退出程序
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                    System.exit(1);
-                } catch (InterruptedException ignored) {
-                }
             }
         };
     }
