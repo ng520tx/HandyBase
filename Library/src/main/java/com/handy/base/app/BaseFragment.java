@@ -28,14 +28,30 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     public Context context;
     public Activity activity;
     public Application application;
-
-    public int screenWidth; //手机屏幕宽度参数
-    public int screenHeight; //手机屏幕高度参数
-
-    public boolean isAlive = false; //Fragment的活跃状态
-    public boolean isInitViewHDB = true; //onViewCreated中初始化界面视图
-    public boolean isInitDataHDB = true; //onActivityCreated中初始化界面视图
-    public boolean isOnRequestHDB = true; //用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
+    /**
+     * 手机屏幕宽度参数
+     */
+    public int screenWidth;
+    /**
+     * 手机屏幕高度参数
+     */
+    public int screenHeight;
+    /**
+     * Fragment的活跃状态
+     */
+    public boolean isAlive = false;
+    /**
+     * onViewCreated中初始化界面视图
+     */
+    public boolean isInitViewHDB = true;
+    /**
+     * onActivityCreated中初始化界面视图
+     */
+    public boolean isInitDataHDB = true;
+    /**
+     * 用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
+     */
+    public boolean isOnRequestHDB = true;
 
     @Override
     public void onAttach(Activity activity) {
