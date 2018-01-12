@@ -240,14 +240,14 @@
 * 新增base包，含有Activity、Fragment、Application的基类
 * 新增Util补充工具类
 
-* 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.9.6
-* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.0.0   [参考1](http://www.jianshu.com/p/1eaca34e5314)
-* 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.0
+* 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.11.1
+* 新接入[pgyersdk](https://www.pgyer.com/doc/view/sdk_android_guide) 2.8.1
+* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
+* 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.1
 * 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
-* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.6
+* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.8
 * 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
 * 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.7
-* 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper):2.9.33
-* 新接入[Glide](https://github.com/bumptech/glide):4.3.0
-* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.4.0
-* 新接入[pgyersdk](https://www.pgyer.com/doc/view/sdk_android_guide) 2.7.6
+* 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper):2.9.34
+* 新接入[Glide](https://github.com/bumptech/glide):4.5.0
+* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.5.1

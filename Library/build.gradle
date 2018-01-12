@@ -33,23 +33,23 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
 
     //AndroidUtilCode
-    compile 'com.blankj:utilcode:1.9.6'
+    compile 'com.blankj:utilcode:1.11.1'
     //蒲公英SDK
-    compile 'com.pgyersdk:sdk:2.7.6'
+    compile 'com.pgyersdk:sdk:2.8.1'
     //EventBus
-    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.greenrobot:eventbus:3.1.1'
     //郭霖Litepal数据库
-    compile 'org.litepal.android:core:1.6.0'
+    compile 'org.litepal.android:core:1.6.1'
     //Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     //RXJava
-    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.8'
     //RXAndroid
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //QuickAdapter
     compile 'com.github.thepacific:adapter:1.0.7'
     //BaseRecyclerViewAdapterHelper
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.33'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     //Glide
     compile 'com.github.bumptech.glide:glide:4.3.0'
     //ButterKnife
