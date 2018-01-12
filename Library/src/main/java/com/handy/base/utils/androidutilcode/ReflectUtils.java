@@ -271,7 +271,7 @@ public final class ReflectUtils {
 
     /**
      * Searches a method with a similar signature as desired using
-     * {@link #isSimilarSignature(java.lang.reflect.Method, String, Class[])}.
+     * {@link #isSimilarSignature(Method, String, Class[])}.
      * <p>
      * First public methods are searched in the class hierarchy, then private
      * methods init the declaring class. If a method could be found, it is
