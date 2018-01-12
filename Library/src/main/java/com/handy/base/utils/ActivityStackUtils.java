@@ -16,7 +16,10 @@ import java.util.Stack;
  */
 public final class ActivityStackUtils {
 
-    private static Stack<Activity> activityStack; //Activity栈
+    /**
+     * Activity栈
+     */
+    private static Stack<Activity> activityStack;
 
     private ActivityStackUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -27,8 +30,7 @@ public final class ActivityStackUtils {
      */
     public static Activity getCurrent() {
         if (activityStack != null) {
-            Activity activity = activityStack.lastElement();
-            return activity;
+            return activityStack.lastElement();
         }
         return null;
     }
@@ -59,7 +61,9 @@ public final class ActivityStackUtils {
     public static void finishChoiceAsc(Activity activity) {
         if (activity != null && activityStack != null) {
             activityStack.remove(activity);
-            if (!activity.isFinishing()) activity.finish();
+            if (!activity.isFinishing()) {
+                activity.finish();
+            }
         }
     }
 
@@ -68,10 +72,14 @@ public final class ActivityStackUtils {
      */
     public static void finishChoiceDesc(Activity activity) {
         if (activity != null && activityStack != null) {
-            Collections.reverse(activityStack); // 倒序排列
+            /*倒序排列*/
+            Collections.reverse(activityStack);
             activityStack.remove(activity);
-            if (!activity.isFinishing()) activity.finish();
-            Collections.reverse(activityStack); // 倒序排列
+            if (!activity.isFinishing()) {
+                activity.finish();
+            }
+            /*倒序排列*/
+            Collections.reverse(activityStack);
         }
     }
 
@@ -85,7 +93,9 @@ public final class ActivityStackUtils {
                 Activity aty = (Activity) iterator.next();
                 if (aty.getClass().equals(activity.getClass())) {
                     iterator.remove();
-                    if (!aty.isFinishing()) aty.finish();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
                 }
             }
         }
@@ -101,7 +111,9 @@ public final class ActivityStackUtils {
                 Activity aty = (Activity) iterator.next();
                 if (aty.getClass().equals(cls)) {
                     iterator.remove();
-                    if (!aty.isFinishing()) aty.finish();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
                     break;
                 }
             }
@@ -113,17 +125,21 @@ public final class ActivityStackUtils {
      */
     public static void finishChoiceDesc(Class<?> cls) {
         if (activityStack != null) {
-            Collections.reverse(activityStack); // 倒序排列
+            /*倒序排列*/
+            Collections.reverse(activityStack);
             Iterator iterator = activityStack.iterator();
             while (iterator.hasNext()) {
                 Activity aty = (Activity) iterator.next();
                 if (aty.getClass().equals(cls)) {
                     iterator.remove();
-                    if (!aty.isFinishing()) aty.finish();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
                     break;
                 }
             }
-            Collections.reverse(activityStack); // 倒序排列
+            /*倒序排列*/
+            Collections.reverse(activityStack);
         }
     }
 
@@ -137,7 +153,9 @@ public final class ActivityStackUtils {
                 Activity aty = (Activity) iterator.next();
                 if (aty.getClass().equals(cls)) {
                     iterator.remove();
-                    if (!aty.isFinishing()) aty.finish();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
                 }
             }
         }
@@ -152,7 +170,9 @@ public final class ActivityStackUtils {
             while (iterator.hasNext()) {
                 Activity aty = (Activity) iterator.next();
                 iterator.remove();
-                if (!aty.isFinishing()) aty.finish();
+                if (!aty.isFinishing()) {
+                    aty.finish();
+                }
             }
             activityStack.clear();
         }
@@ -168,7 +188,9 @@ public final class ActivityStackUtils {
                 Activity aty = (Activity) iterator.next();
                 if (activityStack.size() > 1) {
                     iterator.remove();
-                    if (!aty.isFinishing()) aty.finish();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
                 }
             }
         }
@@ -177,7 +199,7 @@ public final class ActivityStackUtils {
     /**
      * 退出应用程序
      */
-    public static void AppExit() {
+    public static void appExit() {
         try {
             finishAll();
             android.os.Process.killProcess(android.os.Process.myPid());
