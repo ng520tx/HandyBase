@@ -45,7 +45,8 @@ public class BaseMvpPresenter<V extends BaseMvpContract.IMvpView> implements Bas
 
     @Override
     public void onDestroy() {
-
+        detachView();
+        unDispose();
     }
 
 }
