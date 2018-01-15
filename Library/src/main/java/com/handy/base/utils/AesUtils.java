@@ -15,8 +15,8 @@
  */
 package com.handy.base.utils;
 
-import com.blankj.utilcode.util.EmptyUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ObjectUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -44,7 +44,7 @@ public final class AesUtils {
     }
 
     public static void setDEFAULT_KEY(String default_key) {
-        if (EmptyUtils.isEmpty(default_key)) {
+        if (ObjectUtils.isEmpty(default_key)) {
             LogUtils.d("密钥为空");
         } else if (default_key.length() != 16) {
             LogUtils.d("密钥长度必须为16位");
