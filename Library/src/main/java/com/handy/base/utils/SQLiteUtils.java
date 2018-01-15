@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.blankj.utilcode.util.EmptyUtils;
+import com.blankj.utilcode.util.ObjectUtils;
 import com.handy.base.utils.bean.SQLTable;
 
 import java.util.ArrayList;
@@ -349,7 +349,7 @@ public class SQLiteUtils {
         @Override
         public void onCreate(SQLiteDatabase db) {
             for (SQLTable sqlTable : sqLiteTables) {
-                if (EmptyUtils.isNotEmpty(sqlTable.getTableName()) && EmptyUtils.isNotEmpty(sqlTable.getCreateSQL())) {
+                if (ObjectUtils.isNotEmpty(sqlTable.getTableName()) && ObjectUtils.isNotEmpty(sqlTable.getCreateSQL())) {
                     db.execSQL(sqlTable.getCreateSQL());
                 }
             }
@@ -358,7 +358,7 @@ public class SQLiteUtils {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             for (SQLTable sqlTable : sqLiteTables) {
-                if (EmptyUtils.isNotEmpty(sqlTable.getTableName()) && EmptyUtils.isNotEmpty(sqlTable.getCreateSQL())) {
+                if (ObjectUtils.isNotEmpty(sqlTable.getTableName()) && ObjectUtils.isNotEmpty(sqlTable.getCreateSQL())) {
                     db.execSQL("DROP TABLE IF EXISTS " + sqlTable.getTableName());
                 }
             }
