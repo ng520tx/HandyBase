@@ -49,6 +49,8 @@ dependencies {
     //RxLifeCycle2
     compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
+    //BGASwipeBackLayout
+    compile 'cn.bingoogolapple:bga-swipebacklayout:latestVersion@1.1.8'
     //QuickAdapter
     compile 'com.github.thepacific:adapter:1.0.7'
     //BaseRecyclerViewAdapterHelper
