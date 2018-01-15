@@ -29,6 +29,11 @@ public class BaseMvpContract {
         void attachView(V iMvpView);
 
         /**
+         * 判断是否已连接View
+         */
+        boolean isAttached();
+
+        /**
          * 解除View
          */
         void detachView();
