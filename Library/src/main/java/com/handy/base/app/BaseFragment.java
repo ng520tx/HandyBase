@@ -5,12 +5,14 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ScreenUtils;
+import com.handy.base.mvp.BaseMvpContract;
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import java.io.Serializable;
 
@@ -22,7 +24,7 @@ import java.io.Serializable;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFgmApi, Serializable {
+public abstract class BaseFragment<IMvpPresenter extends BaseMvpContract.IMvpPresenter> extends RxFragment implements BaseAppApi.BaseFgmApi, BaseMvpContract.IMvpView, Serializable {
     public View fragmentView;
 
     public Context context;
@@ -52,6 +54,8 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
      * 用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
      */
     public boolean isOnRequestHDB = true;
+
+    protected IMvpPresenter iMvpPresenter = null;
 
     @Override
     public void onAttach(Activity activity) {
@@ -96,7 +100,9 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
         if (fragmentView == null) {
             fragmentView = view;
         }
-
+        if (iMvpPresenter != null) {
+            iMvpPresenter.attachView(this);
+        }
         if (isInitViewHDB) {
             initViewHDB(view, savedInstanceState);
             isInitViewHDB = false;
@@ -128,6 +134,9 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     public void onDestroy() {
         super.onDestroy();
         this.isAlive = false;
+        if (iMvpPresenter != null) {
+            iMvpPresenter.detachView();
+        }
     }
 
     @Override
@@ -169,5 +178,10 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Override
     public void onVisiableHDB() {
 
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindToLife() {
+        return this.bindToLifecycle();
     }
 }
