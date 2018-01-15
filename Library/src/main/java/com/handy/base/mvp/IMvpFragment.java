@@ -1,4 +1,4 @@
-package com.handy.base.mvp.strong;
+package com.handy.base.mvp;
 
 /**
  * Created by LiuJie on 2016/9/5.
