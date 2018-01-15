@@ -22,6 +22,11 @@ public class BaseMvpPresenter<V extends BaseMvpContract.IMvpView> implements Bas
     }
 
     @Override
+    public boolean isAttached() {
+        return iMvpView != null;
+    }
+
+    @Override
     public void detachView() {
         if (iMvpView != null) {
             iMvpView = null;
@@ -48,5 +53,4 @@ public class BaseMvpPresenter<V extends BaseMvpContract.IMvpView> implements Bas
         detachView();
         unDispose();
     }
-
 }
