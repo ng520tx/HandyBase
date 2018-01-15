@@ -247,6 +247,7 @@
 * 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
 * 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.8
 * 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
+* 新接入[RxLifeCycle2](https://github.com/trello/RxLifecycle):2.2.1
 * 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.7
 * 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper):2.9.34
 * 新接入[Glide](https://github.com/bumptech/glide):4.5.0
