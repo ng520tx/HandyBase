@@ -16,6 +16,8 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 /**
  * <pre>
  *  author: Handy
@@ -55,6 +57,8 @@ public abstract class BaseFragment<IMvpPresenter extends BaseMvpContract.IMvpPre
      */
     public boolean isOnRequestHDB = true;
 
+    @Nullable
+    @Inject
     protected IMvpPresenter iMvpPresenter = null;
 
     @Override
