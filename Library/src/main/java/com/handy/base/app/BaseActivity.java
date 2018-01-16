@@ -19,6 +19,8 @@ import com.handy.base.utils.PermissionsUtils;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import javax.inject.Inject;
+
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
 /**
@@ -76,6 +78,8 @@ public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPre
 
     private BGASwipeBackHelper mSwipeBackHelper = null;
 
+    @Nullable
+    @Inject
     protected IMvpPresenter iMvpPresenter = null;
 
     @Override
