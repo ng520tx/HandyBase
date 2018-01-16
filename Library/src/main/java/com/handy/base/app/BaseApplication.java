@@ -19,7 +19,7 @@ import org.litepal.LitePal;
  */
 public abstract class BaseApplication extends Application {
 
-    public boolean isInitUtils = true;
+    public boolean isInitLogUtils = true;
     public boolean isUseCuntomCrashUtil = true;
     public boolean isInitPgyCrashManager = false;
 
@@ -32,7 +32,8 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         try {
-            Utils.init(getApplicationContext());
+            Utils.init(this);
+            com.blankj.utilcode.util.Utils.init(this);
             LitePal.initialize(getApplicationContext());
 
              /* 初始化崩溃捕获工具 */
@@ -42,11 +43,8 @@ public abstract class BaseApplication extends Application {
                 com.blankj.utilcode.util.CrashUtils.init();
             }
 
-            /* 初始化工具类功能 */
-            if (isInitUtils) {
-                com.blankj.utilcode.util.Utils.init(this);
-
-                //初始化日志工具
+            /* 初始化日志工具类功能 */
+            if (isInitLogUtils) {
                 config = LogUtils.getConfig()
                         // 设置log总开关，包括输出到控制台和文件，默认开
                         .setLogSwitch(AppUtils.isAppDebug())
