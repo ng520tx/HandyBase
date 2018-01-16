@@ -18,6 +18,8 @@ import com.handy.base.utils.PermissionsUtils;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * <pre>
@@ -72,8 +74,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
 
     public Bundle intentBundle = null;
     public Bundle savedInstanceState = null;
+    public CompositeDisposable mCompositeDisposable = null;
 
-    protected BGASwipeBackHelper mSwipeBackHelper;
+    public BGASwipeBackHelper mSwipeBackHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -138,6 +141,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
     protected void onPause() {
         super.onPause();
         if (isFinishing()) {
+            unRxDispose();
+
             isAlive = false;
             ActivityStackUtils.finishChoiceDesc(this);
         }
@@ -213,6 +218,21 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
          *     }
          * }
          */
+    }
+
+    @Override
+    public void addRxDispose(Disposable disposable) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
+        }
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void unRxDispose() {
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();
+        }
     }
 
     /**
