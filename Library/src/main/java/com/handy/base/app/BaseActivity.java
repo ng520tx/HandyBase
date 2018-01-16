@@ -8,20 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.blankj.utilcode.util.ScreenUtils;
-import com.handy.base.R;
-import com.handy.base.mvp.BaseMvpContract;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-
-import javax.inject.Inject;
-
-import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
 /**
  * <pre>
@@ -31,60 +24,27 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPresenter> extends RxAppCompatActivity implements BaseAppApi.BaseAtyApi, BaseMvpContract.IMvpView, BGASwipeBackHelper.Delegate {
-    /**
-     * 屏幕宽度
-     */
-    public int screenWidth = 0;
-    /**
-     * 屏幕高度
-     */
-    public int screenHeight = 0;
-    /**
-     * 界面视图布局
-     */
-    public View rootLayout = null;
-    /**
-     * Activity的活跃状态
-     */
-    public boolean isAlive = false;
-    /**
-     * onStart中初始化界面视图
-     */
-    public boolean isInitViewHDB = true;
-    /**
-     * onStart中初始化界面数据
-     */
-    public boolean isInitDataHDB = true;
-    /**
-     * onResume中界面请求处理
-     */
-    public boolean isOnRequestHDB = true;
-    /**
-     * onStart中初始化意图内容
-     */
-    public boolean isInitIntentBundle = true;
-    /**
-     * onStart中权限扫描
-     */
-    public boolean isCheckPermissionsHDB = true;
-
+public abstract class BaseActivity extends AppCompatActivity implements BaseAppApi.BaseAtyApi {
     public Context context;
     public Activity activity;
     public Application application;
 
+    public int screenWidth = 0; //屏幕宽度
+    public int screenHeight = 0; //屏幕高度
+    public View contentView = null; //界面视图布局
+
+    public boolean isAlive = false; //Activity的活跃状态
+    public boolean isInitViewHDB = true; //onStart中初始化界面视图
+    public boolean isInitDataHDB = true; //onStart中初始化界面数据
+    public boolean isOnRequestHDB = true; //onResume中界面请求处理
+    public boolean isInitIntentBundle = true; //onStart中初始化意图内容
+    public boolean isCheckPermissionsHDB = true; //onStart中权限扫描
+
     public Bundle intentBundle = null;
     public Bundle savedInstanceState = null;
 
-    private BGASwipeBackHelper mSwipeBackHelper = null;
-
-    @Nullable
-    @Inject
-    protected IMvpPresenter iMvpPresenter = null;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        initSwipeBackFinish();
         super.onCreate(savedInstanceState);
         try {
             this.isAlive = true;
@@ -95,9 +55,6 @@ public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPre
             this.screenWidth = ScreenUtils.getScreenWidth();
             this.screenHeight = ScreenUtils.getScreenHeight();
 
-            if (iMvpPresenter != null) {
-                iMvpPresenter.attachView(this);
-            }
             ActivityStackUtils.addActivity(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,9 +105,6 @@ public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPre
     protected void onPause() {
         super.onPause();
         if (isFinishing()) {
-            if (iMvpPresenter != null) {
-                iMvpPresenter.detachView();
-            }
             isAlive = false;
             ActivityStackUtils.finishChoiceDesc(this);
         }
@@ -158,9 +112,9 @@ public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPre
 
     @Override
     public boolean setContentViewHDB(@LayoutRes int layoutResId) {
-        rootLayout = LayoutInflater.from(context).inflate(layoutResId, null);
-        if (rootLayout != null) {
-            setContentView(rootLayout);
+        contentView = LayoutInflater.from(context).inflate(layoutResId, null);
+        if (contentView != null) {
+            setContentView(contentView);
             return true;
         }
         return false;
@@ -199,34 +153,33 @@ public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPre
 
     @Override
     public void onPermissionRejectionHDB() {
-    /*
-     * //发现未启用的权限时，可以参考一下进行处理。
-     * SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
-     *     @Override
-     *     public void onClick(SweetAlertDialog sweetAlertDialog) {
-     *         PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
-     *         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-     *         intent.setData(Uri.parse("package:" + getPackageName()));
-     *         startActivityForResult(intent, 45);
-     *         sweetAlertDialog.dismiss();
-     *     }
-     * }, new SweetAlertDialog.OnSweetClickListener() {
-     *     @Override
-     *     public void onClick(SweetAlertDialog sweetAlertDialog) {
-     *         sweetAlertDialog.dismiss();
-     *         ActivityStackUtils.AppExit(context);
-     *     }
-     * }).setCancelable(false);
-     *
-     * //若从设置界面返回，重新扫描权限（请将此方法放与onActivityPermissionRejection()同级）
-     * @Override
-     * protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-     *     super.onActivityResult(requestCode, resultCode, data);
-     *     if (requestCode == 45) {
-     *         PermissionsUtils.checkDeniedPermissions(activity, true);
-     *     }
-     * }
-     */
+        /*
+         * 发现未启用的权限时，可以参考一下进行处理。
+         * SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
+         *     @Override
+         *     public void onClick(SweetAlertDialog sweetAlertDialog) {
+         *         PrintfUT.showShortToast(context, "请在手机设置权限管理中启用开启此应用系统权限");
+         *         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+         *         intent.setData(Uri.parse("package:" + getPackageName()));
+         *         startActivityForResult(intent, 45);
+         *         sweetAlertDialog.dismiss();
+         *     }
+         * }, new SweetAlertDialog.OnSweetClickListener() {
+         *     @Override
+         *     public void onClick(SweetAlertDialog sweetAlertDialog) {
+         *         sweetAlertDialog.dismiss();
+         *         ActivityStackUtils.AppExit(context);
+         *     }
+         * }).setCancelable(false);
+         * //若从设置界面返回，重新扫描权限（请将此方法放与onActivityPermissionRejection()同级）
+         * @Override
+         * protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         *     super.onActivityResult(requestCode, resultCode, data);
+         *     if (requestCode == 45) {
+         *         PermissionsUtils.checkDeniedPermissions(activity, true);
+         *     }
+         * }
+         */
     }
 
     /**
@@ -245,54 +198,17 @@ public abstract class BaseActivity<IMvpPresenter extends BaseMvpContract.IMvpPre
         }
     }
 
-    /**
-     * 是否支持滑动返回。这里在父类中默认返回 true 来支持滑动返回，如果某个界面不想支持滑动返回则重写该方法返回 false 即可
-     */
-    @Override
-    public boolean isSupportSwipeBack() {
-        return true;
-    }
-
-    /**
-     * 初始化滑动返回。在 super.onCreate(savedInstanceState) 之前调用该方法
-     */
-    private void initSwipeBackFinish() {
-        mSwipeBackHelper = new BGASwipeBackHelper(this, this);
-        // 「必须在 Application 的 onCreate 方法中执行 BGASwipeBackManager.getInstance().init(this) 来初始化滑动返回」
-        // 下面几项可以不配置，这里只是为了讲述接口用法。
-        // 设置滑动返回是否可用。默认值为 true
-        mSwipeBackHelper.setSwipeBackEnable(true);
-        // 设置是否仅仅跟踪左侧边缘的滑动返回。默认值为 true
-        mSwipeBackHelper.setIsOnlyTrackingLeftEdge(false);
-        // 设置是否是微信滑动返回样式。默认值为 true
-        mSwipeBackHelper.setIsWeChatStyle(true);
-        // 设置阴影资源 id。默认值为 R.drawable.bga_sbl_shadow
-        mSwipeBackHelper.setShadowResId(R.drawable.bga_sbl_shadow);
-        // 设置是否显示滑动返回的阴影效果。默认值为 true
-        mSwipeBackHelper.setIsNeedShowShadow(true);
-        // 设置阴影区域的透明度是否根据滑动的距离渐变。默认值为 true
-        mSwipeBackHelper.setIsShadowAlphaGradient(true);
-        // 设置触发释放后自动滑动返回的阈值，默认值为 0.3f
-        mSwipeBackHelper.setSwipeBackThreshold(0.3f);
-    }
-
-    @Override
-    public void onSwipeBackLayoutSlide(float v) {
-
-    }
-
-    @Override
-    public void onSwipeBackLayoutCancel() {
-
-    }
-
-    @Override
-    public void onSwipeBackLayoutExecuted() {
-        mSwipeBackHelper.swipeBackward();
-    }
-
-    @Override
-    public <T> LifecycleTransformer<T> bindToLife() {
-        return this.bindToLifecycle();
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+//        super.onSaveInstanceState(outState, outPersistentState);
+//        outState.putSerializable("ActivityStack", ActivityStackUtils.getActivityStack());
+//    }
+//
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+//        super.onRestoreInstanceState(savedInstanceState, persistentState);
+//        if (savedInstanceState != null && savedInstanceState.size() > 0) {
+//            ActivityStackUtils.setActivityStack((Stack<Activity>) savedInstanceState.getSerializable("ActivityStack"));
+//        }
+//    }
 }

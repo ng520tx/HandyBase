@@ -9,8 +9,6 @@ import com.pgyersdk.crash.PgyCrashManager;
 
 import org.litepal.LitePal;
 
-import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
-
 /**
  * <pre>
  *  author: Handy
@@ -21,8 +19,8 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  */
 public abstract class BaseApplication extends Application {
 
-    public boolean isInitLogUtils = true;
-    public boolean isUseCustomCrashUtil = true;
+    public boolean isInitUtils = true;
+    public boolean isUseCuntomCrashUtil = true;
     public boolean isInitPgyCrashManager = false;
 
     /**
@@ -34,20 +32,20 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         try {
-            Utils.init(this);
+            Utils.init(getApplicationContext());
             LitePal.initialize(getApplicationContext());
-            com.blankj.utilcode.util.Utils.init(this);
-            BGASwipeBackHelper.init(this, null);
 
              /* 初始化崩溃捕获工具 */
-            if (isUseCustomCrashUtil) {
+            if (isUseCuntomCrashUtil) {
                 com.handy.base.utils.CrashUtils.init();
             } else {
                 com.blankj.utilcode.util.CrashUtils.init();
             }
 
             /* 初始化工具类功能 */
-            if (isInitLogUtils) {
+            if (isInitUtils) {
+                com.blankj.utilcode.util.Utils.init(this);
+
                 //初始化日志工具
                 config = LogUtils.getConfig()
                         // 设置log总开关，包括输出到控制台和文件，默认开

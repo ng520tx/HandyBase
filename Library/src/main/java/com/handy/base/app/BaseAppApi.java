@@ -15,8 +15,8 @@ import android.view.ViewGroup;
  *  desc  : Activity基本类接口
  * </pre>
  */
-public class BaseAppApi {
-    public interface BaseAtyApi {
+class BaseAppApi {
+    interface BaseAtyApi {
 
         /**
          * <pre>

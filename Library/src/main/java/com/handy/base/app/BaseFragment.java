@@ -5,18 +5,14 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ScreenUtils;
-import com.handy.base.mvp.BaseMvpContract;
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import java.io.Serializable;
-
-import javax.inject.Inject;
 
 /**
  * <pre>
@@ -26,40 +22,20 @@ import javax.inject.Inject;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment<IMvpPresenter extends BaseMvpContract.IMvpPresenter> extends RxFragment implements BaseAppApi.BaseFgmApi, BaseMvpContract.IMvpView, Serializable {
+public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFgmApi, Serializable {
     public View fragmentView;
 
     public Context context;
     public Activity activity;
     public Application application;
-    /**
-     * 手机屏幕宽度参数
-     */
-    public int screenWidth;
-    /**
-     * 手机屏幕高度参数
-     */
-    public int screenHeight;
-    /**
-     * Fragment的活跃状态
-     */
-    public boolean isAlive = false;
-    /**
-     * onViewCreated中初始化界面视图
-     */
-    public boolean isInitViewHDB = true;
-    /**
-     * onActivityCreated中初始化界面视图
-     */
-    public boolean isInitDataHDB = true;
-    /**
-     * 用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
-     */
-    public boolean isOnRequestHDB = true;
 
-    @Nullable
-    @Inject
-    protected IMvpPresenter iMvpPresenter = null;
+    public int screenWidth; //手机屏幕宽度参数
+    public int screenHeight; //手机屏幕高度参数
+
+    public boolean isAlive = false; //Fragment的活跃状态
+    public boolean isInitViewHDB = true; //onViewCreated中初始化界面视图
+    public boolean isInitDataHDB = true; //onActivityCreated中初始化界面视图
+    public boolean isOnRequestHDB = true; //用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
 
     @Override
     public void onAttach(Activity activity) {
@@ -104,9 +80,7 @@ public abstract class BaseFragment<IMvpPresenter extends BaseMvpContract.IMvpPre
         if (fragmentView == null) {
             fragmentView = view;
         }
-        if (iMvpPresenter != null) {
-            iMvpPresenter.attachView(this);
-        }
+
         if (isInitViewHDB) {
             initViewHDB(view, savedInstanceState);
             isInitViewHDB = false;
@@ -138,9 +112,6 @@ public abstract class BaseFragment<IMvpPresenter extends BaseMvpContract.IMvpPre
     public void onDestroy() {
         super.onDestroy();
         this.isAlive = false;
-        if (iMvpPresenter != null) {
-            iMvpPresenter.detachView();
-        }
     }
 
     @Override
@@ -182,10 +153,5 @@ public abstract class BaseFragment<IMvpPresenter extends BaseMvpContract.IMvpPre
     @Override
     public void onVisiableHDB() {
 
-    }
-
-    @Override
-    public <T> LifecycleTransformer<T> bindToLife() {
-        return this.bindToLifecycle();
     }
 }
