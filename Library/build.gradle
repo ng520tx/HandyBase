@@ -13,6 +13,12 @@ android {
         versionName "2.2.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'com.example.myapp.MyEventBusIndex']
+            }
+        }
     }
 
     buildTypes {
@@ -34,17 +40,18 @@ dependencies {
 
     //AndroidUtilCode
     compile 'com.blankj:utilcode:1.11.1'
-    //蒲公英SDK
+    //PgyerSDK
     compile 'com.pgyersdk:sdk:2.8.1'
     //EventBus
     compile 'org.greenrobot:eventbus:3.1.1'
-    //郭霖Litepal数据库
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+    //Litepal
     compile 'org.litepal.android:core:1.6.1'
     //Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     //Dagger2
     compile 'com.google.dagger:dagger:2.14.1'
-    compile 'com.google.dagger:dagger-compiler:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
     //RXJava
     compile 'io.reactivex.rxjava2:rxjava:2.1.8'
     //RXAndroid
@@ -64,6 +71,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:4.3.0'
     //ButterKnife
     compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
 
 //-------------------- jitPack生成文档 --------------------

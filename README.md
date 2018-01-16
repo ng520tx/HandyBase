@@ -241,7 +241,7 @@
 * 新增Util补充工具类
 
 * 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.11.1
-* 新接入[pgyersdk](https://www.pgyer.com/doc/view/sdk_android_guide) 2.8.1
+* 新接入[PgyerSDK](https://www.pgyer.com/doc/view/sdk_android_guide) 2.8.1
 * 新接入[EventBus](https://github.com/greenrobot/EventBus):3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 * 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.1
 * 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
