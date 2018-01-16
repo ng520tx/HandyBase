@@ -235,7 +235,7 @@
 * 新接入[RxLifeCycle2](https://github.com/trello/RxLifecycle):2.2.1
 * 新接入[BGASwipeBackLayout](https://github.com/bingoogolapple/BGASwipeBackLayout-Android):1.1.8
 * 新接入[Fragmentation](https://github.com/YoKeyword/Fragmentation):1.2.4
-* 新接入[QuickAdapter](https://github.com/ThePacific/adapter):1.0.7
+* 新接入[HandyAdapter](https://github.com/Handy045/HandyAdapter):1.0.1
 * 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper):2.9.34
 * 新接入[Glide](https://github.com/bumptech/glide):4.5.0
 * 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.5.1

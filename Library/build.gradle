@@ -63,8 +63,8 @@ dependencies {
     compile 'cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar'
     //Fragmentation
     compile 'me.yokeyword:fragmentation:1.2.4'
-    //QuickAdapter
-    compile 'com.github.thepacific:adapter:1.0.7'
+    //HandyAdapter
+    compile 'com.github.Handy045:HandyAdapter:1.0.1'
     //BaseRecyclerViewAdapterHelper
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     //Glide
