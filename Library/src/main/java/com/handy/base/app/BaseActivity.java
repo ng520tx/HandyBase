@@ -25,20 +25,47 @@ import com.handy.base.utils.PermissionsUtils;
  * </pre>
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseAppApi.BaseAtyApi {
+    /**
+     * 屏幕宽度
+     */
+    public int screenWidth = 0;
+    /**
+     * 屏幕高度
+     */
+    public int screenHeight = 0;
+    /**
+     * 界面视图布局
+     */
+    public View contentView = null;
+
+    /**
+     * Activity的活跃状态
+     */
+    public boolean isAlive = false;
+    /**
+     * onStart中初始化界面视图
+     */
+    public boolean isInitViewHDB = true;
+    /**
+     * onStart中初始化界面数据
+     */
+    public boolean isInitDataHDB = true;
+    /**
+     * onResume中界面请求处理
+     */
+    public boolean isOnRequestHDB = true;
+    /**
+     * onStart中初始化意图内容
+     */
+    public boolean isInitIntentBundle = true;
+    /**
+     * onStart中权限扫描
+     */
+    public boolean isCheckPermissionsHDB = true;
+
     public Context context;
     public Activity activity;
     public Application application;
-
-    public int screenWidth = 0; //屏幕宽度
-    public int screenHeight = 0; //屏幕高度
-    public View contentView = null; //界面视图布局
-
-    public boolean isAlive = false; //Activity的活跃状态
-    public boolean isInitViewHDB = true; //onStart中初始化界面视图
-    public boolean isInitDataHDB = true; //onStart中初始化界面数据
-    public boolean isOnRequestHDB = true; //onResume中界面请求处理
-    public boolean isInitIntentBundle = true; //onStart中初始化意图内容
-    public boolean isCheckPermissionsHDB = true; //onStart中权限扫描
 
     public Bundle intentBundle = null;
     public Bundle savedInstanceState = null;
@@ -154,7 +181,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     @Override
     public void onPermissionRejectionHDB() {
         /*
-         * 发现未启用的权限时，可以参考一下进行处理。
+         * //发现未启用的权限时，可以参考一下进行处理。
          * SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
          *     @Override
          *     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -197,18 +224,4 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
             onPermissionRejectionHDB();
         }
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-//        super.onSaveInstanceState(outState, outPersistentState);
-//        outState.putSerializable("ActivityStack", ActivityStackUtils.getActivityStack());
-//    }
-//
-//    @Override
-//    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-//        super.onRestoreInstanceState(savedInstanceState, persistentState);
-//        if (savedInstanceState != null && savedInstanceState.size() > 0) {
-//            ActivityStackUtils.setActivityStack((Stack<Activity>) savedInstanceState.getSerializable("ActivityStack"));
-//        }
-//    }
 }
