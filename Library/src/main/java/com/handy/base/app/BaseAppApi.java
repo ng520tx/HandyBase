@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * <pre>
  *  author: Handy
@@ -91,6 +93,20 @@ class BaseAppApi {
          * </pre>
          */
         void onPermissionRejectionHDB();
+
+        /**
+         * <pre>
+         * 将所有disposable放入,集中处理
+         * </pre>
+         */
+        void addRxDispose(Disposable disposable);
+
+        /**
+         * <pre>
+         * 保证activity结束时取消所有正在执行的订阅
+         * </pre>
+         */
+        void unRxDispose();
     }
 
     interface BaseFgmApi {
