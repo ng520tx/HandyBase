@@ -9,6 +9,8 @@ import com.pgyersdk.crash.PgyCrashManager;
 
 import org.litepal.LitePal;
 
+import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
+
 /**
  * <pre>
  *  author: Handy
@@ -34,6 +36,7 @@ public abstract class BaseApplication extends Application {
         try {
             Utils.init(this);
             com.blankj.utilcode.util.Utils.init(this);
+            BGASwipeBackHelper.init(this, null);
             LitePal.initialize(getApplicationContext());
 
              /* 初始化崩溃捕获工具 */
