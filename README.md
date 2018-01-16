@@ -245,6 +245,7 @@
 * 新接入[EventBus](https://github.com/greenrobot/EventBus):3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
 * 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.1
 * 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
+* 新接入[Dagger2](https://github.com/google/dagger):2.14.1
 * 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.8
 * 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
 * 新接入[RxLifeCycle2](https://github.com/trello/RxLifecycle):2.2.1
