@@ -23,19 +23,37 @@ import java.io.Serializable;
  * </pre>
  */
 public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFgmApi, Serializable {
-    public View fragmentView;
+    /**
+     * 手机屏幕宽度参数
+     */
+    public int screenWidth;
+    /**
+     * 手机屏幕高度参数
+     */
+    public int screenHeight;
+
+    /**
+     * Fragment的活跃状态
+     */
+    public boolean isAlive = false;
+    /**
+     * onViewCreated中初始化界面视图
+     */
+    public boolean isInitViewHDB = true;
+    /**
+     * onActivityCreated中初始化界面视图
+     */
+    public boolean isInitDataHDB = true;
+    /**
+     * 用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
+     */
+    public boolean isOnRequestHDB = true;
+
+    public View rootLayout;
 
     public Context context;
     public Activity activity;
     public Application application;
-
-    public int screenWidth; //手机屏幕宽度参数
-    public int screenHeight; //手机屏幕高度参数
-
-    public boolean isAlive = false; //Fragment的活跃状态
-    public boolean isInitViewHDB = true; //onViewCreated中初始化界面视图
-    public boolean isInitDataHDB = true; //onActivityCreated中初始化界面视图
-    public boolean isOnRequestHDB = true; //用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
 
     @Override
     public void onAttach(Activity activity) {
@@ -68,17 +86,17 @@ public abstract class BaseFragment extends Fragment implements BaseAppApi.BaseFg
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (fragmentView == null) {
-            this.fragmentView = createViewHDB(inflater, container, savedInstanceState);
+        if (rootLayout == null) {
+            this.rootLayout = createViewHDB(inflater, container, savedInstanceState);
         }
-        return this.fragmentView != null ? this.fragmentView : super.onCreateView(inflater, container, savedInstanceState);
+        return this.rootLayout != null ? this.rootLayout : super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (fragmentView == null) {
-            fragmentView = view;
+        if (rootLayout == null) {
+            rootLayout = view;
         }
 
         if (isInitViewHDB) {

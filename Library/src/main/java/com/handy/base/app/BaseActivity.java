@@ -36,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
     /**
      * 界面视图布局
      */
-    public View contentView = null;
+    public View rootLayout = null;
 
     /**
      * Activity的活跃状态
@@ -139,9 +139,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseAppA
 
     @Override
     public boolean setContentViewHDB(@LayoutRes int layoutResId) {
-        contentView = LayoutInflater.from(context).inflate(layoutResId, null);
-        if (contentView != null) {
-            setContentView(contentView);
+        rootLayout = LayoutInflater.from(context).inflate(layoutResId, null);
+        if (rootLayout != null) {
+            setContentView(rootLayout);
             return true;
         }
         return false;
