@@ -74,7 +74,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
 
     public Bundle intentBundle = null;
     public Bundle savedInstanceState = null;
-    public CompositeDisposable mCompositeDisposable = null;
+    public CompositeDisposable compositeDisposable = null;
 
     public BGASwipeBackHelper mSwipeBackHelper;
 
@@ -222,16 +222,17 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
 
     @Override
     public void addRxDispose(Disposable disposable) {
-        if (mCompositeDisposable == null) {
-            mCompositeDisposable = new CompositeDisposable();
+        if (compositeDisposable == null) {
+            compositeDisposable = new CompositeDisposable();
         }
-        mCompositeDisposable.add(disposable);
+        compositeDisposable.add(disposable);
     }
 
     @Override
     public void unRxDispose() {
-        if (mCompositeDisposable != null) {
-            mCompositeDisposable.clear();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
+            compositeDisposable = null;
         }
     }
 
