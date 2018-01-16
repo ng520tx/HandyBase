@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.1.3'
+    compile 'com.github.liujie045:HandyBase:2.3.0'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
@@ -12,8 +12,7 @@
             jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:2.3.1'
-            classpath 'me.tatarka:gradle-retrolambda:3.6.0'
+            classpath 'com.android.tools.build:gradle:3.0.1'
             classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         }
     }
@@ -52,37 +51,21 @@
     dependencies {
         ...
         compile 'com.github.liujie045:HandyBase:最新版本'
-        annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
-        annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+        annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.3.0'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+        annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
     }
 ```
 
 #### Step 3.工具类已在BaseApplication中初始化
 ```javascript
-    if (isInitUtils) {
-        Utils.init(getApplicationContext());
-        CrashUtils.getInstance().init(); //初始化崩溃捕获工具
-    
-        LogUtils.Builder builder = new LogUtils.Builder()
-            .setLogSwitch(AppUtils.isAppDebug())// 设置log总开关，默认开
-            .setGlobalTag(null)// 设置log全局标签，默认为空。当全局标签不为空时，我们输出的log全部为该tag，为空时，如果传入的tag为空那就显示类名，否则显示tag
-            .setLogHeadSwitch(true)// 设置log头信息开关，默认为开
-            .setLog2FileSwitch(AppUtils.isAppDebug())// 打印log时是否存到文件的开关，默认关
-            .setDir("")// 当自定义路径为空时，写入应用的/cache/log/目录中
-            .setBorderSwitch(true)// 输出日志是否带边框开关，默认开
-            .setLogFilter(LogUtils.V);// log过滤器，和logcat过滤器同理，默认Verbose
-        LogUtils.d(builder.toString());
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-```
-
-```javascript
 如果不需要初始化工具类，或手动初始化。则可以在BaseApplication的子类中添加代码：
     public class MyBaseApplication extends BaseApplication {
         {
-            isInitHandyBaseUtils = false;
+            isInitLogUtils = false; //是否启用日志工具
+            isUseCuntomCrashUtil = false; //是否启用自定义的异常捕获处理工具
+            isInitPgyCrashManager = false; //是否启用蒲公英远程异常监控
         }
         ...
     }
@@ -96,6 +79,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>  <!-- 获取设备信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 获取WIFI状态-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 获取网络状态 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 获取震动权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 读写sdcard，storage等等 -->
 ```
 
