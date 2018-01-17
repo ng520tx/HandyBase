@@ -17,8 +17,8 @@ import io.reactivex.disposables.Disposable;
  *  desc  : Activity基本类接口
  * </pre>
  */
-class BaseAppApi {
-    interface BaseAtyApi {
+public class BaseAppApi {
+    public interface BaseAtyApi {
 
         /**
          * <pre>
@@ -109,7 +109,7 @@ class BaseAppApi {
         void unRxDispose();
     }
 
-    interface BaseFgmApi {
+    public interface BaseFgmApi {
         /**
          * <pre>
          *  初始化界面视图
