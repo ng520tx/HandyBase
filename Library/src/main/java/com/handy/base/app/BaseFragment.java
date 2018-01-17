@@ -14,6 +14,9 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import java.io.Serializable;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 /**
  * <pre>
  *  author: Handy
@@ -22,7 +25,7 @@ import java.io.Serializable;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment extends RxFragment implements BaseAppApi.BaseFgmApi, Serializable {
+public abstract class BaseFragment extends RxFragment implements BaseApplicationApi.BaseFragmentApi, BaseApplicationApi.BaseRxJavaApi, Serializable {
     /**
      * 手机屏幕宽度参数
      */
@@ -54,6 +57,8 @@ public abstract class BaseFragment extends RxFragment implements BaseAppApi.Base
     public Context context;
     public Activity activity;
     public Application application;
+
+    public CompositeDisposable compositeDisposable = null;
 
     @Override
     public void onAttach(Activity activity) {
@@ -129,6 +134,8 @@ public abstract class BaseFragment extends RxFragment implements BaseAppApi.Base
     @Override
     public void onDestroy() {
         super.onDestroy();
+        clearRxDisposable();
+
         this.isAlive = false;
     }
 
@@ -171,5 +178,21 @@ public abstract class BaseFragment extends RxFragment implements BaseAppApi.Base
     @Override
     public void onVisiableHDB() {
 
+    }
+
+    @Override
+    public void addRxDisposable(Disposable disposable) {
+        if (compositeDisposable == null) {
+            compositeDisposable = new CompositeDisposable();
+        }
+        compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void clearRxDisposable() {
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
+            compositeDisposable = null;
+        }
     }
 }

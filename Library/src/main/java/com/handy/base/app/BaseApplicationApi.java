@@ -17,8 +17,8 @@ import io.reactivex.disposables.Disposable;
  *  desc  : Activity基本类接口
  * </pre>
  */
-public class BaseAppApi {
-    public interface BaseAtyApi {
+public class BaseApplicationApi {
+    interface BaseActivityApi {
 
         /**
          * <pre>
@@ -93,23 +93,9 @@ public class BaseAppApi {
          * </pre>
          */
         void onPermissionRejectionHDB();
-
-        /**
-         * <pre>
-         * 将所有disposable放入,集中处理
-         * </pre>
-         */
-        void addRxDispose(Disposable disposable);
-
-        /**
-         * <pre>
-         * 保证activity结束时取消所有正在执行的订阅
-         * </pre>
-         */
-        void unRxDispose();
     }
 
-    public interface BaseFgmApi {
+    interface BaseFragmentApi {
         /**
          * <pre>
          *  初始化界面视图
@@ -157,5 +143,21 @@ public class BaseAppApi {
          * </pre>
          */
         void onRequestHDB();
+    }
+
+    public interface BaseRxJavaApi {
+        /**
+         * <pre>
+         * 将所有disposable放入,集中处理
+         * </pre>
+         */
+        void addRxDisposable(Disposable disposable);
+
+        /**
+         * <pre>
+         * 保证activity结束时取消所有正在执行的订阅
+         * </pre>
+         */
+        void clearRxDisposable();
     }
 }

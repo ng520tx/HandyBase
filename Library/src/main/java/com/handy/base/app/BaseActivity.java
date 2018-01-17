@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements BaseAppApi.BaseAtyApi, BGASwipeBackHelper.Delegate {
+public abstract class BaseActivity extends RxAppCompatActivity implements BaseApplicationApi.BaseActivityApi, BaseApplicationApi.BaseRxJavaApi, BGASwipeBackHelper.Delegate {
     /**
      * 屏幕宽度
      */
@@ -141,7 +141,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
     protected void onPause() {
         super.onPause();
         if (isFinishing()) {
-            unRxDispose();
+            clearRxDisposable();
 
             isAlive = false;
             ActivityStackUtils.finishChoiceDesc(this);
@@ -221,7 +221,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
     }
 
     @Override
-    public void addRxDispose(Disposable disposable) {
+    public void addRxDisposable(Disposable disposable) {
         if (compositeDisposable == null) {
             compositeDisposable = new CompositeDisposable();
         }
@@ -229,7 +229,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
     }
 
     @Override
-    public void unRxDispose() {
+    public void clearRxDisposable() {
         if (compositeDisposable != null) {
             compositeDisposable.clear();
             compositeDisposable = null;
