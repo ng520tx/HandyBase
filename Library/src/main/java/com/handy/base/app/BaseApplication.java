@@ -21,22 +21,22 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  */
 public abstract class BaseApplication extends Application {
 
+    public LogUtils.Config config;
+
     public boolean isInitLogUtils = true;
     public boolean isUseCuntomCrashUtil = true;
     public boolean isInitPgyCrashManager = false;
-
-    /**
-     * 日志工具配置类
-     */
-    public LogUtils.Config config;
 
     @Override
     public void onCreate() {
         super.onCreate();
         try {
+            /*初始化工具类*/
             Utils.init(this);
             com.blankj.utilcode.util.Utils.init(this);
+            /*初始化侧滑返回功能*/
             BGASwipeBackHelper.init(this, null);
+            /*初始化数据库*/
             LitePal.initialize(getApplicationContext());
 
              /* 初始化崩溃捕获工具 */
