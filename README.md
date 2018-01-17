@@ -2,7 +2,7 @@
 ![](HandyBase.png)
 
 ## 最新版本
-    compile 'com.github.liujie045:HandyBase:2.3.0'
+   [![](https://jitpack.io/v/Handy045/HandyBase.svg)](https://jitpack.io/#Handy045/HandyBase) compile 'com.github.liujie045:HandyBase:2.3.2'
 
 ## 项目引用
 #### Step 1.添加maven地址到Project的build.gradle配置文件中
