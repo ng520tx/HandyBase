@@ -6,8 +6,7 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.handy.base.utils.androidutilcode.Utils;
 import com.pgyersdk.crash.PgyCrashManager;
-
-import org.litepal.LitePal;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
@@ -37,7 +36,7 @@ public abstract class BaseApplication extends Application {
             /*初始化侧滑返回功能*/
             BGASwipeBackHelper.init(this, null);
             /*初始化数据库*/
-            LitePal.initialize(getApplicationContext());
+            FlowManager.init(getApplicationContext());
 
              /* 初始化崩溃捕获工具 */
             if (isUseCuntomCrashUtil) {
