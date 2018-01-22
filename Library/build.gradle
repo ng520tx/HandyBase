@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 230
-        versionName "2.3.0"
+        versionCode 235
+        versionName "2.3.5"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,48 +30,53 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:appcompat-v7:27.0.2'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    testApi 'junit:junit:4.12'
+    androidTestApi 'com.android.support.test:runner:1.0.1'
+    androidTestApi 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    api 'com.android.support:design:27.0.2'
+    api 'com.android.support:appcompat-v7:27.0.2'
 
     //AndroidUtilCode
-    compile 'com.blankj:utilcode:1.11.1'
+    api 'com.blankj:utilcode:1.11.1'
     //PgyerSDK
-    compile 'com.pgyersdk:sdk:2.8.1'
+    api 'com.pgyersdk:sdk:2.8.1'
+    //MobStat
+    api 'com.baidu.mobstat:mtj-sdk:3.8.1.1'
     //EventBus
-    compile 'org.greenrobot:eventbus:3.1.1'
+    api 'org.greenrobot:eventbus:3.1.1'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
-    //Litepal
-    compile 'org.litepal.android:core:1.6.1'
+    //DBFlow
+    api 'com.github.Raizlabs.DBFlow:dbflow:4.2.4'
+    api 'com.github.Raizlabs.DBFlow:dbflow-core:4.2.4'
+    api 'com.github.Raizlabs.DBFlow:dbflow-sqlcipher:4.2.4'
+    annotationProcessor 'com.github.Raizlabs.DBFlow:dbflow-processor:4.2.4'
     //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
     //Dagger2
-    compile 'com.google.dagger:dagger:2.14.1'
+    api 'com.google.dagger:dagger:2.14.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
     //RXJava
-    compile 'io.reactivex.rxjava2:rxjava:2.1.8'
+    api 'io.reactivex.rxjava2:rxjava:2.1.8'
     //RXAndroid
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //RxLifeCycle2
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
+    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     //BGASwipeBackLayout
-    compile 'cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar'
+    api 'cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar'
     //Fragmentation
-    compile 'me.yokeyword:fragmentation:1.2.4'
+    api 'me.yokeyword:fragmentation:1.2.4'
     //HandyAdapter
-    compile 'com.github.Handy045:HandyAdapter:1.0.1'
+    api 'com.github.Handy045:HandyAdapter:1.0.1'
     //BaseRecyclerViewAdapterHelper
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     //Glide
-    compile 'com.github.bumptech.glide:glide:4.5.0'
+    api 'com.github.bumptech.glide:glide:4.5.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
     //ButterKnife
-    compile 'com.jakewharton:butterknife:8.5.1'
+    api 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
 
