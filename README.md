@@ -51,6 +51,7 @@
     dependencies {
         ...
         compile 'com.github.liujie045:HandyBase:最新版本'
+        annotationProcessor 'com.github.Raizlabs.DBFlow:dbflow-processor:4.2.4'
         annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
         annotationProcessor 'com.github.bumptech.glide:compiler:4.3.0'
         annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
@@ -226,8 +227,9 @@
 
 * 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.11.1
 * 新接入[PgyerSDK](https://www.pgyer.com/doc/view/sdk_android_guide) 2.8.1
+* 新接入[MobStat](https://mtj.baidu.com/web/welcome/login) 3.8.1.1
 * 新接入[EventBus](https://github.com/greenrobot/EventBus):3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
-* 新接入[Litepal](https://github.com/LitePalFramework/LitePal):1.6.1
+* 新接入[DBFlow](https://github.com/Raizlabs/DBFlow):4.2.4
 * 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
 * 新接入[Dagger2](https://github.com/google/dagger):2.14.1
 * 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.8
