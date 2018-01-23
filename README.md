@@ -227,17 +227,18 @@
 
 * 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.11.1
 * 新接入[PgyerSDK](https://www.pgyer.com/doc/view/sdk_android_guide) 2.8.1
-* 新接入[MobStat](https://mtj.baidu.com/web/welcome/login) 3.8.1.1
-* 新接入[EventBus](https://github.com/greenrobot/EventBus):3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
-* 新接入[DBFlow](https://github.com/Raizlabs/DBFlow):4.2.4
-* 新接入[Retrofit](https://github.com/square/retrofit):2.3.0
-* 新接入[Dagger2](https://github.com/google/dagger):2.14.1
-* 新接入[Rxjava](https://github.com/ReactiveX/RxJava):2.1.8
-* 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid):2.0.1
-* 新接入[RxLifeCycle2](https://github.com/trello/RxLifecycle):2.2.1
-* 新接入[BGASwipeBackLayout](https://github.com/bingoogolapple/BGASwipeBackLayout-Android):1.1.8
-* 新接入[Fragmentation](https://github.com/YoKeyword/Fragmentation):1.2.4
-* 新接入[HandyAdapter](https://github.com/Handy045/HandyAdapter):1.0.1
-* 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper):2.9.34
-* 新接入[Glide](https://github.com/bumptech/glide):4.5.0
-* 新接入[Butterknife](https://github.com/JakeWharton/butterknife):8.5.1
+* 新接入[Bugly-crashreport_upgrade](https://bugly.qq.com/v2/) 1.3.4
+* 新接入[Bugly-nativecrashreport](https://bugly.qq.com/v2/) 3.3.1
+* 新接入[EventBus](https://github.com/greenrobot/EventBus) 3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
+* 新接入[DBFlow](https://github.com/Raizlabs/DBFlow) 4.2.4
+* 新接入[Retrofit](https://github.com/square/retrofit) 2.3.0
+* 新接入[Dagger2](https://github.com/google/dagger) 2.14.1
+* 新接入[Rxjava](https://github.com/ReactiveX/RxJava) 2.1.8
+* 新接入[Rxandroid](https://github.com/ReactiveX/RxAndroid) 2.0.1
+* 新接入[RxLifeCycle2](https://github.com/trello/RxLifecycle) 2.2.1
+* 新接入[BGASwipeBackLayout](https://github.com/bingoogolapple/BGASwipeBackLayout-Android) 1.1.8
+* 新接入[Fragmentation](https://github.com/YoKeyword/Fragmentation) 1.2.4
+* 新接入[HandyAdapter](https://github.com/Handy045/HandyAdapter) 1.0.1
+* 新接入[BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper) 2.9.34
+* 新接入[Glide](https://github.com/bumptech/glide) 4.5.0
+* 新接入[Butterknife](https://github.com/JakeWharton/butterknife) 8.5.1
