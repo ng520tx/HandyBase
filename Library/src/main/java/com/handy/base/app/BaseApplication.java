@@ -1,20 +1,13 @@
 package com.handy.base.app;
 
 import android.app.Application;
-import android.content.Context;
-import android.text.TextUtils;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
+import com.handy.base.config.BuglyConfig;
 import com.handy.base.utils.androidutilcode.Utils;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.crashreport.CrashReport;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
@@ -30,8 +23,10 @@ public abstract class BaseApplication extends Application {
 
     public LogUtils.Config config;
 
-    public String buglyId = "";
-    public boolean isBuglyDebug = true;
+    public String buglyID = "";
+    public BuglyConfig buglyConfig = null;
+
+    public boolean isUseBugly = true;
     public boolean isInitLogUtils = true;
     public boolean isUseCuntomCrashUtil = true;
 
@@ -79,21 +74,20 @@ public abstract class BaseApplication extends Application {
                         .setFileFilter(LogUtils.V)
                         // log栈深度，默认为1
                         .setStackDeep(1);
+
                 LogUtils.d(config.toString());
             }
 
             /* 初始化腾讯Bugly应用分析上报功能 */
-            if (ObjectUtils.isNotEmpty(buglyId)) {
-                Context context = getApplicationContext();
-                // 获取当前包名
-                String packageName = context.getPackageName();
-                // 获取当前进程名
-                String processName = getProcessName(android.os.Process.myPid());
-                // 设置是否为上报进程
-                CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
-                strategy.setUploadProcess(processName == null || processName.equals(packageName));
-                // 初始化Bugly
-                Bugly.init(context, buglyId, isBuglyDebug, strategy);
+            if (isUseBugly && ObjectUtils.isNotEmpty(buglyID)) {
+                // 实例化Bugly配置对象
+                buglyConfig = new BuglyConfig(buglyID);
+                // 重新设置Bugly配置对象
+                buglyConfig = resetBuglyConfig(buglyConfig);
+                // 初始化Bugly功能
+                buglyConfig.initBugly(getApplicationContext());
+
+                LogUtils.d(buglyConfig.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,31 +95,12 @@ public abstract class BaseApplication extends Application {
     }
 
     /**
-     * 获取进程号对应的进程名
+     * 可以在baseApplication的子类重写此方法，直接修改入参对象然后return反馈即可。
      *
-     * @param pid 进程号
-     * @return 进程名
+     * @param buglyConfig 原Bugly配置对象
+     * @return 新Bugly配置对象
      */
-    private String getProcessName(int pid) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
-            String processName = reader.readLine();
-            if (!TextUtils.isEmpty(processName)) {
-                processName = processName.trim();
-            }
-            return processName;
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-        return null;
+    protected BuglyConfig resetBuglyConfig(BuglyConfig buglyConfig) {
+        return buglyConfig;
     }
 }

@@ -6,6 +6,10 @@ package com.handy.base.app;
 
 public class MyBaseApplication extends BaseApplication {
 
+    {
+        buglyID = "dda0e5e9a5";
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
