@@ -19,6 +19,11 @@ android {
                 arguments = [eventBusIndex: 'com.example.myapp.MyEventBusIndex']
             }
         }
+
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
 
     buildTypes {
@@ -42,8 +47,9 @@ dependencies {
     compile 'com.blankj:utilcode:1.11.1'
     //PgyerSDK
     compile 'com.pgyersdk:sdk:2.8.1'
-    //MobStat
-    compile 'com.baidu.mobstat:mtj-sdk:3.8.1.1'
+    //Bugly
+    compile 'com.tencent.bugly:crashreport_upgrade:1.3.4'
+    compile 'com.tencent.bugly:nativecrashreport:3.3.1'
     //EventBus
     compile 'org.greenrobot:eventbus:3.1.1'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
