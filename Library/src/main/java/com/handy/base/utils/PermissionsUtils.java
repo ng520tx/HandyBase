@@ -33,6 +33,7 @@ public final class PermissionsUtils {
      */
     private static void initPermissions() {
         Permissions = new ArrayList<String>() {{
+            add(Manifest.permission.READ_LOGS);
             add(Manifest.permission.INTERNET);
             add(Manifest.permission.RECORD_AUDIO);
             add(Manifest.permission.READ_PHONE_STATE);
@@ -83,8 +84,9 @@ public final class PermissionsUtils {
     private static boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest) {
         for (int index = 0; index < Permissions.size(); index++) {
             if (ContextCompat.checkSelfPermission(activity, Permissions.get(index)) == PackageManager.PERMISSION_DENIED) {
-                if (isRequest)
+                if (isRequest) {
                     ActivityCompat.requestPermissions(activity, new String[]{Permissions.get(index)}, index);
+                }
                 return true;
             }
         }
@@ -94,8 +96,9 @@ public final class PermissionsUtils {
     private static boolean checkDeniedPermissionsBase(Activity activity, boolean isRequest, List<String> permissions) {
         for (int index = 0; index < permissions.size(); index++) {
             if (ContextCompat.checkSelfPermission(activity, permissions.get(index)) == PackageManager.PERMISSION_DENIED) {
-                if (isRequest)
+                if (isRequest) {
                     ActivityCompat.requestPermissions(activity, new String[]{permissions.get(index)}, index);
+                }
                 return true;
             }
         }
@@ -110,8 +113,9 @@ public final class PermissionsUtils {
      * @return 如果有未启用的权限返回true
      */
     public static boolean checkDeniedPermissions(Activity activity, boolean isRequest) {
-        if (Permissions == null || Permissions.size() == 0)
+        if (Permissions == null || Permissions.size() == 0) {
             initPermissions();
+        }
 
         if (Permissions != null && Permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -166,8 +170,9 @@ public final class PermissionsUtils {
      * @return 如果有未启用的权限返回true
      */
     public static boolean checkDeniedPermissions(Activity activity, Class intentClass, boolean isRequest, boolean isFinish) {
-        if (Permissions == null || Permissions.size() == 0)
+        if (Permissions == null || Permissions.size() == 0) {
             initPermissions();
+        }
 
         if (Permissions != null && Permissions.size() != 0) {
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -177,12 +182,16 @@ public final class PermissionsUtils {
                 } else {
                     LogUtils.d("应用权限已全部开启");
                     IntentUtils.openActivity(activity, intentClass, isFinish);
-                    if (isFinish) activity.finish();
+                    if (isFinish) {
+                        activity.finish();
+                    }
                 }
             } else {
                 LogUtils.d("系统版本小于23，无需扫描权限");
                 IntentUtils.openActivity(activity, intentClass, isFinish);
-                if (isFinish) activity.finish();
+                if (isFinish) {
+                    activity.finish();
+                }
             }
         } else {
             LogUtils.e("未发现需扫描的权限内容");
@@ -209,12 +218,16 @@ public final class PermissionsUtils {
                 } else {
                     LogUtils.d("应用权限已全部开启");
                     IntentUtils.openActivity(activity, intentClass, isFinish);
-                    if (isFinish) activity.finish();
+                    if (isFinish) {
+                        activity.finish();
+                    }
                 }
             } else {
                 LogUtils.d("系统版本小于23，无需扫描权限");
                 IntentUtils.openActivity(activity, intentClass, isFinish);
-                if (isFinish) activity.finish();
+                if (isFinish) {
+                    activity.finish();
+                }
             }
         } else {
             LogUtils.e("未发现需扫描的权限内容");
