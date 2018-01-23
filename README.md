@@ -226,7 +226,6 @@
 * 新增Util补充工具类
 
 * 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.11.1
-* 新接入[PgyerSDK](https://www.pgyer.com/doc/view/sdk_android_guide) 2.8.1
 * 新接入[Bugly-crashreport_upgrade](https://bugly.qq.com/v2/) 1.3.4
 * 新接入[Bugly-nativecrashreport](https://bugly.qq.com/v2/) 3.3.1
 * 新接入[EventBus](https://github.com/greenrobot/EventBus) 3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
