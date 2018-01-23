@@ -170,50 +170,16 @@
     ...
     }
 ```
-#### Step 7.若要使用蒲公英内测功能，需要在module中配置
+#### Step 7.若要使用讯Bugly应用分析上报功能，需要在module中配置
 ```javascript
 在BaseApplication中已添加注册方法，若需要使用此功能，可以在BaseApplication的子类中添加代码：
     public class MyBaseApplication extends BaseApplication {
         {
             ...
-            isInitPgyCrashManager = true;
+            buglyId = "此处请填写腾讯Bugly产品Id";
         }
         ...
     }
-```
-
-```javascript
-在AndroidManifest配置文件中添加：
-<application
-    ...>
-    ...
-    <meta-data
-        android:name="PGYER_APPID"
-        android:value="此处填写蒲公英平台上传应用后获得的AppId" >
-    </meta-data>
-    <provider
-        android:name="com.handy.base.provider.pgyProvider"
-        android:authorities="此处输入授权名，可以随意输入但要保证唯一性，可能会和手机其他App产生冲突"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/pgycrash_paths"/>
-    </provider>
-</application>
-```
-
-```javascript
-在res下的xml文件夹（不存在则创建）中创建pgycrash_paths.xml文件，写入内容：
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <external-path
-        name="files_root"
-        path="Android/data/项目包名/pgycrash"/>
-    <external-path
-        name="external_storage_root"
-        path="."/>
-</paths>
 ```
 
 ##  内容目录
