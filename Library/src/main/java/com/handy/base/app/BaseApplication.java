@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.handy.base.utils.androidutilcode.Utils;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.BufferedReader;
@@ -94,7 +95,7 @@ public abstract class BaseApplication extends Application {
                 CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
                 strategy.setUploadProcess(processName == null || processName.equals(packageName));
                 // 初始化Bugly
-                CrashReport.initCrashReport(context, buglyId, isBuglyDebug, strategy);
+                Bugly.init(context, buglyId, isBuglyDebug, strategy);
             }
         } catch (Exception e) {
             e.printStackTrace();
