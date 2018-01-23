@@ -1,12 +1,19 @@
 package com.handy.base.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.text.TextUtils;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ObjectUtils;
 import com.handy.base.utils.androidutilcode.Utils;
-import com.pgyersdk.crash.PgyCrashManager;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.tencent.bugly.crashreport.CrashReport;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
@@ -20,11 +27,14 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  */
 public abstract class BaseApplication extends Application {
 
+    public String buglyId = "";
+    public boolean isBuglyDebug = AppUtils.isAppDebug();
+
     public LogUtils.Config config;
 
+    public boolean isInitBugly = false;
     public boolean isInitLogUtils = true;
     public boolean isUseCuntomCrashUtil = true;
-    public boolean isInitPgyCrashManager = false;
 
     @Override
     public void onCreate() {
@@ -73,13 +83,50 @@ public abstract class BaseApplication extends Application {
                 LogUtils.d(config.toString());
             }
 
-            /* 初始化蒲公英内测功能 */
-            if (isInitPgyCrashManager) {
-                PgyCrashManager.register(getApplicationContext());
-                LogUtils.d("蒲公英内测功能已注册");
+            /* 初始化腾讯Bugly应用分析上报功能 */
+            if (isInitBugly && ObjectUtils.isNotEmpty(buglyId)) {
+                Context context = getApplicationContext();
+                // 获取当前包名
+                String packageName = context.getPackageName();
+                // 获取当前进程名
+                String processName = getProcessName(android.os.Process.myPid());
+                // 设置是否为上报进程
+                CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
+                strategy.setUploadProcess(processName == null || processName.equals(packageName));
+                // 初始化Bugly
+                CrashReport.initCrashReport(context, buglyId, isBuglyDebug, strategy);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取进程号对应的进程名
+     *
+     * @param pid 进程号
+     * @return 进程名
+     */
+    private String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
     }
 }
