@@ -28,12 +28,10 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  */
 public abstract class BaseApplication extends Application {
 
-    public String buglyId = "";
-    public boolean isBuglyDebug = AppUtils.isAppDebug();
-
     public LogUtils.Config config;
 
-    public boolean isInitBugly = false;
+    public String buglyId = "";
+    public boolean isBuglyDebug = true;
     public boolean isInitLogUtils = true;
     public boolean isUseCuntomCrashUtil = true;
 
@@ -85,7 +83,7 @@ public abstract class BaseApplication extends Application {
             }
 
             /* 初始化腾讯Bugly应用分析上报功能 */
-            if (isInitBugly && ObjectUtils.isNotEmpty(buglyId)) {
+            if (ObjectUtils.isNotEmpty(buglyId)) {
                 Context context = getApplicationContext();
                 // 获取当前包名
                 String packageName = context.getPackageName();
