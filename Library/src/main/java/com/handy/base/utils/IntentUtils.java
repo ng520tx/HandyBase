@@ -21,30 +21,34 @@ public final class IntentUtils {
     public static void openActivity(Activity activity, Class<?> clss, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         activity.startActivity(intent);
-        if (isFinish)
+        if (isFinish) {
             activity.finish();
+        }
     }
 
     public static void openActivity(Activity activity, Class<?> clss, Bundle bundle, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         intent.putExtras(bundle);
         activity.startActivity(intent);
-        if (isFinish)
+        if (isFinish) {
             activity.finish();
+        }
     }
 
     public static void openActivityForResult(Activity activity, Class<?> clss, int requestCode, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         activity.startActivityForResult(intent, requestCode);
-        if (isFinish)
+        if (isFinish) {
             activity.finish();
+        }
     }
 
     public static void openActivityForResult(Activity activity, Class<?> clss, Bundle bundle, int requestCode, boolean isFinish) {
         Intent intent = new Intent(activity, clss);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, requestCode);
-        if (isFinish)
+        if (isFinish) {
             activity.finish();
+        }
     }
 }

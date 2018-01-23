@@ -77,7 +77,9 @@ public class ImageUtils {
                                           final float x,
                                           final float y,
                                           final boolean recycle) {
-        if (isEmptyBitmap(src) || content == null) return null;
+        if (isEmptyBitmap(src) || content == null) {
+            return null;
+        }
         Bitmap ret = src.copy(src.getConfig(), true);
         TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         Canvas canvas = new Canvas(ret);
@@ -88,7 +90,9 @@ public class ImageUtils {
         StaticLayout layout = new StaticLayout(content, paint, (int) (ret.getWidth() - x), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
         canvas.translate(x, y);
         layout.draw(canvas);
-        if (recycle && !src.isRecycled()) src.recycle();
+        if (recycle && !src.isRecycled()) {
+            src.recycle();
+        }
         return ret;
     }
 
@@ -118,7 +122,9 @@ public class ImageUtils {
      * @return 带有图片水印的图片
      */
     public static Bitmap addImageWatermark(final Bitmap src, final Bitmap watermark, final int x, final int y, final int alpha, final boolean recycle) {
-        if (isEmptyBitmap(src)) return null;
+        if (isEmptyBitmap(src)) {
+            return null;
+        }
         Bitmap ret = src.copy(src.getConfig(), true);
         if (!isEmptyBitmap(watermark)) {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -126,7 +132,9 @@ public class ImageUtils {
             paint.setAlpha(alpha);
             canvas.drawBitmap(watermark, x, y, paint);
         }
-        if (recycle && !src.isRecycled()) src.recycle();
+        if (recycle && !src.isRecycled()) {
+            src.recycle();
+        }
         return ret;
     }
 

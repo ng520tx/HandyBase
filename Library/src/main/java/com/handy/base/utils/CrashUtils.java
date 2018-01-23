@@ -88,7 +88,9 @@ public final class CrashUtils {
                 Date now = new Date(System.currentTimeMillis());
                 String fileName = FORMAT.format(now) + ".txt";
                 final String fullPath = (dir == null ? defaultDir : dir) + fileName;
-                if (!createOrExistsFile(fullPath)) return;
+                if (!createOrExistsFile(fullPath)) {
+                    return;
+                }
                 if (sExecutor == null) {
                     sExecutor = Executors.newSingleThreadExecutor();
                 }
@@ -157,9 +159,9 @@ public final class CrashUtils {
             dir = crashDir.endsWith(FILE_SEP) ? crashDir : crashDir + FILE_SEP;
         }
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                && Utils.getApp().getExternalCacheDir() != null)
+                && Utils.getApp().getExternalCacheDir() != null) {
             defaultDir = Utils.getApp().getExternalCacheDir() + FILE_SEP + "crash" + FILE_SEP;
-        else {
+        } else {
             defaultDir = Utils.getApp().getCacheDir() + FILE_SEP + "crash" + FILE_SEP;
         }
         Thread.setDefaultUncaughtExceptionHandler(UNCAUGHT_EXCEPTION_HANDLER);
@@ -167,8 +169,12 @@ public final class CrashUtils {
 
     private static boolean createOrExistsFile(final String filePath) {
         File file = new File(filePath);
-        if (file.exists()) return file.isFile();
-        if (!createOrExistsDir(file.getParentFile())) return false;
+        if (file.exists()) {
+            return file.isFile();
+        }
+        if (!createOrExistsDir(file.getParentFile())) {
+            return false;
+        }
         try {
             return file.createNewFile();
         } catch (IOException e) {
@@ -182,7 +188,9 @@ public final class CrashUtils {
     }
 
     private static boolean isSpace(final String s) {
-        if (s == null) return true;
+        if (s == null) {
+            return true;
+        }
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
                 return false;
