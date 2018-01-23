@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import java.util.List;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * Created by LiuJie on 2017/4/19.
@@ -24,8 +24,9 @@ public class SubActivity extends BaseActivity {
         findViewById(R.id.crashTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> strings = null;
-                String str = strings.get(0);
+//                List<String> strings = null;
+//                String str = strings.get(0);
+                CrashReport.testJavaCrash();
             }
         });
     }
