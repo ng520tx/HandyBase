@@ -5,12 +5,12 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ScreenUtils;
-import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import java.io.Serializable;
 
@@ -25,7 +25,7 @@ import io.reactivex.disposables.Disposable;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment extends RxFragment implements BaseApplicationApi.BaseFragmentApi, BaseApplicationApi.BaseRxJavaApi, Serializable {
+public abstract class BaseFragment extends Fragment implements BaseApplicationApi.BaseFragmentApi, BaseApplicationApi.BaseRxJavaApi, Serializable {
     /**
      * 手机屏幕宽度参数
      */

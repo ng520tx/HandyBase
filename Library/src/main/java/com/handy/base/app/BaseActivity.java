@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -15,7 +16,6 @@ import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.R;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 import io.reactivex.disposables.CompositeDisposable;
@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements BaseApplicationApi.BaseActivityApi, BaseApplicationApi.BaseRxJavaApi, BGASwipeBackHelper.Delegate {
+public abstract class BaseActivity extends AppCompatActivity implements BaseApplicationApi.BaseActivityApi, BaseApplicationApi.BaseRxJavaApi, BGASwipeBackHelper.Delegate {
     /**
      * 屏幕宽度
      */
@@ -67,6 +67,10 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
      * onStart中权限扫描
      */
     public boolean isCheckPermissionsHDB = true;
+    /**
+     * 是否使用作化返回功能
+     */
+    public boolean isUseSwipeBackFinish = false;
 
     public Context context;
     public Activity activity;
@@ -80,7 +84,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        initSwipeBackFinish();
         super.onCreate(savedInstanceState);
         try {
             this.isAlive = true;
@@ -90,6 +93,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
             this.savedInstanceState = savedInstanceState;
             this.screenWidth = ScreenUtils.getScreenWidth();
             this.screenHeight = ScreenUtils.getScreenHeight();
+
+            initSwipeBackFinish();
 
             ActivityStackUtils.addActivity(this);
         } catch (Exception e) {
@@ -280,7 +285,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
      */
     @Override
     public boolean isSupportSwipeBack() {
-        return true;
+        return isUseSwipeBackFinish;
     }
 
 
