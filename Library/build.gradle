@@ -65,23 +65,16 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.8'
     //RXAndroid
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    //RxLifeCycle2
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     //BGASwipeBackLayout
     compile 'cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar'
-    //Fragmentation
-    compile 'me.yokeyword:fragmentation:1.2.4'
-    //HandyAdapter
-    compile 'com.github.Handy045:HandyAdapter:1.0.1'
     //BaseRecyclerViewAdapterHelper
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     //Glide
     compile 'com.github.bumptech.glide:glide:4.5.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
     //ButterKnife
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
 
 //-------------------- jitPack生成文档 --------------------
