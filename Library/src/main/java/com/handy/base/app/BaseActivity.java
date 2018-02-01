@@ -31,7 +31,7 @@ import io.reactivex.subjects.Subject;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements Lifecycleable<ActivityEvent>, BaseApplicationApi.BaseActivityApi, BGASwipeBackHelper.Delegate {
+public abstract class BaseActivity extends RxAppCompatActivity implements Lifecycleable<ActivityEvent>, BaseApplicationApi.BaseActivityApi {
     /**
      * 屏幕宽度
      */
