@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.blankj.utilcode.util.ScreenUtils;
-import com.handy.base.rxjava.FragmentLifecycleable;
+import com.handy.base.rxjava.lifecycle.FragmentLifecycleable;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
