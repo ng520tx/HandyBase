@@ -65,7 +65,7 @@ public class BaseApplicationApi {
 
         /**
          * <h4>界面结束销毁时事务处理</h4>
-         * 在{@link BaseActivity#onPause()} 方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
+         * 在{@link BaseActivity#onPause()} 方法中当 {@link BaseActivity#isFinishing()} ==true时调用此方法。
          */
         void onFinishing();
 
@@ -114,5 +114,11 @@ public class BaseApplicationApi {
          * 当界面可见且当前Fragment已执行{@link BaseFragment#onViewCreated(View, Bundle)} 时，在 {@link BaseFragment#setUserVisibleHint(boolean)} ()} 方法中被调用，用于Fragment懒加载事务处理。
          */
         void onLazyLoadHDB();
+
+        /**
+         * <h4>界面结束销毁时事务处理</h4>
+         * 在{@link BaseFragment#onDestroy()} 方法中被调用。
+         */
+        void onFinishing();
     }
 }
