@@ -4,18 +4,17 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ScreenUtils;
+import com.handy.base.rxjava.Lifecycleable;
+import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
-import java.io.Serializable;
-
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * <pre>
@@ -25,7 +24,7 @@ import io.reactivex.disposables.Disposable;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment extends Fragment implements BaseApplicationApi.BaseFragmentApi, BaseApplicationApi.BaseRxJavaApi, Serializable {
+public abstract class BaseFragment extends RxFragment implements BaseApplicationApi.BaseFragmentApi, Lifecycleable<FragmentEvent> {
     /**
      * 手机屏幕宽度参数
      */
@@ -34,31 +33,32 @@ public abstract class BaseFragment extends Fragment implements BaseApplicationAp
      * 手机屏幕高度参数
      */
     public int screenHeight;
-
     /**
-     * Fragment的活跃状态
+     * 界面视图布局
      */
-    public boolean isAlive = false;
+    public View rootLayout;
+    /**
+     * Fragment是否已创建成功，用于控制在Fragment创建之前不调用 {@link BaseFragment#setUserVisibleHint(boolean)} 方法实现内部的 {@link BaseFragment#onVisiableHDB()} ()} 和 {@link BaseFragment#onLazyLoadHDB()} 方法
+     */
+    public boolean isCreateed = false;
     /**
      * onViewCreated中初始化界面视图
      */
     public boolean isInitViewHDB = true;
     /**
-     * onActivityCreated中初始化界面视图
+     * onActivityCreated中初始化界面数据
      */
     public boolean isInitDataHDB = true;
     /**
-     * 用于控制每个Fragment进入onResume时，是否重新执行onRequest()方法
+     * 用于控制每个Fragment进入{@link BaseFragment#setUserVisibleHint(boolean)} 时，是否重新执行onRequest()方法
      */
-    public boolean isOnRequestHDB = true;
-
-    public View rootLayout;
+    public boolean isLazyLoadHDB = true;
 
     public Context context;
     public Activity activity;
     public Application application;
 
-    public CompositeDisposable compositeDisposable = null;
+    private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
 
     @Override
     public void onAttach(Activity activity) {
@@ -82,28 +82,20 @@ public abstract class BaseFragment extends Fragment implements BaseApplicationAp
             this.activity = getActivity();
         }
 
-        this.isAlive = true;
+        assert activity != null;
         this.application = activity.getApplication();
         this.screenWidth = ScreenUtils.getScreenWidth();
         this.screenHeight = ScreenUtils.getScreenHeight();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (rootLayout == null) {
-            this.rootLayout = createViewHDB(inflater, container, savedInstanceState);
-        }
-        return this.rootLayout != null ? this.rootLayout : super.onCreateView(inflater, container, savedInstanceState);
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.isCreateed = true;
         if (rootLayout == null) {
             rootLayout = view;
         }
-
+        /* 初始化界面数据 */
         if (isInitViewHDB) {
             initViewHDB(view, savedInstanceState);
             isInitViewHDB = false;
@@ -122,11 +114,19 @@ public abstract class BaseFragment extends Fragment implements BaseApplicationAp
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint() && isAlive) {
+        if (getUserVisibleHint() && isCreateed) {
             onRefreshHDB();
-            if (isOnRequestHDB) {
-                onRequestHDB();
-                isOnRequestHDB = false;
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isCreateed) {
+            onVisiableHDB();
+            if (isLazyLoadHDB) {
+                onLazyLoadHDB();
+                isLazyLoadHDB = false;
             }
         }
     }
@@ -134,26 +134,13 @@ public abstract class BaseFragment extends Fragment implements BaseApplicationAp
     @Override
     public void onDestroy() {
         super.onDestroy();
-        clearRxDisposable();
-
-        this.isAlive = false;
+        this.isCreateed = false;
     }
 
+    @NonNull
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isAlive) {
-            onVisiableHDB();
-            if (isOnRequestHDB) {
-                onRequestHDB();
-                isOnRequestHDB = false;
-            }
-        }
-    }
-
-    @Override
-    public View createViewHDB(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return null;
+    public Subject<FragmentEvent> provideLifecycleSubject() {
+        return mLifecycleSubject;
     }
 
     @Override
@@ -171,28 +158,12 @@ public abstract class BaseFragment extends Fragment implements BaseApplicationAp
     }
 
     @Override
-    public void onRequestHDB() {
+    public void onLazyLoadHDB() {
 
     }
 
     @Override
     public void onVisiableHDB() {
 
-    }
-
-    @Override
-    public void addRxDisposable(Disposable disposable) {
-        if (compositeDisposable == null) {
-            compositeDisposable = new CompositeDisposable();
-        }
-        compositeDisposable.add(disposable);
-    }
-
-    @Override
-    public void clearRxDisposable() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
-            compositeDisposable = null;
-        }
     }
 }
