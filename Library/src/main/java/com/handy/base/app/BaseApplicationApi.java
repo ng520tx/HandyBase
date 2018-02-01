@@ -81,7 +81,7 @@ public class BaseApplicationApi {
          * 若不执行权限扫描，此方法无用。<br>
          * 若执行扫描，当安卓版本大于等于23且发现有未开启的权限时调用此方法。用于弹出提示框提示用户在系统应用设置界面中手动开启权限。
          */
-        void onPermissionRejectionHDB();
+        void onPermissionRejectionHDB(String[] permissions);
     }
 
     interface BaseFragmentApi {

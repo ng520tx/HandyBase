@@ -177,7 +177,7 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
                 onPermissionSuccessHDB();
             }
         } else {
-            onPermissionRejectionHDB();
+            onPermissionRejectionHDB(permissions);
         }
     }
 
@@ -270,7 +270,7 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     }
 
     @Override
-    public void onPermissionRejectionHDB() {
+    public void onPermissionRejectionHDB(String[] permissions) {
         /*
          * //发现未启用的权限时，可以参考一下进行处理。
          * SweetDialogUT.showNormalDialog((BaseActivity) activity, "发现未启用权限", "为保障应用正常使用，请开启应用权限", "开启", "退出", new SweetAlertDialog.OnSweetClickListener() {
