@@ -11,7 +11,7 @@ package com.handy.base.mvp;
 public interface IModel {
 
     /**
-     * 在MVP框架中，执行{@link BasePresenter#onDestroy()}方法时会默认调用{@link IModel#onDestroy()}
+     * 在MVP框架中，执行 {@link BasePresenter#onDestroy()} 方法时会默认调用 {@link IModel#onDestroy()}
      */
     void onDestroy();
 }
