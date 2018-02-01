@@ -3,11 +3,7 @@ package com.handy.base.app;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * <pre>
@@ -19,145 +15,104 @@ import io.reactivex.disposables.Disposable;
  */
 public class BaseApplicationApi {
     interface BaseActivityApi {
-
         /**
-         * <pre>
-         *  初始化界面视图布局
-         *  在onCreate被调用，被调用后若视图设置成功则
-         * </pre>
+         * <h4>绑定界面视图布局</h4>
+         * 替换 {@link BaseActivity#onCreate(Bundle)} 实现里的 setContentView()方法，替换后可使用 {@link BaseActivity#rootLayout} 根布局。
          */
         boolean setContentViewHDB(@LayoutRes int layoutResId);
 
         /**
+         * <h4>加载 {@link BaseActivity#getIntent()} 内容数据</h4>
+         * 在onStart中，当意图内容不为null且size大于0时被调用。<br>
+         * 方法的实现中需要注意判断bundle是否为null：
          * <pre>
-         *  初始化意图内容数据
-         *  在onStart中，当意图内容不为null且size大于0时被调用
+         * if (bundle != null && bundle.size() > 0) {
+         *     ......
+         * }
          * </pre>
          */
         void initIntentBundle(Bundle intentBundle);
 
         /**
-         * <pre>
-         *  用户检查权限
-         *  在onStart方法中被调用
-         * </pre>
+         * <h4>适配Android6.0，检查应用权限</h4>
+         * 在 {@link BaseActivity#onStart()} 方法中被调用，建议只在第一个启动的 Activity 检查权限。
          */
         void checkPermissionsHDB();
 
         /**
-         * <pre>
-         *  初始化界面视图
-         *  在onStart方法中被调用
-         * </pre>
+         * <h4>初始化界面控件</h4>
+         * 在 {@link BaseActivity#onStart()} 方法中被调用，用于绑定布局控件、初始化控件点击事件等。
          */
         void initViewHDB(@Nullable Bundle savedInstanceState);
 
         /**
-         * <pre>
-         *  初始化界面数据
-         *  在onStart方法中被调用
-         * </pre>
+         * <h4>初始化界面数据</h4>
+         * 在 {@link BaseActivity#onStart()} 方法中被调用，用于控件数据加载、全局变量实例化等。
          */
         void initDataHDB();
 
         /**
-         * <pre>
-         *  刷新界面视图或数据
-         *  每次进入onResume方法时被调用
-         * </pre>
+         * <h4>刷新界面视图或数据</h4>
+         * 在 {@link BaseActivity#onResume()} 方法中被调用，用于每次重新加载界面时加载数据、布局等。
          */
         void onRefreshHDB();
 
         /**
-         * <pre>
-         *  请求界面相关处理
-         *  在onResume方法中，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
-         * </pre>
+         * <h4>界面事务单次请求</h4>
+         * 在 {@link BaseActivity#onResume()} 方法中被调用，并由全局变量 {@link BaseActivity#isOnRequestHDB}控制在界面重新加载时是否执行，用于单次加载数据等。
          */
         void onRequestHDB();
 
         /**
-         * <pre>
-         *  当权限扫描通过时（全部权限均已开启）执行方法
-         *  回调接口，若不执行权限扫描，此方法无用。
-         *  若执行扫描，当安卓版本小于23或安卓版本大于等于23且权限均已开启时，会直接调用此方法。
-         * </pre>
+         * <h4>界面结束销毁时事务处理</h4>
+         * 在{@link BaseActivity#onPause()} 方法中被调用，当界面对用户可见且isRequesting==true时执行此方法，用于可能重复执行的操作。
+         */
+        void onFinishing();
+
+        /**
+         * <h4>权限扫描通过时事务处理</h4>
+         * 若不执行权限扫描，此方法无用。<br>
+         * 若执行扫描，当安卓版本小于23或安卓版本大于等于23且权限均已开启时调用此方法。
          */
         void onPermissionSuccessHDB();
 
         /**
-         * <pre>
-         *  当权限扫描不通过时执行方法
-         *  回调接口，若不执行权限扫描，此方法无用。
-         *  若执行扫描，当安卓版本大于等于23且发现未开启权限时，会直接调用此方法。
-         * </pre>
+         * <h4>权限扫描不通过时事务处理</h4>
+         * 若不执行权限扫描，此方法无用。<br>
+         * 若执行扫描，当安卓版本大于等于23且发现有未开启的权限时调用此方法。用于弹出提示框提示用户在系统应用设置界面中手动开启权限。
          */
         void onPermissionRejectionHDB();
     }
 
     interface BaseFragmentApi {
         /**
-         * <pre>
-         *  初始化界面视图
-         *  在onCreateView方法中被调用。
-         * </pre>
-         */
-        View createViewHDB(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
-
-        /**
-         * <pre>
-         *  初始化界面控件
-         *  在onViewCreated方法中被调用。
-         * </pre>
+         * <h4>初始化界面控件</h4>
+         * 在 {@link BaseFragment#onViewCreated(View, Bundle)} 方法中被调用，用于绑定布局控件、初始化控件点击事件等。
          */
         void initViewHDB(View view, @Nullable Bundle savedInstanceState);
 
         /**
-         * <pre>
-         *  初始化界面数据
-         *  在onActivityCreated方法中被调用。
-         * </pre>
+         * <h4>初始化界面数据</h4>
+         * 在 {@link BaseFragment#onActivityCreated(Bundle)} 方法中被调用，用于控件数据加载、全局变量实例化等。
          */
         void initDataHDB(@Nullable Bundle savedInstanceState);
 
         /**
-         * <pre>
-         *  刷新界面视图或数据
-         *  在onResume方法中被调用。
-         * </pre>
+         * <h4>刷新界面视图或数据</h4>
+         * 在 {@link BaseFragment#onResume()} 方法中被调用，用于每次重新加载界面时加载数据、布局等。
          */
         void onRefreshHDB();
 
         /**
-         * <pre>
-         *  界面可见时相关处理
-         *  在setUserVisibleHint方法中，当界面对用户可见时被调用。
-         * </pre>
+         * <h4>界面可见时相关处理</h4>
+         * 在 {@link BaseFragment#setUserVisibleHint(boolean)} 方法中被调用，用于每次界面可见时加载数据、布局等。
          */
         void onVisiableHDB();
 
         /**
-         * <pre>
-         *  请求界面相关处理
-         *  在setUserVisibleHint方法中，当界面对用户可见且isRequesting==true时被调用。
-         * </pre>
+         * <h4>Fragment懒加载方法</h4>
+         * 当界面可见且当前Fragment已执行{@link BaseFragment#onViewCreated(View, Bundle)} 时，在 {@link BaseFragment#setUserVisibleHint(boolean)} ()} 方法中被调用，用于Fragment懒加载事务处理。
          */
-        void onRequestHDB();
-    }
-
-    public interface BaseRxJavaApi {
-        /**
-         * <pre>
-         * 将所有disposable放入,集中处理
-         * </pre>
-         */
-        void addRxDisposable(Disposable disposable);
-
-        /**
-         * <pre>
-         * 保证activity结束时取消所有正在执行的订阅
-         * </pre>
-         */
-        void clearRxDisposable();
+        void onLazyLoadHDB();
     }
 }
