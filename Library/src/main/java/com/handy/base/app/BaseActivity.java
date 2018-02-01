@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.R;
-import com.handy.base.rxjava.Lifecycleable;
+import com.handy.base.rxjava.ActivityLifecycleable;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -31,7 +31,7 @@ import io.reactivex.subjects.Subject;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements Lifecycleable<ActivityEvent>, BaseApplicationApi.BaseActivityApi {
+public abstract class BaseActivity extends RxAppCompatActivity implements BaseApplicationApi.BaseActivityApi, ActivityLifecycleable {
     /**
      * 屏幕宽度
      */

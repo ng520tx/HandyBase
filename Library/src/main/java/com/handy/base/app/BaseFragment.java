@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.blankj.utilcode.util.ScreenUtils;
-import com.handy.base.rxjava.Lifecycleable;
+import com.handy.base.rxjava.FragmentLifecycleable;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
@@ -24,7 +24,7 @@ import io.reactivex.subjects.Subject;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment extends RxFragment implements BaseApplicationApi.BaseFragmentApi, Lifecycleable<FragmentEvent> {
+public abstract class BaseFragment extends RxFragment implements BaseApplicationApi.BaseFragmentApi, FragmentLifecycleable {
     /**
      * 手机屏幕宽度参数
      */
