@@ -9,9 +9,12 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.blankj.utilcode.util.ScreenUtils;
+import com.handy.base.mvp.IPresenter;
 import com.handy.base.rxjava.lifecycle.FragmentLifecycleable;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxFragment;
+
+import javax.inject.Inject;
 
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
@@ -24,7 +27,7 @@ import io.reactivex.subjects.Subject;
  *  desc  : Fragment基类
  * </pre>
  */
-public abstract class BaseFragment extends RxFragment implements BaseApplicationApi.BaseFragmentApi, FragmentLifecycleable {
+public abstract class BaseFragment<P extends IPresenter> extends RxFragment implements BaseApplicationApi.BaseFragmentApi, FragmentLifecycleable {
     /**
      * 手机屏幕宽度参数
      */
@@ -53,6 +56,9 @@ public abstract class BaseFragment extends RxFragment implements BaseApplication
      * 用于控制每个Fragment进入{@link BaseFragment#setUserVisibleHint(boolean)} 时，是否重新执行onRequest()方法
      */
     public boolean isLazyLoadHDB = true;
+
+    @Inject
+    protected P presenter;
 
     public Context context;
     public Activity activity;
@@ -133,8 +139,14 @@ public abstract class BaseFragment extends RxFragment implements BaseApplication
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        onFinishing();
+
+        if (this.presenter != null) {
+            this.presenter.onDestroy();//释放资源
+            this.presenter = null;
+        }
         this.isCreateed = false;
+        super.onDestroy();
     }
 
     @NonNull
@@ -164,6 +176,11 @@ public abstract class BaseFragment extends RxFragment implements BaseApplication
 
     @Override
     public void onVisiableHDB() {
+
+    }
+
+    @Override
+    public void onFinishing() {
 
     }
 }

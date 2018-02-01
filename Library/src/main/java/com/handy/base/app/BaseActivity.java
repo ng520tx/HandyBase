@@ -13,11 +13,14 @@ import android.view.View;
 
 import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.R;
+import com.handy.base.mvp.IPresenter;
 import com.handy.base.rxjava.lifecycle.ActivityLifecycleable;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import javax.inject.Inject;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 import io.reactivex.subjects.BehaviorSubject;
@@ -31,7 +34,7 @@ import io.reactivex.subjects.Subject;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements BaseApplicationApi.BaseActivityApi, ActivityLifecycleable {
+public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActivity implements BaseApplicationApi.BaseActivityApi, ActivityLifecycleable {
     /**
      * 屏幕宽度
      */
@@ -68,6 +71,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
      * 是否使用作化返回功能
      */
     public boolean isUseSwipeBackFinish = false;
+
+    @Inject
+    protected P presenter;
 
     public Context context;
     public Activity activity;
@@ -142,6 +148,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements BaseAp
         super.onPause();
         if (isFinishing()) {
             onFinishing();
+
+            if (this.presenter != null) {
+                this.presenter.onDestroy();//释放资源
+                this.presenter = null;
+            }
             ActivityStackUtils.finishChoiceDesc(this);
         }
     }
