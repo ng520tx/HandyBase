@@ -65,6 +65,9 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.1.8'
     //RXAndroid
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //RxLifeCycle2
+    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     //BGASwipeBackLayout
     api 'cn.bingoogolapple:bga-swipebacklayout:1.1.8@aar'
     //BaseRecyclerViewAdapterHelper
