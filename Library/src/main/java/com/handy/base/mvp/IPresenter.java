@@ -32,7 +32,7 @@ public interface IPresenter {
     /**
      * 将RxJava任务加入集合统一管理生命周期<br>
      * 在IPresenter的实现类中创建全局变量 CompositeDisposable。<br>
-     * 将{@link Observer#onSubscribe(Disposable)}方法中的{@link Disposable}添加到全局变量CompositeDisposable中统一管理。<br>
+     * 将 {@link Observer#onSubscribe(Disposable)} 方法中的 {@link Disposable} 添加到全局变量 CompositeDisposable 中统一管理。<br>
      * 具体实现内容：
      * <pre>
      * if (mCompositeDisposable == null) {
