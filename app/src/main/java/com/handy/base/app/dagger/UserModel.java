@@ -1,6 +1,7 @@
 package com.handy.base.app.dagger;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.handy.base.mvp.BaseModel;
 
 import javax.inject.Inject;
 
@@ -12,7 +13,7 @@ import javax.inject.Inject;
  * @date Created in 2018/2/2 下午4:43
  * @modified By LiuJie
  */
-public class UserModel implements UserContract.userModel {
+public class UserModel extends BaseModel implements UserContract.userModel {
     @Inject
     UserContract.userView view;
 
