@@ -14,11 +14,11 @@ import javax.inject.Inject;
  * @modified By LiuJie
  */
 public class UserModel extends BaseModel implements UserContract.userModel {
-    @Inject
-    UserContract.userView view;
+    private UserContract.userView view;
 
     @Inject
-    public UserModel() {
+    public UserModel(UserContract.userView view) {
+        this.view = view;
         LogUtils.d("UserModel is Created");
     }
 
