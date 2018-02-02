@@ -16,7 +16,6 @@ import com.handy.base.app.R;
  */
 public class UserActivity extends BaseActivity<UserContract.userPresenter> implements UserContract.userView {
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
