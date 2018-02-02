@@ -10,7 +10,7 @@ import dagger.Component;
  * @date Created in 2018/2/2 上午1:59
  * @modified By LiuJie
  */
-@Component(modules = {UserModel.class})
+@Component(modules = {UserModule.class})
 public interface UserComponent {
     void inject(UserActivity userActivity);
 }

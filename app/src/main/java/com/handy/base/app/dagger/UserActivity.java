@@ -21,7 +21,7 @@ public class UserActivity extends BaseActivity<UserContract.userPresenter> imple
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DaggerUserComponent.builder().userModel(new UserModel(this)).build().inject(this);
+        DaggerUserComponent.builder().userModel(new UserModule(this)).build().inject(this);
     }
 
     @Override
