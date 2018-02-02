@@ -1,5 +1,9 @@
 package com.handy.base.app.dagger;
 
+import com.blankj.utilcode.util.LogUtils;
+
+import javax.inject.Inject;
+
 /**
  * 中文名称
  *
@@ -8,5 +12,17 @@ package com.handy.base.app.dagger;
  * @date Created in 2018/2/2 下午4:43
  * @modified By LiuJie
  */
-public class UserModel {
+public class UserModel implements UserContract.userModel {
+    @Inject
+    UserContract.userView view;
+
+    @Inject
+    public UserModel() {
+        LogUtils.d("UserModel is Created");
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
 }
