@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import com.handy.base.app.BaseActivity;
 import com.handy.base.app.R;
 
-import javax.inject.Inject;
-
 /**
  * 中文名称
  *
@@ -16,10 +14,8 @@ import javax.inject.Inject;
  * @date Created in 2018/2/2 上午1:35
  * @modified By LiuJie
  */
-public class UserActivity extends BaseActivity implements UserContract.userView {
+public class UserActivity extends BaseActivity<UserContract.userPresenter> implements UserContract.userView {
 
-    @Inject
-    UserContract.userPresenter userPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

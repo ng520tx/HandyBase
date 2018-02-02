@@ -15,7 +15,6 @@ import dagger.Provides;
 public class UserModel implements UserContract.userModel {
 
     private UserActivity userActivity;
-    private UserContract.userPresenter presenter;
 
     public UserModel(UserActivity userActivity) {
         this.userActivity = userActivity;

@@ -15,10 +15,10 @@ import javax.inject.Inject;
  * @date Created in 2018/2/2 上午1:37
  * @modified By LiuJie
  */
-public class UserPresenter extends BasePresenter<UserModel, UserActivity> implements UserContract.userPresenter {
+public class UserPresenter extends BasePresenter<UserContract.userModel, UserContract.userView> implements UserContract.userPresenter {
 
     @Inject
-    public UserPresenter(@NonNull UserModel model, @NonNull UserActivity view) {
+    public UserPresenter(@NonNull UserContract.userModel model, @NonNull UserContract.userView view) {
         super(model, view);
         LogUtils.d("UserPresenter is Created");
     }
