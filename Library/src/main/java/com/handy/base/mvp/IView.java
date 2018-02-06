@@ -1,6 +1,6 @@
 package com.handy.base.mvp;
 
-import android.app.Activity;
+import com.handy.base.app.BaseActivity;
 
 /**
  * Mvp框架中 View层通用接口
@@ -19,12 +19,7 @@ public interface IView {
     String getViewTag();
 
     /**
-     * 杀死自己，用于注销事务
-     */
-    void killMyself();
-
-    /**
      * 通过接口获取Activity
      */
-    Activity getActivity();
+    BaseActivity getBaseActivity();
 }
