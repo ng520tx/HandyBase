@@ -76,8 +76,8 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     protected P presenter;
 
     public Context context;
-    public Activity activity;
     public Application application;
+    public BaseActivity baseActivity;
 
     public Bundle intentBundle = null;
     public Bundle savedInstanceState = null;
@@ -91,7 +91,7 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
         super.onCreate(savedInstanceState);
         try {
             this.context = this;
-            this.activity = this;
+            this.baseActivity = this;
             this.application = getApplication();
             this.savedInstanceState = savedInstanceState;
             this.screenWidth = ScreenUtils.getScreenWidth();
@@ -173,7 +173,7 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (!PermissionsUtils.checkDeniedPermissions(activity, true)) {
+            if (!PermissionsUtils.checkDeniedPermissions(baseActivity, true)) {
                 onPermissionSuccessHDB();
             }
         } else {
@@ -240,7 +240,7 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     @Override
     public void checkPermissionsHDB() {
-        if (!PermissionsUtils.checkDeniedPermissions(activity, true)) {
+        if (!PermissionsUtils.checkDeniedPermissions(baseActivity, true)) {
             onPermissionSuccessHDB();
         }
     }
