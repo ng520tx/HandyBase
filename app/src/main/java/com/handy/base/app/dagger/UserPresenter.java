@@ -17,13 +17,12 @@ import javax.inject.Inject;
  */
 public class UserPresenter extends BasePresenter<UserContract.userView> implements UserContract.userPresenter {
 
-    @Inject
     UserContract.userModel model;
 
     @Inject
-    public UserPresenter(@NonNull UserContract.userView view) {
+    public UserPresenter(@NonNull UserContract.userModel userModel, @NonNull UserContract.userView view) {
         super(view);
-        addIModel(model);
+        addIModel(this.model = userModel);
         LogUtils.d("UserPresenter is Created");
     }
 }
