@@ -2,7 +2,6 @@ package com.handy.base.mvp;
 
 import android.app.Activity;
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
@@ -23,17 +22,17 @@ import io.reactivex.disposables.Disposable;
  * @date Created in 2018/2/1 上午11:16
  * @modified By LiuJie
  */
-public class BasePresenter<V extends IView> implements IPresenter, LifecycleObserver {
+public class BasePresenter<V extends IView> implements IPresenter {
     protected CompositeDisposable mCompositeDisposable;
 
     protected V view;
-    protected List<BaseModel> baseModels = new ArrayList<>();
+    protected List<IModel> iModels = new ArrayList<>();
 
     /**
      * 如果当前页面同时需要 Model 层和 View 层,则使用此构造函数(默认)
      */
-    public BasePresenter(@NonNull List<BaseModel> baseModels, @NonNull V view) {
-        this.baseModels = new ArrayList<>(baseModels);
+    public BasePresenter(@NonNull List<IModel> iModels, @NonNull V view) {
+        this.iModels = new ArrayList<>(iModels);
         this.view = view;
         onStart();
     }
@@ -56,17 +55,17 @@ public class BasePresenter<V extends IView> implements IPresenter, LifecycleObse
         if (view != null && view instanceof LifecycleOwner) {
             ((LifecycleOwner) view).getLifecycle().addObserver(this);
         }
-        if (ObjectUtils.isNotEmpty(baseModels)) {
-            for (BaseModel baseModel : baseModels) {
-                ((LifecycleOwner) view).getLifecycle().addObserver(baseModel);
+        if (ObjectUtils.isNotEmpty(iModels)) {
+            for (IModel iModel : iModels) {
+                ((LifecycleOwner) view).getLifecycle().addObserver(iModel);
             }
         }
     }
 
     @Override
-    public void addModel(@NonNull BaseModel baseModel) {
-        baseModels.add(baseModel);
-        ((LifecycleOwner) view).getLifecycle().addObserver(baseModel);
+    public void addIModel(@NonNull IModel iModel) {
+        iModels.add(iModel);
+        ((LifecycleOwner) view).getLifecycle().addObserver(iModel);
     }
 
     /**
@@ -75,11 +74,11 @@ public class BasePresenter<V extends IView> implements IPresenter, LifecycleObse
     @Override
     public void onDestroy() {
         unDispose();
-        if (ObjectUtils.isNotEmpty(baseModels)) {
-            for (BaseModel baseModel : baseModels) {
-                baseModel.onDestroy();
+        if (ObjectUtils.isNotEmpty(iModels)) {
+            for (IModel iModel : iModels) {
+                iModel.onDestroy();
             }
-            baseModels.clear();
+            iModels.clear();
         }
         this.view = null;
         this.mCompositeDisposable = null;

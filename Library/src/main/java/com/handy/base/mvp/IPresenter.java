@@ -1,6 +1,7 @@
 package com.handy.base.mvp;
 
 import android.app.Activity;
+import android.arch.lifecycle.LifecycleObserver;
 import android.support.annotation.NonNull;
 
 import com.trello.rxlifecycle2.RxLifecycle;
@@ -17,7 +18,7 @@ import io.reactivex.disposables.Disposable;
  * @date Created in 2018/2/1 上午11:16
  * @modified By LiuJie
  */
-public interface IPresenter {
+public interface IPresenter extends LifecycleObserver {
 
     /**
      * 做一些初始化操作
@@ -27,9 +28,9 @@ public interface IPresenter {
     /**
      * 向Presenter添加Model，用以批量绑定、解绑等
      *
-     * @param baseModel
+     * @param iModel
      */
-    void addModel(BaseModel baseModel);
+    void addIModel(IModel iModel);
 
     /**
      * 在框架中 {@link Activity#onDestroy()} 时会默认调用 {@link IPresenter#onDestroy()}

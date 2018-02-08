@@ -1,7 +1,6 @@
 package com.handy.base.mvp;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 
@@ -16,7 +15,7 @@ import com.handy.base.retrofit.IRetrofitManager;
  * @date Created in 2018/2/1 上午11:16
  * @modified By LiuJie
  */
-public class BaseModel implements IModel, LifecycleObserver {
+public class BaseModel implements IModel {
 
     protected IRetrofitManager iRetrofitManager;
 
