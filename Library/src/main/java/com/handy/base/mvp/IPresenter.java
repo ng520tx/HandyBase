@@ -25,6 +25,13 @@ public interface IPresenter {
     void onStart();
 
     /**
+     * 向Presenter添加Model，用以批量绑定、解绑等
+     *
+     * @param baseModel
+     */
+    void addModel(BaseModel baseModel);
+
+    /**
      * 在框架中 {@link Activity#onDestroy()} 时会默认调用 {@link IPresenter#onDestroy()}
      */
     void onDestroy();
