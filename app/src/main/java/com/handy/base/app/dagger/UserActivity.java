@@ -1,6 +1,5 @@
 package com.handy.base.app.dagger;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -31,12 +30,7 @@ public class UserActivity extends BaseActivity<UserContract.userPresenter> imple
     }
 
     @Override
-    public void killMyself() {
-
-    }
-
-    @Override
-    public Activity getActivity() {
-        return activity;
+    public BaseActivity getBaseActivity() {
+        return this;
     }
 }
