@@ -31,8 +31,8 @@ public class UserModule implements UserContract.userModel {
     }
 
     @Provides
-    public UserContract.userPresenter providesPresenter(UserContract.userModel model, UserContract.userView view) {
-        return new UserPresenter(model, view);
+    public UserContract.userPresenter providesPresenter(UserContract.userView view) {
+        return new UserPresenter(view);
     }
 
     @Override
