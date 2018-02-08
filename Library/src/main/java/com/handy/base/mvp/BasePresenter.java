@@ -11,7 +11,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.SupportActivity;
 import android.view.View;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.trello.rxlifecycle2.RxLifecycle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -25,28 +29,23 @@ import io.reactivex.functions.Action;
  * @date Created in 2018/2/1 上午11:16
  * @modified By LiuJie
  */
-public class BasePresenter<M extends IModel, V extends IView> implements IPresenter, LifecycleObserver {
+public class BasePresenter<V extends IView> implements IPresenter, LifecycleObserver {
     protected CompositeDisposable mCompositeDisposable;
 
-    protected M model;
     protected V view;
+    protected List<BaseModel> baseModels = new ArrayList<>();
 
     /**
      * 如果当前页面同时需要 Model 层和 View 层,则使用此构造函数(默认)
-     *
-     * @param model
-     * @param view
      */
-    public BasePresenter(@NonNull M model, @NonNull V view) {
-        this.model = model;
+    public BasePresenter(@NonNull List<BaseModel> baseModels, @NonNull V view) {
+        this.baseModels = new ArrayList<>(baseModels);
         this.view = view;
         onStart();
     }
 
     /**
      * 如果当前页面不需要操作数据,只需要 View 层,则使用此构造函数
-     *
-     * @param view
      */
     public BasePresenter(@NonNull V view) {
         this.view = view;
@@ -62,23 +61,32 @@ public class BasePresenter<M extends IModel, V extends IView> implements IPresen
         //将 LifecycleObserver 注册给 LifecycleOwner 后 @OnLifecycleEvent 才可以正常使用
         if (view != null && view instanceof LifecycleOwner) {
             ((LifecycleOwner) view).getLifecycle().addObserver(this);
-            if (model != null && model instanceof LifecycleObserver) {
-                ((LifecycleOwner) view).getLifecycle().addObserver((LifecycleObserver) model);
+        }
+        if (ObjectUtils.isNotEmpty(baseModels)) {
+            for (BaseModel baseModel : baseModels) {
+                ((LifecycleOwner) view).getLifecycle().addObserver(baseModel);
             }
         }
     }
 
+    @Override
+    public void addModel(@NonNull BaseModel baseModel) {
+        baseModels.add(baseModel);
+        ((LifecycleOwner) view).getLifecycle().addObserver(baseModel);
+    }
+
     /**
-     * 在框架中 {@link Activity#onDestroy()} 时会默认调用 {@link IPresenter#onDestroy()}
+     * 在框架中 {@link Activity#onPause()} 且 {@link Activity#isFinishing()} == true 时会默认调用 {@link IPresenter#onDestroy()}
      */
     @Override
     public void onDestroy() {
-        //解除订阅
         unDispose();
-        if (model != null) {
-            model.onDestroy();
+        if (ObjectUtils.isNotEmpty(baseModels)) {
+            for (BaseModel baseModel : baseModels) {
+                baseModel.onDestroy();
+            }
+            baseModels.clear();
         }
-        this.model = null;
         this.view = null;
         this.mCompositeDisposable = null;
     }
