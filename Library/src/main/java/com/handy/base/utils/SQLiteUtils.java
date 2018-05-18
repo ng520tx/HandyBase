@@ -21,12 +21,30 @@ public class SQLiteUtils {
     private static SQLiteUtils sqLiteUtils = null;
 
     private Context context;
-    private Cursor cursor; //查询游标对象
-    private int DB_VERSION = 1; //数据库版本
-    private String DB_NAME = "HandyBase.db"; //默认数据库
-    private DatabaseHelper databaseHelper = null; //由SQLiteOpenHelper继承过来
-    private SQLiteDatabase sqLiteDatabase = null; //执行open()打开数据库时，保存返回的数据库对象
-    private List<SQLTable> sqLiteTables = new ArrayList<>(); //数据库表对象数据集合
+    /**
+     * 查询游标对象
+     */
+    private Cursor cursor;
+    /**
+     * 数据库版本
+     */
+    private int DB_VERSION = 1;
+    /**
+     * 默认数据库
+     */
+    private String DB_NAME = "HandyBase.db";
+    /**
+     * 由SQLiteOpenHelper继承过来
+     */
+    private DatabaseHelper databaseHelper = null;
+    /**
+     * 执行open()打开数据库时，保存返回的数据库对象
+     */
+    private SQLiteDatabase sqLiteDatabase = null;
+    /**
+     * 数据库表对象数据集合
+     */
+    private List<SQLTable> sqLiteTables = new ArrayList<>();
 
     private SQLiteUtils(Context context) {
         this.context = context;
@@ -126,7 +144,7 @@ public class SQLiteUtils {
      * @return 新插入数据的ID，错误返回-1
      * @throws Exception
      */
-    public long insert(String tableName, String nullColumn, ContentValues contentValues) throws Exception {
+    public long insert(String tableName, String nullColumn, ContentValues contentValues) {
         try {
             open();
             return sqLiteDatabase.insert(tableName, nullColumn, contentValues);
@@ -146,7 +164,7 @@ public class SQLiteUtils {
      * @return 受影响的记录数
      * @throws Exception
      */
-    public long delete(String tableName, String key, int id) throws Exception {
+    public long delete(String tableName, String key, int id) {
         try {
             open();
             return sqLiteDatabase.delete(tableName, key + " = " + id, null);
@@ -164,7 +182,7 @@ public class SQLiteUtils {
      * @return
      * @throws Exception
      */
-    public Cursor findBySQL(String sql, String[] selectionArgs) throws Exception {
+    public Cursor findBySQL(String sql, String[] selectionArgs) {
         try {
             open();
             cursor = sqLiteDatabase.rawQuery(sql, selectionArgs);
@@ -182,7 +200,7 @@ public class SQLiteUtils {
      * @return
      * @throws Exception
      */
-    public Cursor findAll(String tableName, String[] columns) throws Exception {
+    public Cursor findAll(String tableName, String[] columns) {
         try {
             open();
             cursor = sqLiteDatabase.query(tableName, columns, null, null, null, null, null);
@@ -202,7 +220,7 @@ public class SQLiteUtils {
      * @return Cursor游标
      * @throws Exception
      */
-    public Cursor findById(String tableName, String key, int id, String[] columns) throws Exception {
+    public Cursor findById(String tableName, String key, int id, String[] columns) {
         try {
             open();
             cursor = sqLiteDatabase.query(tableName, columns, key + " = " + id, null, null, null, null);
@@ -221,7 +239,7 @@ public class SQLiteUtils {
      * @return Cursor游标
      * @throws Exception
      */
-    public Cursor findByCondition(String tableName, String condition, String[] columns) throws Exception {
+    public Cursor findByCondition(String tableName, String condition, String[] columns) {
         try {
             open();
             cursor = sqLiteDatabase.query(tableName, columns, condition, null, null, null, null);
@@ -244,7 +262,7 @@ public class SQLiteUtils {
      * @return Cursor游标
      * @throws Exception
      */
-    public Cursor findLinkAnd(String tableName, String[] names, String[] condition, String[] values, String[] columns, String orderColumn, String limit) throws Exception {
+    public Cursor findLinkAnd(String tableName, String[] names, String[] condition, String[] values, String[] columns, String orderColumn, String limit) {
         try {
             open();
             StringBuffer selection = new StringBuffer();
@@ -275,7 +293,7 @@ public class SQLiteUtils {
      * @return Cursor游标
      * @throws Exception
      */
-    public Cursor findLinkOr(String tableName, String[] names, String[] condition, String[] values, String[] columns, String orderColumn, String limit) throws Exception {
+    public Cursor findLinkOr(String tableName, String[] names, String[] condition, String[] values, String[] columns, String orderColumn, String limit) {
         try {
             open();
             StringBuffer selection = new StringBuffer();
@@ -301,7 +319,7 @@ public class SQLiteUtils {
      * @return true或false
      * @throws Exception
      */
-    public boolean udpate(String tableName, String[] names, String[] values, ContentValues args) throws Exception {
+    public boolean udpate(String tableName, String[] names, String[] values, ContentValues args) {
         try {
             open();
             StringBuffer selection = new StringBuffer();
