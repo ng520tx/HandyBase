@@ -191,6 +191,8 @@
 * 新增base包，含有Activity、Fragment、Application的基类
 * 新增Util补充工具类
 
+* 新接入[GSON](https://github.com/google/gson) 2.8.4
+* 新接入[FastJSON](https://github.com/alibaba/fastjson) 1.2.47
 * 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.15.1
 * 新接入[Bugly-crashreport_upgrade](https://bugly.qq.com/docs/release-notes/release-android-beta/) 1.3.4
 * 新接入[Bugly-nativecrashreport](https://bugly.qq.com/docs/release-notes/release-android-ndk/?v=20180427191736) 3.3.1

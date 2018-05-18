@@ -44,6 +44,10 @@ dependencies {
     api 'com.android.support:design:27.1.1'
     api 'com.android.support:appcompat-v7:27.1.1'
 
+    //gson
+    api 'com.google.code.gson:gson:2.8.4'
+    //fastjson
+    api 'com.alibaba:fastjson:1.2.47'
     //AndroidUtilCode
     api 'com.blankj:utilcode:1.15.1'
     //Bugly
