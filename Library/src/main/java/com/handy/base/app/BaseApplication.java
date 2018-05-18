@@ -30,7 +30,7 @@ public abstract class BaseApplication extends Application {
 
     public boolean isUseBugly = true;
     public boolean isInitLogUtils = true;
-    public boolean isUseCuntomCrashUtil = true;
+    public boolean isUseCrashUtil = true;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -48,9 +48,7 @@ public abstract class BaseApplication extends Application {
             FlowManager.init(getApplicationContext());
 
             /*初始化崩溃捕获工具*/
-            if (isUseCuntomCrashUtil) {
-                com.handy.base.utils.CrashUtils.init();
-            } else {
+            if (isUseCrashUtil) {
                 CrashUtils.init(new CrashUtils.OnCrashListener() {
                     @Override
                     public void onCrash(String crashInfo, Throwable e) {
