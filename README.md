@@ -193,7 +193,7 @@
 
 * 新接入[GSON](https://github.com/google/gson) 2.8.4
 * 新接入[FastJSON](https://github.com/alibaba/fastjson) 1.2.47
-* 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.15.1
+* 新接入[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode) 1.16.4
 * 新接入[Bugly-crashreport_upgrade](https://bugly.qq.com/docs/release-notes/release-android-beta/) 1.3.4
 * 新接入[Bugly-nativecrashreport](https://bugly.qq.com/docs/release-notes/release-android-ndk/?v=20180427191736) 3.3.1
 * 新接入[EventBus](https://github.com/greenrobot/EventBus) 3.1.1   [参考1](http://www.jianshu.com/p/1eaca34e5314)
