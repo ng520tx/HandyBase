@@ -35,11 +35,9 @@ public final class PermissionsUtils {
         Permissions = new ArrayList<String>() {{
             add(Manifest.permission.READ_LOGS);
             add(Manifest.permission.INTERNET);
-            add(Manifest.permission.RECORD_AUDIO);
             add(Manifest.permission.READ_PHONE_STATE);
             add(Manifest.permission.ACCESS_WIFI_STATE);
             add(Manifest.permission.ACCESS_NETWORK_STATE);
-            add(Manifest.permission.VIBRATE);
             add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }};
     }
