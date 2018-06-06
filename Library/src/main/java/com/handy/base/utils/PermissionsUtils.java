@@ -33,7 +33,6 @@ public final class PermissionsUtils {
      */
     private static void initPermissions() {
         Permissions = new ArrayList<String>() {{
-            add(Manifest.permission.READ_LOGS);
             add(Manifest.permission.INTERNET);
             add(Manifest.permission.READ_PHONE_STATE);
             add(Manifest.permission.ACCESS_WIFI_STATE);
