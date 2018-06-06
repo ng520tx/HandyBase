@@ -23,8 +23,6 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  */
 public abstract class BaseApplication extends Application {
 
-    public LogUtils.Config config;
-
     public String buglyID = "";
     public BuglyConfig buglyConfig = null;
 
