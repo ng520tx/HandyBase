@@ -1,9 +1,9 @@
 package com.handy.base.app;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.handy.base.HandyBase;
 import com.handy.base.utils.IntentUtils;
 import com.handy.base.utils.androidutilcode.CoordinateUtils;
 
@@ -24,15 +24,13 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
+        HandyBase.buglyID = "dda0e5e9a5";
+        HandyBase.init(getApplication());
 
-    @Override
-    public void initViewHDB(@Nullable Bundle savedInstanceState) {
-        super.initViewHDB(savedInstanceState);
         findViewById(R.id.crashTest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.openActivity(activity, SubActivity.class, false);
+                IntentUtils.openActivity(MainActivity.this, SubActivity.class, false);
             }
         });
     }

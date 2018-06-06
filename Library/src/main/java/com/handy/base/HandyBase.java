@@ -1,4 +1,4 @@
-package com.handy.base.app;
+package com.handy.base;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -21,7 +21,7 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  * @date Created in 2018/6/6 下午5:09
  * @modified By LiuJie
  */
-public class HandyBaseBuild {
+public class HandyBase {
 
     public static String buglyID = "";
     public static BuglyConfig buglyConfig = null;
