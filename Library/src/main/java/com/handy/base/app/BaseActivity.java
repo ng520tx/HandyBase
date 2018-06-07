@@ -68,7 +68,7 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
      */
     public boolean isCheckPermissionsHDB = true;
     /**
-     * 是否使用作化返回功能
+     * 是否使用滑动返回功能
      */
     public boolean isUseSwipeBackFinish = false;
 
