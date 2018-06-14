@@ -78,7 +78,7 @@ dependencies {
     //BaseRecyclerViewAdapterHelper
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     //Glide
-    api 'com.github.bumptech.glide:glide:4.5.0'
+    api 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     //ButterKnife
     api 'com.jakewharton:butterknife:8.8.1'

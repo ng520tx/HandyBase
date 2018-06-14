@@ -36,9 +36,9 @@ dependencies {
 
     implementation project(':Library')
 
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
     annotationProcessor 'com.github.Raizlabs.DBFlow:dbflow-processor:4.2.4'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
