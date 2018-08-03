@@ -1,12 +1,18 @@
 package com.handy.base.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+
+import com.blankj.utilcode.util.ObjectUtils;
+
+import java.io.File;
 
 /**
  * <pre>
@@ -18,6 +24,100 @@ import android.text.TextPaint;
  * </pre>
  */
 public class ImageUtils {
+
+    /**
+     * 按目标宽高所计算的宽高比压缩图片
+     *
+     * @param filePath     原图片路径
+     * @param targetWidth  目标宽度（建议值：360）
+     * @param targetHeight 目标高度（建议值：640）
+     * @param recycle      是否回收
+     * @return 压缩后的图片
+     */
+    public static Bitmap compressByScale(@NonNull String filePath, int targetWidth, int targetHeight, boolean recycle) {
+        if (ObjectUtils.isEmpty(filePath)) {
+            return null;
+        }
+        Bitmap barcode = BitmapFactory.decodeFile(filePath);
+        if (isEmptyBitmap(barcode)) {
+            return null;
+        }
+        return compressByScale(barcode, targetWidth, targetHeight, recycle);
+    }
+
+    /**
+     * 按目标宽高所计算的宽高比压缩图片
+     *
+     * @param file         原图片文件
+     * @param targetWidth  目标宽度（建议值：360）
+     * @param targetHeight 目标高度（建议值：640）
+     * @param recycle      是否回收
+     * @return 压缩后的图片
+     */
+    public static Bitmap compressByScale(@NonNull File file, int targetWidth, int targetHeight, boolean recycle) {
+        if (ObjectUtils.isEmpty(file)) {
+            return null;
+        }
+        Bitmap barcode = BitmapFactory.decodeFile(file.getPath());
+        if (isEmptyBitmap(barcode)) {
+            return null;
+        }
+        return compressByScale(barcode, targetWidth, targetHeight, recycle);
+    }
+
+    /**
+     * 按目标宽高所计算的宽高比压缩图片
+     *
+     * @param mBitmap      原图片BitMap
+     * @param targetWidth  目标宽度（建议值：360）
+     * @param targetHeight 目标高度（建议值：640）
+     * @param recycle      是否回收
+     * @return 压缩后的图片
+     */
+    public static Bitmap compressByScale(@NonNull Bitmap mBitmap, int targetWidth, int targetHeight, boolean recycle) {
+        if (targetWidth == 0 || targetHeight == 0) {
+            return null;
+        }
+
+        //计算图片宽高与制定宽高的最大比例
+        double scale;
+        Bitmap bitmap = null;
+        if (mBitmap.getWidth() < mBitmap.getHeight()) {
+            if (mBitmap.getWidth() <= targetWidth || mBitmap.getHeight() <= targetHeight) {
+                scale = 1;
+            } else {
+                double widthScale = (double) mBitmap.getWidth() / (double) targetWidth;
+                double heightScale = (double) mBitmap.getHeight() / (double) targetHeight;
+                scale = widthScale > heightScale ? widthScale : heightScale;
+            }
+        } else {
+            if (mBitmap.getWidth() <= targetHeight || mBitmap.getHeight() <= targetWidth) {
+                scale = 1;
+            } else {
+                double widthScale = (double) mBitmap.getWidth() / (double) targetHeight;
+                double heightScale = (double) mBitmap.getHeight() / (double) targetWidth;
+                scale = widthScale > heightScale ? widthScale : heightScale;
+            }
+        }
+
+        // 如果缩放倍数大于1则对Bitmap实例进行压缩，如果小于1则无需压缩
+        if (scale > 1) {
+            int imgWidth = (int) (mBitmap.getWidth() / scale);
+            int imgHeight = (int) (mBitmap.getHeight() / scale);
+
+            bitmap = Bitmap.createScaledBitmap(mBitmap, imgWidth, imgHeight, true);
+        }
+
+        if (bitmap == null) {
+            return mBitmap;
+        } else {
+            if (recycle && !mBitmap.isRecycled()) {
+                mBitmap.recycle();
+            }
+            return bitmap;
+        }
+    }
+
     /**
      * 添加文字水印
      *
@@ -29,12 +129,7 @@ public class ImageUtils {
      * @param y        起始坐标y
      * @return 带有文字水印的图片
      */
-    public static Bitmap addTextWatermark(final Bitmap src,
-                                          final String content,
-                                          final int textSize,
-                                          final int color,
-                                          final float x,
-                                          final float y) {
+    public static Bitmap addTextWatermark(final Bitmap src, final String content, final int textSize, final int color, final float x, final float y) {
         return addTextWatermark(src, content, textSize, color, x, y, false);
     }
 
@@ -49,12 +144,7 @@ public class ImageUtils {
      * @param y         起始坐标y
      * @return 带有文字水印的图片
      */
-    public static Bitmap addTextWatermarkScale(final Bitmap src,
-                                               final String content,
-                                               final int textScale,
-                                               final int color,
-                                               final float x,
-                                               final float y) {
+    public static Bitmap addTextWatermarkScale(final Bitmap src, final String content, final int textScale, final int color, final float x, final float y) {
         return addTextWatermark(src, content, src.getHeight() / textScale, color, x, y, false);
     }
 
@@ -70,13 +160,7 @@ public class ImageUtils {
      * @param recycle  是否回收
      * @return 带有文字水印的图片
      */
-    public static Bitmap addTextWatermark(final Bitmap src,
-                                          final String content,
-                                          final float textSize,
-                                          final int color,
-                                          final float x,
-                                          final float y,
-                                          final boolean recycle) {
+    public static Bitmap addTextWatermark(final Bitmap src, final String content, final float textSize, final int color, final float x, final float y, final boolean recycle) {
         if (isEmptyBitmap(src) || content == null) {
             return null;
         }
