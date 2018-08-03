@@ -78,6 +78,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onAttach(Activity activity)");
         }
         super.onAttach(activity);
+
         this.activity = activity;
     }
 
@@ -87,6 +88,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onAttach(Context context)");
         }
         super.onAttach(context);
+
         this.context = context;
     }
 
@@ -96,6 +98,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onCreate(Bundle savedInstanceState)");
         }
         super.onCreate(savedInstanceState);
+
         if (context == null) {
             this.context = getContext();
         }
@@ -115,6 +118,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onViewCreated(View view, Bundle savedInstanceState)");
         }
         super.onViewCreated(view, savedInstanceState);
+
         this.isCreateed = true;
         if (rootLayout == null) {
             rootLayout = view;
@@ -132,6 +136,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onActivityCreated(Bundle savedInstanceState)");
         }
         super.onActivityCreated(savedInstanceState);
+
         if (isInitDataHDB) {
             initDataHDB(savedInstanceState);
             isInitDataHDB = false;
@@ -152,6 +157,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onResume()");
         }
         super.onResume();
+
         if (getUserVisibleHint() && isCreateed) {
             onRefreshHDB();
         }
@@ -163,6 +169,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - setUserVisibleHint(" + String.valueOf(isVisibleToUser) + ")");
         }
         super.setUserVisibleHint(isVisibleToUser);
+
         if (isVisibleToUser && isCreateed) {
             onVisiableHDB();
             if (isLazyLoadHDB) {

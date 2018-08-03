@@ -94,10 +94,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onCreate()");
         }
+        super.onCreate(savedInstanceState);
 
         try {
             this.context = this;
@@ -117,10 +117,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     @Override
     protected void onStart() {
-        super.onStart();
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onStart()");
         }
+        super.onStart();
 
         /* 初始化Activity接收意图的内容 */
         if (isInitIntentBundle && getIntent() != null) {
@@ -147,10 +147,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     @Override
     protected void onResume() {
-        super.onResume();
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onResume()");
         }
+        super.onResume();
 
         /* Activity刷新时调用 */
         onRefreshHDB();
@@ -163,10 +163,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     @Override
     protected void onPause() {
-        super.onPause();
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onPause()");
         }
+        super.onPause();
 
         if (isFinishing()) {
             onFinishing();
@@ -181,26 +181,26 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     @Override
     protected void onStop() {
-        super.onStop();
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onStop()");
         }
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onDestroy()");
         }
+        super.onDestroy();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onActivityResult(" + requestCode + "," + resultCode + ") data.size = " + ((data == null || data.getExtras() == null) ? 0 : data.getExtras().size()));
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
