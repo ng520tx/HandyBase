@@ -3,11 +3,13 @@ package com.handy.base.app;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.mvp.IPresenter;
 import com.handy.base.rxjava.lifecycle.FragmentLifecycleable;
@@ -56,6 +58,10 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
      * 用于控制每个Fragment进入{@link BaseFragment#setUserVisibleHint(boolean)} 时，是否重新执行onRequest()方法
      */
     public boolean isLazyLoadHDB = true;
+    /**
+     * 是否Log打印Fragment的生命周期
+     */
+    public boolean isLogFragmentLife = false;
 
     @Inject
     protected P presenter;
@@ -68,18 +74,27 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
 
     @Override
     public void onAttach(Activity activity) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onAttach(Activity activity)");
+        }
         super.onAttach(activity);
         this.activity = activity;
     }
 
     @Override
     public void onAttach(Context context) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onAttach(Context context)");
+        }
         super.onAttach(context);
         this.context = context;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onCreate(Bundle savedInstanceState)");
+        }
         super.onCreate(savedInstanceState);
         if (context == null) {
             this.context = getContext();
@@ -96,6 +111,9 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onViewCreated(View view, Bundle savedInstanceState)");
+        }
         super.onViewCreated(view, savedInstanceState);
         this.isCreateed = true;
         if (rootLayout == null) {
@@ -110,6 +128,9 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onActivityCreated(Bundle savedInstanceState)");
+        }
         super.onActivityCreated(savedInstanceState);
         if (isInitDataHDB) {
             initDataHDB(savedInstanceState);
@@ -118,7 +139,18 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
     }
 
     @Override
+    public void onStart() {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onStart()");
+        }
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onResume()");
+        }
         super.onResume();
         if (getUserVisibleHint() && isCreateed) {
             onRefreshHDB();
@@ -127,6 +159,9 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - setUserVisibleHint(" + String.valueOf(isVisibleToUser) + ")");
+        }
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isCreateed) {
             onVisiableHDB();
@@ -138,7 +173,26 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
     }
 
     @Override
+    public void onPause() {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onPause()");
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onStop()");
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onDestroy()");
+        }
         onFinishing();
 
         if (this.presenter != null) {
@@ -147,6 +201,14 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
         }
         this.isCreateed = false;
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isLogFragmentLife) {
+            LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onActivityResult(" + requestCode + "," + resultCode + ") data.size = " + ((data == null || data.getExtras() == null) ? 0 : data.getExtras().size()));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @NonNull
