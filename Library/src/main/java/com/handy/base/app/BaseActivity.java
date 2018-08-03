@@ -3,6 +3,7 @@ package com.handy.base.app;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.R;
 import com.handy.base.mvp.IPresenter;
@@ -71,6 +73,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
      * 是否使用滑动返回功能
      */
     public boolean isUseSwipeBackFinish = false;
+    /**
+     * 是否Log打印Activity的生命周期
+     */
+    public boolean isLogActivityLife = false;
 
     @Inject
     protected P presenter;
@@ -89,6 +95,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onCreate()");
+        }
+
         try {
             this.context = this;
             this.activity = this;
@@ -108,6 +118,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     @Override
     protected void onStart() {
         super.onStart();
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onStart()");
+        }
+
         /* 初始化Activity接收意图的内容 */
         if (isInitIntentBundle && getIntent() != null) {
             this.intentBundle = getIntent().getExtras();
@@ -134,6 +148,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     @Override
     protected void onResume() {
         super.onResume();
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onResume()");
+        }
+
         /* Activity刷新时调用 */
         onRefreshHDB();
         /* Activity请求时调用（可被重复调用） */
@@ -146,6 +164,10 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
     @Override
     protected void onPause() {
         super.onPause();
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onPause()");
+        }
+
         if (isFinishing()) {
             onFinishing();
 
@@ -154,6 +176,30 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
                 this.presenter = null;
             }
             ActivityStackUtils.finishChoiceDesc(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onStop()");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onDestroy()");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (isLogActivityLife) {
+            LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onActivityResult(" + requestCode + "," + resultCode + ") data.size = " + ((data == null || data.getExtras() == null) ? 0 : data.getExtras().size()));
         }
     }
 
