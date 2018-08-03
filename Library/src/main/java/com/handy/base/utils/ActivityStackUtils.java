@@ -68,7 +68,7 @@ public final class ActivityStackUtils {
     }
 
     /**
-     * 按倒叙单次结束指定的Activity
+     * 按倒序单次结束指定的Activity
      */
     public static void finishChoiceDesc(Activity activity) {
         if (activity != null && activityStack != null) {
@@ -78,7 +78,7 @@ public final class ActivityStackUtils {
             if (!activity.isFinishing()) {
                 activity.finish();
             }
-            /*倒序排列*/
+            /*排列还原*/
             Collections.reverse(activityStack);
         }
     }
@@ -121,7 +121,7 @@ public final class ActivityStackUtils {
     }
 
     /**
-     * 按倒叙单次结束指定的Activity
+     * 按倒序单次结束指定的Activity
      */
     public static void finishChoiceDesc(Class<?> cls) {
         if (activityStack != null) {
@@ -138,7 +138,7 @@ public final class ActivityStackUtils {
                     break;
                 }
             }
-            /*倒序排列*/
+            /*排列还原*/
             Collections.reverse(activityStack);
         }
     }
@@ -193,6 +193,50 @@ public final class ActivityStackUtils {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 按顺序结束到指定的Activity
+     */
+    public static void finish2ChoiceAsc(Class<?> cls) {
+        if (activityStack != null) {
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (!aty.getClass().equals(cls)) {
+                    iterator.remove();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 按倒序结束到指定的Activity
+     */
+    public static void finish2ChoiceDesc(Class<?> cls) {
+        if (activityStack != null) {
+            /*倒序排列*/
+            Collections.reverse(activityStack);
+            Iterator iterator = activityStack.iterator();
+            while (iterator.hasNext()) {
+                Activity aty = (Activity) iterator.next();
+                if (!aty.getClass().equals(cls)) {
+                    iterator.remove();
+                    if (!aty.isFinishing()) {
+                        aty.finish();
+                    }
+                } else {
+                    break;
+                }
+            }
+            /*排列还原*/
+            Collections.reverse(activityStack);
         }
     }
 
