@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         HandyBase.buglyID = "dda0e5e9a5";
-        HandyBase.init(getApplication());
+        HandyBase.getInstance().init(getApplication());
 
         findViewById(R.id.crashTest).setOnClickListener(new View.OnClickListener() {
             @Override
