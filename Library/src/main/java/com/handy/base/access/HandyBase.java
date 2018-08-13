@@ -1,4 +1,4 @@
-package com.handy.base;
+package com.handy.base.access;
 
 import android.annotation.SuppressLint;
 import android.app.Application;

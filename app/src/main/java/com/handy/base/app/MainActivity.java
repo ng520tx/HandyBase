@@ -3,7 +3,7 @@ package com.handy.base.app;
 import android.os.Bundle;
 import android.view.View;
 
-import com.handy.base.HandyBase;
+import com.handy.base.access.HandyBase;
 import com.handy.base.utils.IntentUtils;
 import com.handy.base.utils.androidutilcode.CoordinateUtils;
 
