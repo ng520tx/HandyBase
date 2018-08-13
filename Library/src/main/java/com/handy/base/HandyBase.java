@@ -23,6 +23,8 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
  */
 public class HandyBase {
 
+    private volatile static HandyBase instance;
+
     public static String buglyID = "";
     public static BuglyConfig buglyConfig = null;
 
@@ -30,11 +32,26 @@ public class HandyBase {
     public static boolean isInitLogUtils = true;
     public static boolean isUseCrashUtil = true;
 
+    private HandyBase() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+    public static HandyBase getInstance() {
+        if (instance == null) {
+            synchronized (HandyBase.class) {
+                if (instance == null) {
+                    instance = new HandyBase();
+                }
+            }
+        }
+        return instance;
+    }
+
     /**
      * 在第一个启动的Activity或者自定义Application中的onCreate()方法里调用
      */
     @SuppressLint("MissingPermission")
-    public static void init(Application application) {
+    public void init(Application application) {
         try {
             /*初始化工具类*/
             Utils.init(application);
@@ -112,7 +129,7 @@ public class HandyBase {
      * @param buglyConfig 原Bugly配置对象
      * @return 新Bugly配置对象
      */
-    protected static BuglyConfig resetBuglyConfig(BuglyConfig buglyConfig) {
+    public BuglyConfig resetBuglyConfig(BuglyConfig buglyConfig) {
         return buglyConfig;
     }
 }
