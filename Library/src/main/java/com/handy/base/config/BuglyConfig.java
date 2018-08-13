@@ -67,7 +67,7 @@ public class BuglyConfig {
         this.isUploadProcess = true;
         this.isDevelopmentDevice = AppUtils.isAppDebug();
         this.buglyID = buglyID;
-        this.appChannel = AppUtils.getAppName() + "-" + (AppUtils.isAppDebug() ? "测试版本" : "正式版本");
+        this.appChannel = AppUtils.getAppName() + "-" + (AppUtils.isAppDebug() ? "Debug" : "Release");
         this.appVersion = AppUtils.getAppVersionName();
         this.appPackageName = AppUtils.getAppPackageName();
         this.crashAddInfo = new HashMap<>(9);
