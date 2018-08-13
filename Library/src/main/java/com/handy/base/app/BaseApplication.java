@@ -72,7 +72,7 @@ public abstract class BaseApplication extends Application {
                         .setLog2FileSwitch(false)
                         // 当自定义路径为空时，写入应用的/cache/log/目录中
                         .setDir("")
-                        // 当文件前缀为空时，默认为"util"，即写入文件为"util-MM-dd.txt"
+                        // 当文件前缀为空时，默认为"util"，即写入文件为"util-yyyy-MM-dd.txt"
                         .setFilePrefix("")
                         // 输出日志是否带边框开关，默认开
                         .setBorderSwitch(true)
