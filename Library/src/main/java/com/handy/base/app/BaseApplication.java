@@ -2,6 +2,11 @@ package com.handy.base.app;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Looper;
+import android.os.SystemClock;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.CrashUtils;
@@ -26,7 +31,6 @@ public abstract class BaseApplication extends Application {
     public String buglyID = "";
     public BuglyConfig buglyConfig = null;
 
-    public boolean isUseBugly = true;
     public boolean isInitLogUtils = true;
     public boolean isUseCrashUtil = true;
 
@@ -48,10 +52,28 @@ public abstract class BaseApplication extends Application {
             /*初始化崩溃捕获工具*/
             if (isUseCrashUtil) {
                 CrashUtils.init(new CrashUtils.OnCrashListener() {
+                    @SuppressLint("StaticFieldLeak")
                     @Override
                     public void onCrash(String crashInfo, Throwable e) {
-                        LogUtils.e(crashInfo);
-                        AppUtils.relaunchApp();
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                Looper.prepare();
+                                Toast.makeText(getApplicationContext(), "很抱歉：程序出现异常即将退出", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                                return null;
+                            }
+                        }.execute();
+
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startMain);
+
+                        SystemClock.sleep(1500L);
+
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(0);
                     }
                 });
             }
@@ -69,7 +91,7 @@ public abstract class BaseApplication extends Application {
                         //设置 log 头信息开关，默认为开
                         .setLogHeadSwitch(true)
                         //打印 log 时是否存到文件的开关，默认关
-                        .setLog2FileSwitch(false)
+                        .setLog2FileSwitch(AppUtils.isAppDebug())
                         //当自定义路径为空时，写入应用的/cache/log/目录中
                         .setDir("")
                         //当文件前缀为空时，默认为"util"，即写入文件为"util-yyyy-MM-dd.txt"
@@ -86,15 +108,17 @@ public abstract class BaseApplication extends Application {
                         .setStackDeep(1)
                         //设置栈偏移，比如二次封装的话就需要设置，默认为 0
                         .setStackOffset(0);
-                LogUtils.d(config.toString());
             }
 
             /*初始化腾讯Bugly应用分析上报功能*/
-            if (isUseBugly && ObjectUtils.isNotEmpty(buglyID)) {
+            if (ObjectUtils.isNotEmpty(buglyID)) {
                 //实例化Bugly配置对象
                 buglyConfig = new BuglyConfig(buglyID);
                 //重新设置Bugly配置对象
-                buglyConfig = resetBuglyConfig(buglyConfig);
+                BuglyConfig config = resetBuglyConfig(buglyConfig);
+                if (config != null) {
+                    buglyConfig = config;
+                }
                 //初始化Bugly功能
                 buglyConfig.initBugly(getApplicationContext());
 
