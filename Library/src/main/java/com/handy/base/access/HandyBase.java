@@ -25,15 +25,24 @@ public class HandyBase {
 
     private volatile static HandyBase instance;
 
-    public static String buglyID = "";
-    public static BuglyConfig buglyConfig = null;
+    private boolean isInitLogUtils;
 
-    public static boolean isUseBugly = true;
-    public static boolean isInitLogUtils = true;
-    public static boolean isUseCrashUtil = true;
+    private boolean isUseCrashUtil;
+    private CrashUtils.OnCrashListener onCrashListener;
+
+    private String buglyID;
+    private BuglyConfig buglyConfig;
+    private BuglyConfigApi buglyConfigApi;
 
     private HandyBase() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+        isInitLogUtils = true;
+
+        isUseCrashUtil = true;
+        onCrashListener = null;
+
+        buglyID = "";
+        buglyConfig = null;
+        buglyConfigApi = null;
     }
 
     public static HandyBase getInstance() {
@@ -65,13 +74,7 @@ public class HandyBase {
 
             /*初始化崩溃捕获工具*/
             if (isUseCrashUtil) {
-                CrashUtils.init(new CrashUtils.OnCrashListener() {
-                    @Override
-                    public void onCrash(String crashInfo, Throwable e) {
-                        LogUtils.e(crashInfo);
-                        AppUtils.relaunchApp();
-                    }
-                });
+                CrashUtils.init(onCrashListener);
             }
 
             /*初始化日志工具*/
@@ -104,16 +107,19 @@ public class HandyBase {
                         .setStackDeep(1)
                         // 设置栈偏移，比如二次封装的话就需要设置，默认为 0
                         .setStackOffset(0);
-                LogUtils.d(config.toString());
             }
 
             /*初始化腾讯Bugly应用分析上报功能*/
-            if (isUseBugly && ObjectUtils.isNotEmpty(buglyID)) {
+            if (ObjectUtils.isNotEmpty(buglyID)) {
                 // 实例化Bugly配置对象
                 buglyConfig = new BuglyConfig(buglyID);
                 // 重新设置Bugly配置对象
-                buglyConfig = resetBuglyConfig(buglyConfig);
-                // 初始化Bugly功能
+                if (buglyConfigApi != null) {
+                    BuglyConfig config = buglyConfigApi.resetBuglyConfig(buglyConfig);
+                    if (config != null) {
+                        buglyConfig = config;
+                    }
+                } // 初始化Bugly功能
                 buglyConfig.initBugly(application.getApplicationContext());
 
                 LogUtils.d(buglyConfig.toString());
@@ -123,13 +129,37 @@ public class HandyBase {
         }
     }
 
-    /**
-     * 可以重写此方法，直接修改入参对象然后return反馈即可。
-     *
-     * @param buglyConfig 原Bugly配置对象
-     * @return 新Bugly配置对象
-     */
-    public BuglyConfig resetBuglyConfig(BuglyConfig buglyConfig) {
-        return buglyConfig;
+    public HandyBase setBuglyID(String buglyID) {
+        this.buglyID = buglyID;
+        return this;
+    }
+
+    public HandyBase setBuglyConfig(BuglyConfig buglyConfig) {
+        this.buglyConfig = buglyConfig;
+        return this;
+    }
+
+    public HandyBase setInitLogUtils(boolean initLogUtils) {
+        isInitLogUtils = initLogUtils;
+        return this;
+    }
+
+    public HandyBase setUseCrashUtil(boolean useCrashUtil) {
+        isUseCrashUtil = useCrashUtil;
+        return this;
+    }
+
+    public HandyBase setOnCrashListener(CrashUtils.OnCrashListener onCrashListener) {
+        this.onCrashListener = onCrashListener;
+        return this;
+    }
+
+    public HandyBase setBuglyConfigApi(BuglyConfigApi buglyConfigApi) {
+        this.buglyConfigApi = buglyConfigApi;
+        return this;
+    }
+
+    public interface BuglyConfigApi {
+        BuglyConfig resetBuglyConfig(BuglyConfig buglyConfig);
     }
 }
