@@ -2,6 +2,11 @@ package com.handy.base.access;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Looper;
+import android.os.SystemClock;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.CrashUtils;
@@ -14,10 +19,10 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
 /**
- * 类名
+ * 第三方接入，不需要使用BaseApplication
  *
  * @author LiuJie https://www.Handy045.com
- * @description 类功能内容
+ * @description 第三方接入
  * @date Created in 2018/6/6 下午5:09
  * @modified By LiuJie
  */
@@ -34,22 +39,46 @@ public class HandyBase {
     private BuglyConfig buglyConfig;
     private BuglyConfigApi buglyConfigApi;
 
-    private HandyBase() {
+    private HandyBase(final Application application) {
         isInitLogUtils = true;
 
         isUseCrashUtil = true;
-        onCrashListener = null;
+        onCrashListener = new CrashUtils.OnCrashListener() {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public void onCrash(String crashInfo, Throwable e) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        Looper.prepare();
+                        Toast.makeText(application, "很抱歉：程序出现异常即将退出", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                        return null;
+                    }
+                }.execute();
+
+                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                startMain.addCategory(Intent.CATEGORY_HOME);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                application.startActivity(startMain);
+
+                SystemClock.sleep(1200L);
+
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(0);
+            }
+        };
 
         buglyID = "";
         buglyConfig = null;
         buglyConfigApi = null;
     }
 
-    public static HandyBase getInstance() {
+    public static HandyBase getInstance(Application application) {
         if (instance == null) {
             synchronized (HandyBase.class) {
                 if (instance == null) {
-                    instance = new HandyBase();
+                    instance = new HandyBase(application);
                 }
             }
         }
@@ -131,11 +160,6 @@ public class HandyBase {
 
     public HandyBase setBuglyID(String buglyID) {
         this.buglyID = buglyID;
-        return this;
-    }
-
-    public HandyBase setBuglyConfig(BuglyConfig buglyConfig) {
-        this.buglyConfig = buglyConfig;
         return this;
     }
 

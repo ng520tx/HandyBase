@@ -70,7 +70,7 @@ public abstract class BaseApplication extends Application {
                         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(startMain);
 
-                        SystemClock.sleep(1500L);
+                        SystemClock.sleep(1200L);
 
                         android.os.Process.killProcess(android.os.Process.myPid());
                         System.exit(0);
