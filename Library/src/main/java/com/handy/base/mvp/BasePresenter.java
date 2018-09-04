@@ -11,9 +11,6 @@ import com.blankj.utilcode.util.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-
 /**
  * Mvp框架中 Presenter层通用基类
  *
@@ -23,7 +20,6 @@ import io.reactivex.disposables.Disposable;
  * @modified By LiuJie
  */
 public class BasePresenter<V extends IView> implements IPresenter {
-    protected CompositeDisposable mCompositeDisposable;
 
     protected V view;
     protected List<IModel> iModels = new ArrayList<>();
@@ -73,7 +69,6 @@ public class BasePresenter<V extends IView> implements IPresenter {
      */
     @Override
     public void onDestroy() {
-        unDispose();
         if (ObjectUtils.isNotEmpty(iModels)) {
             for (IModel iModel : iModels) {
                 iModel.onDestroy();
@@ -81,28 +76,10 @@ public class BasePresenter<V extends IView> implements IPresenter {
             iModels.clear();
         }
         this.view = null;
-        this.mCompositeDisposable = null;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy(LifecycleOwner owner) {
         owner.getLifecycle().removeObserver(this);
-    }
-
-    @Override
-    public void addDispose(@NonNull Disposable disposable) {
-        if (mCompositeDisposable == null) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        //将所有 Disposable 放入集中处理
-        mCompositeDisposable.add(disposable);
-    }
-
-    @Override
-    public void unDispose() {
-        if (mCompositeDisposable != null) {
-            //保证 Activity 结束时取消所有正在执行的订阅
-            mCompositeDisposable.clear();
-        }
     }
 }

@@ -18,6 +18,7 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
@@ -70,6 +71,7 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
     public Activity activity;
     public Application application;
 
+    public CompositeDisposable compositeDisposable;
     private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
 
     @Override
@@ -201,6 +203,12 @@ public abstract class BaseFragment<P extends IPresenter> extends RxFragment impl
             LogUtils.d("Fragment - " + this.getClass().getSimpleName() + " - onDestroy()");
         }
         onFinishing();
+
+        if (this.compositeDisposable != null) {
+            //保证Activity结束时取消所有正在执行的订阅
+            this.compositeDisposable.clear();
+            this.compositeDisposable = null;
+        }
 
         if (this.presenter != null) {
             this.presenter.onDestroy();//释放资源
