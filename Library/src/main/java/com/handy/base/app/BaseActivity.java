@@ -25,7 +25,6 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import javax.inject.Inject;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
@@ -91,7 +90,6 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
     public BGASwipeBackHelper mSwipeBackHelper;
 
-    public CompositeDisposable compositeDisposable;
     private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
 
     @Override
@@ -172,12 +170,6 @@ public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActi
 
         if (isFinishing()) {
             onFinishing();
-
-            if (this.compositeDisposable != null) {
-                //保证Activity结束时取消所有正在执行的订阅
-                this.compositeDisposable.clear();
-                this.compositeDisposable = null;
-            }
 
             if (this.presenter != null) {
                 //释放资源
