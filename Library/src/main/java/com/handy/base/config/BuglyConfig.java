@@ -37,7 +37,7 @@ public class BuglyConfig {
      */
     private String buglyID = "";
     /**
-     * 设置渠道，默认：AppUtils.getAppName() + "-" + (AppUtils.isAppDebug() ? "测试版本" : "正式版本")
+     * 设置渠道，默认：AppUtils.getAppName() + "-" + (AppUtils.isAppDebug() ? "Debug" : "Release")
      */
     private String appChannel = "";
     /**
