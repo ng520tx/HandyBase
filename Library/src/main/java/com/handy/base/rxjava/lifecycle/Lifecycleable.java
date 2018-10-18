@@ -1,11 +1,11 @@
 package com.handy.base.rxjava.lifecycle;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 
 import com.trello.rxlifecycle2.RxLifecycle;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import io.reactivex.subjects.Subject;
 
 /**

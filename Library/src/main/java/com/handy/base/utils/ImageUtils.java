@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -13,6 +12,8 @@ import android.text.TextPaint;
 import com.blankj.utilcode.util.ObjectUtils;
 
 import java.io.File;
+
+import androidx.annotation.NonNull;
 
 /**
  * <pre>

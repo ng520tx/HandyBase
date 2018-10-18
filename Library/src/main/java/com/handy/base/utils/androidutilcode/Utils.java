@@ -3,9 +3,10 @@ package com.handy.base.utils.androidutilcode;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
+
+import androidx.annotation.NonNull;
 
 /**
  * <pre>

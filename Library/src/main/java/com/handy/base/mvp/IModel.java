@@ -1,6 +1,6 @@
 package com.handy.base.mvp;
 
-import android.arch.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleObserver;
 
 /**
  * Mvp框架中 Model层通用接口

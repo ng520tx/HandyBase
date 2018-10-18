@@ -13,7 +13,7 @@ android {
         versionCode 250
         versionName "2.5.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -37,10 +37,10 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    //androidX
+    api 'com.google.android.material:material:1.0.0'
+    api 'androidx.appcompat:appcompat:1.0.0'
     //androidSupport
     api 'com.android.support:design:28.0.0'
     api 'com.android.support:appcompat-v7:28.0.0'

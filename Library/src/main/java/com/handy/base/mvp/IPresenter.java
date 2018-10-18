@@ -1,7 +1,8 @@
 package com.handy.base.mvp;
 
 import android.app.Activity;
-import android.arch.lifecycle.LifecycleObserver;
+
+import androidx.lifecycle.LifecycleObserver;
 
 
 /**

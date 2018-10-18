@@ -1,11 +1,11 @@
 package com.handy.base.app.dagger;
 
-import android.support.annotation.NonNull;
-
 import com.blankj.utilcode.util.LogUtils;
 import com.handy.base.mvp.BasePresenter;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
 
 /**
  * 中文名称
