@@ -1,6 +1,6 @@
 package com.handy.base.utils.androidutilcode;
 
-import androidx.collection.SimpleArrayMap;
+import android.support.v4.util.SimpleArrayMap;
 
 /**
  * <pre>

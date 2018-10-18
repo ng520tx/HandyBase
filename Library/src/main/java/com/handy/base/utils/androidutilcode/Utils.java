@@ -2,11 +2,15 @@ package com.handy.base.utils.androidutilcode;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.ContentProvider;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
-
-import androidx.annotation.NonNull;
 
 /**
  * <pre>
@@ -42,7 +46,11 @@ public final class Utils {
      *
      * @param context context
      */
-    public static void init(@NonNull final Context context) {
+    public static void init(final Context context) {
+        if (context == null) {
+            init(getApplicationByReflect());
+            return;
+        }
         init((Application) context.getApplicationContext());
     }
 
@@ -52,8 +60,14 @@ public final class Utils {
      *
      * @param app application
      */
-    public static void init(@NonNull final Application app) {
-        Utils.sApplication = app;
+    public static void init(final Application app) {
+        if (sApplication == null) {
+            if (app == null) {
+                Utils.sApplication = getApplicationByReflect();
+            } else {
+                Utils.sApplication = app;
+            }
+        }
     }
 
     /**
@@ -63,9 +77,13 @@ public final class Utils {
      */
     public static Application getApp() {
         if (sApplication != null) return sApplication;
+        return getApplicationByReflect();
+    }
+
+    private static Application getApplicationByReflect() {
         try {
             @SuppressLint("PrivateApi")
-            Class<?> activityThread = Class.forName("android.app.activityThread");
+            Class<?> activityThread = Class.forName("android.app.ActivityThread");
             Object at = activityThread.getMethod("currentActivityThread").invoke(null);
             Object app = activityThread.getMethod("getApplication").invoke(at);
             if (app == null) {
@@ -83,5 +101,43 @@ public final class Utils {
             e.printStackTrace();
         }
         throw new NullPointerException("u should init first");
+    }
+
+
+    public static final class ContentProvider4SubUtil extends ContentProvider {
+
+        @Override
+        public boolean onCreate() {
+            Utils.init(getContext());
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public String getType(@NonNull Uri uri) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+            return null;
+        }
+
+        @Override
+        public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+            return 0;
+        }
+
+        @Override
+        public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+            return 0;
+        }
     }
 }

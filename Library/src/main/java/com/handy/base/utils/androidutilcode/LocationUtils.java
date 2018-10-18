@@ -11,13 +11,12 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
-import androidx.annotation.RequiresPermission;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -115,7 +114,8 @@ public final class LocationUtils {
      */
     public static boolean isGpsEnabled() {
         LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-        return lm != null && lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        //noinspection ConstantConditions
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
@@ -125,10 +125,9 @@ public final class LocationUtils {
      */
     public static boolean isLocationEnabled() {
         LocationManager lm = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-        return lm != null
-                && (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-                || lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        );
+        //noinspection ConstantConditions
+        return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                || lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     /**
@@ -158,9 +157,9 @@ public final class LocationUtils {
     public static boolean register(long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
         mLocationManager = (LocationManager) Utils.getApp().getSystemService(Context.LOCATION_SERVICE);
-        if (mLocationManager == null
-                || (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-                && !mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))) {
+        //noinspection ConstantConditions
+        if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                && !mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.d("LocationUtils", "无法定位，请打开定位服务");
             return false;
         }
