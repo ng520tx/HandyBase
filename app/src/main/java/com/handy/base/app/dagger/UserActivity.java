@@ -1,11 +1,10 @@
 package com.handy.base.app.dagger;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import com.handy.base.app.BaseActivity;
 import com.handy.base.app.R;
-
-import androidx.annotation.Nullable;
 
 /**
  * 中文名称

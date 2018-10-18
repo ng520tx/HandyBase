@@ -1,9 +1,10 @@
 package com.handy.base.rxjava.lifecycle;
 
+import android.support.v4.app.Fragment;
+
 import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
-import androidx.fragment.app.Fragment;
 
 /**
  * 让 {@link Fragment} 实现此接口,即可正常使用 {@link RxLifecycle}

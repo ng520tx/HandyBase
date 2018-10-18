@@ -1,10 +1,10 @@
 package com.handy.base.mvp;
 
-import com.handy.base.retrofit.IRetrofitManager;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.OnLifecycleEvent;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.OnLifecycleEvent;
+import com.handy.base.retrofit.IRetrofitManager;
 
 
 /**
