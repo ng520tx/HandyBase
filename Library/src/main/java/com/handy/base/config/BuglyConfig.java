@@ -230,32 +230,32 @@ public class BuglyConfig {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("======================= Bugly配置信息 =======================\n");
-        stringBuilder.append("| 是否启用Debug模式：  【").append(isDebug).append("】\n");
-        stringBuilder.append("| 设置是否只在主进程上报：  【").append(isUploadProcess).append("】\n");
-        stringBuilder.append("| 是否将App运行的设备注册为测试设备：  【").append(isDevelopmentDevice).append("】\n");
-        stringBuilder.append("| Bugly注册的产品ID：  【").append(buglyID).append("】\n");
-        stringBuilder.append("| 设置渠道：  【").append(appChannel).append("】\n");
-        stringBuilder.append("| App的版本名称：  【").append(appVersion).append("】\n");
-        stringBuilder.append("| App的包名：  【").append(appPackageName).append("】\n");
-        stringBuilder.append("| 发生Crash时，一起上报的自定义的环境信息：");
+        stringBuilder.append("||\t是否启用Debug模式：  【").append(isDebug).append("】\n");
+        stringBuilder.append("||\t设置是否只在主进程上报：  【").append(isUploadProcess).append("】\n");
+        stringBuilder.append("||\t是否将App运行的设备注册为测试设备：  【").append(isDevelopmentDevice).append("】\n");
+        stringBuilder.append("||\tBugly注册的产品ID：  【").append(buglyID).append("】\n");
+        stringBuilder.append("||\t设置渠道：  【").append(appChannel).append("】\n");
+        stringBuilder.append("||\tApp的版本名称：  【").append(appVersion).append("】\n");
+        stringBuilder.append("||\tApp的包名：  【").append(appPackageName).append("】\n");
+        stringBuilder.append("||\t发生Crash时，一起上报的自定义的环境信息：");
 
         if (ObjectUtils.isNotEmpty(crashFollowInfo)) {
             stringBuilder.append("\n");
             for (Map.Entry<String, String> entry : this.crashAddInfo.entrySet()) {
                 if (ObjectUtils.isNotEmpty(entry.getKey()) && ObjectUtils.isNotEmpty(entry.getValue())) {
-                    stringBuilder.append("| \t").append("Key：").append(entry.getKey()).append("Value：").append(entry.getValue()).append("\n");
+                    stringBuilder.append("||\t\t").append("Key：").append(entry.getKey()).append("Value：").append(entry.getValue()).append("\n");
                 }
             }
         } else {
             stringBuilder.append("  【暂无").append("】\n");
         }
 
-        stringBuilder.append("| 发生Crash时，一起上报的附加的跟踪数据信息：");
+        stringBuilder.append("||\t发生Crash时，一起上报的附加的跟踪数据信息：");
         if (ObjectUtils.isNotEmpty(crashFollowInfo)) {
             stringBuilder.append("\n");
             for (Map.Entry<String, String> entry : this.crashFollowInfo.entrySet()) {
                 if (ObjectUtils.isNotEmpty(entry.getKey()) && ObjectUtils.isNotEmpty(entry.getValue())) {
-                    stringBuilder.append("| \t").append("Key：").append(entry.getKey()).append("Value：").append(entry.getValue()).append("\n");
+                    stringBuilder.append("||\t\t").append("Key：").append(entry.getKey()).append("Value：").append(entry.getValue()).append("\n");
                 }
             }
         } else {
