@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <dimen name="hdb_font_least">20.5000sp</dimen>
+    <dimen name="hdb_font_micro">25.0556sp</dimen>
+    <dimen name="hdb_font_small">29.6111sp</dimen>
+    <dimen name="hdb_font_medium">34.1667sp</dimen>
+    <dimen name="hdb_font_slarge">38.7222sp</dimen>
+    <dimen name="hdb_font_large">43.2778sp</dimen>
+    <dimen name="hdb_font_xlarge">47.8333sp</dimen>
+    <dimen name="hdb_font_xxlarge">52.3889sp</dimen>
+    <dimen name="hdb_margin_least">4.5556dp</dimen>
+    <dimen name="hdb_margin_micro">9.1111dp</dimen>
+    <dimen name="hdb_margin_small">13.6667dp</dimen>
+    <dimen name="hdb_margin_medium">18.2222dp</dimen>
+    <dimen name="hdb_margin_slarge">22.7778dp</dimen>
+    <dimen name="hdb_margin_large">27.3333dp</dimen>
+    <dimen name="hdb_margin_xlarge">36.4444dp</dimen>
+    <dimen name="hdb_margin_xxlarge">41.0000dp</dimen>
+    <dimen name="hdb_padding_least">4.5556dp</dimen>
+    <dimen name="hdb_padding_micro">9.1111dp</dimen>
+    <dimen name="hdb_padding_small">13.6667dp</dimen>
+    <dimen name="hdb_padding_medium">18.2222dp</dimen>
+    <dimen name="hdb_padding_slarge">22.7778dp</dimen>
+    <dimen name="hdb_padding_large">27.3333dp</dimen>
+    <dimen name="hdb_padding_xlarge">36.4444dp</dimen>
+    <dimen name="hdb_padding_xxlarge">41.0000dp</dimen>
+</resources>
