@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.CheckResult;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -19,21 +17,13 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.handy.base.R;
 import com.handy.base.mvp.IPresenter;
-import com.handy.base.rxjava.lifecycle.ActivityLifecycleable;
 import com.handy.base.utils.ActivityStackUtils;
 import com.handy.base.utils.PermissionsUtils;
-import com.trello.rxlifecycle2.LifecycleProvider;
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.RxLifecycle;
-import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import javax.inject.Inject;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.Subject;
 
 /**
  * <pre>
@@ -43,7 +33,7 @@ import io.reactivex.subjects.Subject;
  *  desc  : Activity基本类
  * </pre>
  */
-public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivity implements BaseApplicationApi.BaseActivityApi, ActivityLifecycleable, LifecycleProvider<ActivityEvent> {
+public abstract class BaseActivity<P extends IPresenter> extends RxAppCompatActivity implements BaseApplicationApi.BaseActivityApi {
     /**
      * 屏幕宽度
      */
@@ -97,9 +87,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
 
     public BGASwipeBackHelper mSwipeBackHelper;
 
-    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
-    private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
-
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,7 +94,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onCreate()");
         }
         super.onCreate(savedInstanceState);
-        lifecycleSubject.onNext(ActivityEvent.CREATE);
 
         try {
             this.context = this;
@@ -132,7 +118,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onStart()");
         }
         super.onStart();
-        lifecycleSubject.onNext(ActivityEvent.START);
 
         /* 初始化Activity接收意图的内容 */
         if (isInitIntentBundle && getIntent() != null) {
@@ -164,7 +149,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onResume()");
         }
         super.onResume();
-        lifecycleSubject.onNext(ActivityEvent.RESUME);
 
         /* Activity刷新时调用 */
         onRefreshHDB();
@@ -178,7 +162,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     @CallSuper
     protected void onPause() {
-        lifecycleSubject.onNext(ActivityEvent.PAUSE);
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onPause()");
         }
@@ -199,7 +182,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     @CallSuper
     protected void onStop() {
-        lifecycleSubject.onNext(ActivityEvent.STOP);
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onStop()");
         }
@@ -209,7 +191,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     @CallSuper
     protected void onDestroy() {
-        lifecycleSubject.onNext(ActivityEvent.DESTROY);
         if (isLogActivityLife) {
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onDestroy()");
         }
@@ -222,36 +203,6 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             LogUtils.d("Activity - " + this.getClass().getSimpleName() + " - onActivityResult(" + requestCode + "," + resultCode + ") data.size = " + ((data == null || data.getExtras() == null) ? 0 : data.getExtras().size()));
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * RxJava 任务生命周期关联绑定
-     */
-    @NonNull
-    @Override
-    public Subject<ActivityEvent> provideLifecycleSubject() {
-        return mLifecycleSubject;
-    }
-
-    @Override
-    @NonNull
-    @CheckResult
-    public final Observable<ActivityEvent> lifecycle() {
-        return lifecycleSubject.hide();
-    }
-
-    @Override
-    @NonNull
-    @CheckResult
-    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
-    }
-
-    @Override
-    @NonNull
-    @CheckResult
-    public final <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
     }
 
     /**

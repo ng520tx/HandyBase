@@ -47,6 +47,8 @@ public class HandyBase {
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onCrash(String crashInfo, Throwable e) {
+                LogUtils.e(e);
+
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... voids) {
@@ -64,8 +66,7 @@ public class HandyBase {
 
                 SystemClock.sleep(1200L);
 
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
+                AppUtils.exitApp();
             }
         };
 

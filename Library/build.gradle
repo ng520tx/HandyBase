@@ -44,12 +44,12 @@ dependencies {
     //gson
     api 'com.google.code.gson:gson:2.8.5'
     //fastjson
-    api 'com.alibaba:fastjson:1.2.51'
+    api 'com.alibaba:fastjson:1.2.54'
     //AndroidUtilCode
-    api 'com.blankj:utilcode:1.21.0'
+    api 'com.blankj:utilcode:1.22.10'
     //Bugly
-    api 'com.tencent.bugly:crashreport:2.6.6.1'
-    api 'com.tencent.bugly:nativecrashreport:3.3.1'
+    api 'com.tencent.bugly:crashreport:2.8.6.0'
+    api 'com.tencent.bugly:nativecrashreport:3.6.0.1'
     //EventBus
     api 'org.greenrobot:eventbus:3.1.1'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
@@ -59,21 +59,21 @@ dependencies {
     api 'com.github.Raizlabs.DBFlow:dbflow-sqlcipher:4.2.4'
     annotationProcessor 'com.github.Raizlabs.DBFlow:dbflow-processor:4.2.4'
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.4.0'
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
     //Dagger2
-    api 'com.google.dagger:dagger:2.17'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.17'
+    api 'com.google.dagger:dagger:2.20'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
     //RXJava
-    api 'io.reactivex.rxjava2:rxjava:2.2.2'
+    api 'io.reactivex.rxjava2:rxjava:2.2.5'
     //RXAndroid
     api 'io.reactivex.rxjava2:rxandroid:2.1.0'
     //RxLifeCycle2
     api 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
     api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'
     //BGASwipeBackLayout
-    api 'cn.bingoogolapple:bga-swipebacklayout:1.1.9'
+    api 'cn.bingoogolapple:bga-swipebacklayout:1.2.0'
     //BaseRecyclerViewAdapterHelper
-    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.42'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.44'
     //Glide
     api 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'

@@ -114,7 +114,7 @@ public final class PermissionsUtils {
         }
 
         if (Permissions != null && Permissions.size() != 0) {
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest)) {
                     LogUtils.d("发现未启用权限");
                     return true;
@@ -140,7 +140,7 @@ public final class PermissionsUtils {
      */
     public static boolean checkDeniedPermissions(Activity activity, List<String> permissions, boolean isRequest) {
         if (permissions != null && permissions.size() != 0) {
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest, permissions)) {
                     LogUtils.d("发现未启用权限");
                     return true;
@@ -171,7 +171,7 @@ public final class PermissionsUtils {
         }
 
         if (Permissions != null && Permissions.size() != 0) {
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest)) {
                     LogUtils.d("发现未启用权限");
                     return true;
@@ -207,7 +207,7 @@ public final class PermissionsUtils {
      */
     public static boolean checkDeniedPermissions(Activity activity, Class intentClass, List<String> permissions, boolean isRequest, boolean isFinish) {
         if (permissions != null && permissions.size() != 0) {
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkDeniedPermissionsBase(activity, isRequest, permissions)) {
                     LogUtils.d("发现未启用权限");
                     return true;

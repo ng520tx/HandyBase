@@ -55,6 +55,8 @@ public abstract class BaseApplication extends Application {
                     @SuppressLint("StaticFieldLeak")
                     @Override
                     public void onCrash(String crashInfo, Throwable e) {
+                        LogUtils.e(e);
+
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... voids) {
